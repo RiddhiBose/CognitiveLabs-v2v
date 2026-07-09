@@ -1,0 +1,5 @@
+-- This file is an alias for database/001_initial_schema.sql
+-- Execute the contents of database/001_initial_schema.sql
+-- in the Supabase SQL Editor manually.
+--
+-- See: database/001_initial_schema.sql

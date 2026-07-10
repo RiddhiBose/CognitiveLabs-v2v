@@ -546,7 +546,7 @@ const MentorshipService = {
   async updateRequestStatus(
     requestId: string,
     status: MentorshipRequestStatus,
-    actorUserId: string,
+    _actorUserId: string,
   ): Promise<MentorshipServiceResult<MentorshipRequest>> {
     const { data, error } = await supabase
       .from('mentorship_requests')

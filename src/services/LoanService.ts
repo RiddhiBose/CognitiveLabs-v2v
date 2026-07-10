@@ -17,10 +17,8 @@ import type { UserProfileForSearch, SearchResponse } from '../types/ai.types';
 import type {
   LoanFormData,
   EducationLoanRecommendation,
-  SavedLoanMetadata,
   LoanSearchHistoryFilters,
 } from '../types/educationLoan';
-import { parseError } from '../utils/errorHandler';
 import { logger } from '../utils/logger';
 import { PREFERRED_DOMAINS } from '../types/search.types';
 

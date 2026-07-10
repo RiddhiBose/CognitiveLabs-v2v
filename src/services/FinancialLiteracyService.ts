@@ -3,7 +3,6 @@ import SearchService from './search/searchService';
 import CacheService from './ai/cacheService';
 import SavedItemsService from './SavedItemsService';
 import type { FinancialLiteracyRecommendation } from '../types/ai.types';
-import { parseError } from '../utils/errorHandler';
 import type {
   FinancialLiteracyFormValues,
   FinancialLiteracySearchRequest,

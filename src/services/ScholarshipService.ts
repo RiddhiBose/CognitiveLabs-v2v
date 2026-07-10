@@ -2,7 +2,6 @@ import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
 import SavedItemsService from './SavedItemsService';
 import type { ScholarshipRecommendation } from '../types/ai.types';
-import { parseError } from '../utils/errorHandler';
 import type { ScholarshipFormValues, ScholarshipSearchRequest, ScholarshipSearchResponse } from '../types/scholarship';
 
 const PREFERRED_DOMAINS = [

@@ -155,105 +155,44 @@ export default function StartupFundingPage() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
+    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-6">
 
         {/* ── Page header ─────────────────────────────────────────────────── */}
-        <header className="rounded-3xl bg-gradient-to-r from-orange-500 to-amber-500 p-8 text-white shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-orange-100">
-            AI startup funding finder
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">
-            Discover funding for your startup
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-orange-50 sm:text-base">
-            Get AI-powered recommendations for grants, incubators, accelerators, angel investors,
-            government schemes and more — sourced live from official portals and trusted startup
-            ecosystems. Your profile is used automatically.
-          </p>
+        <header className="rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-8 text-white shadow-xl relative overflow-hidden">
+          <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center pr-10 text-9xl">🚀</div>
+          <div className="relative z-10 max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-100">
+              AI startup funding finder
+            </p>
+            <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
+              Discover funding for your startup
+            </h1>
+            <p className="mt-3 text-sm leading-7 text-primary-50 sm:text-base">
+              Get AI-powered recommendations for grants, incubators, accelerators, angel investors,
+              government schemes and more — sourced live from official portals and trusted startup
+              ecosystems. Your profile is used automatically.
+            </p>
+          </div>
         </header>
 
-        {/* ── Main grid ───────────────────────────────────────────────────── */}
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-
-          {/* Left — form */}
-          <div className="space-y-4">
-            <StartupFundingForm
-              values={formValues}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              loading={loading}
-              isReady={readyState.ready}
-              missingKeys={readyState.missing}
-            />
-            {profileLoading && <LoadingCard />}
-            <ErrorMessage message={error} />
-            {warning && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
-                {warning}
-              </div>
-            )}
-          </div>
-
-          {/* Right — profile summary */}
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm self-start">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-orange-600">
-                Your profile summary
-              </p>
-              <h2 className="mt-1 text-xl font-semibold text-slate-900">Founder context</h2>
-              <p className="mt-1 text-xs text-slate-500">
-                Retrieved automatically — you don't need to re-enter these.
-              </p>
+        {/* ── Form ───────────────────────────────────────────────────────── */}
+        <div className="space-y-4">
+          <StartupFundingForm
+            values={formValues}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            loading={loading}
+            isReady={readyState.ready}
+            missingKeys={readyState.missing}
+          />
+          {profileLoading && <LoadingCard />}
+          <ErrorMessage message={error} />
+          {warning && (
+            <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-700">
+              {warning}
             </div>
-
-            <div className="space-y-2.5 text-sm text-slate-600">
-              <p>
-                <span className="font-semibold text-slate-800">Name: </span>
-                {profile?.full_name ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Age: </span>
-                {profile?.age ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Qualification: </span>
-                {profile?.qualification ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Occupation: </span>
-                {profile?.occupation ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Experience: </span>
-                {profile?.experience != null ? `${profile.experience} years` : 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Industry: </span>
-                {profile?.industry ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">State: </span>
-                {profile?.state ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">City: </span>
-                {profile?.city ?? 'Not available'}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-800">Role: </span>
-                {profile?.role ?? 'Not available'}
-              </p>
-            </div>
-
-            {/* Source disclaimer */}
-            <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-xs text-indigo-700 leading-5">
-              <p className="font-semibold mb-0.5">About these results</p>
-              All recommendations are sourced live from official government portals,
-              incubators, and trusted startup ecosystems. No hardcoded data is used.
-              Every result cites its original source URL.
-            </div>
-          </div>
+          )}
         </div>
 
         {/* ── Results section ──────────────────────────────────────────────── */}
@@ -261,12 +200,12 @@ export default function StartupFundingPage() {
 
           {/* Loading state */}
           {loading && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
               <div className="mb-4 flex items-center gap-3">
-                <div className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:-0.3s]" />
-                <div className="h-2 w-2 animate-bounce rounded-full bg-orange-400 [animation-delay:-0.15s]" />
-                <div className="h-2 w-2 animate-bounce rounded-full bg-amber-400" />
-                <p className="text-sm font-medium text-slate-700">
+                <div className="h-2 w-2 animate-bounce rounded-full bg-primary-600 [animation-delay:-0.3s]" />
+                <div className="h-2 w-2 animate-bounce rounded-full bg-primary-500 [animation-delay:-0.15s]" />
+                <div className="h-2 w-2 animate-bounce rounded-full bg-primary-400" />
+                <p className="text-sm font-medium text-gray-700">
                   {statusMessage || 'Searching funding opportunities…'}
                 </p>
               </div>
@@ -278,12 +217,12 @@ export default function StartupFundingPage() {
             </div>
           )}
 
-          {/* Empty state — only show after a completed search */}
+          {/* Empty state */}
           {!loading && hasSearched && results.length === 0 && !error && (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center shadow-lg">
               <p className="text-4xl mb-3" aria-hidden="true">🔍</p>
-              <p className="font-semibold text-slate-800">No funding opportunities found</p>
-              <p className="mt-1 text-sm text-slate-500 max-w-sm mx-auto">
+              <p className="font-semibold text-gray-800">No funding opportunities found</p>
+              <p className="mt-1 text-sm text-gray-500 max-w-sm mx-auto">
                 No verified opportunities matched your startup profile from the live sources.
                 Try adjusting your industry, stage, or funding type and search again.
               </p>
@@ -294,20 +233,18 @@ export default function StartupFundingPage() {
           {results.length > 0 && (
             <div className="space-y-4">
               {/* Result count bar */}
-              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                <p className="text-sm text-slate-600">
-                  Showing{' '}
-                  <span className="font-semibold text-slate-900">{totalFound || results.length}</span>{' '}
-                  verified funding opportunities matching your startup.
-                </p>
+              <div className="rounded-2xl border border-gray-100 bg-white px-4 py-3 text-sm text-gray-600 shadow-lg">
+                Showing{' '}
+                <span className="font-semibold text-gray-900">{totalFound || results.length}</span>{' '}
+                verified funding opportunities matching your startup.
               </div>
 
               {/* Top 5 — highest match */}
               {topRecommended.length > 0 && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-lg space-y-4">
                   <div className="flex items-center justify-between gap-3">
-                    <h2 className="text-lg font-semibold text-slate-900">⭐ Top Recommended</h2>
-                    <span className="text-sm text-slate-500">Highest match opportunities</span>
+                    <h2 className="text-lg font-bold text-gray-900">⭐ Top Recommended</h2>
+                    <span className="text-sm text-gray-500">Highest match opportunities</span>
                   </div>
                   <div className="grid gap-4 xl:grid-cols-2">
                     {topRecommended.map((opp) => {
@@ -329,12 +266,12 @@ export default function StartupFundingPage() {
 
               {/* All remaining matches */}
               {allMatching.length > 0 && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-lg space-y-4">
                   <div className="flex items-center justify-between gap-3">
-                    <h2 className="text-lg font-semibold text-slate-900">
+                    <h2 className="text-lg font-bold text-gray-900">
                       All Matching Opportunities
                     </h2>
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-gray-500">
                       Every verified match sorted by relevance
                     </span>
                   </div>
@@ -357,8 +294,8 @@ export default function StartupFundingPage() {
               )}
 
               {/* Attribution footer */}
-              <div className="rounded-2xl border border-slate-100 bg-white px-5 py-4 shadow-sm text-xs text-slate-500 leading-5">
-                <p className="font-semibold text-slate-700 mb-1">Data sources &amp; disclaimer</p>
+              <div className="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-lg text-xs text-gray-500 leading-5">
+                <p className="font-semibold text-gray-700 mb-1">Data sources &amp; disclaimer</p>
                 Results are retrieved live from official government portals (startupindia.gov.in,
                 dpiit.gov.in, msme.gov.in, sidbi.in, myscheme.gov.in) and trusted public sources
                 (Inc42, YourStory, Crunchbase, LinkedIn, etc.). No funding data is hardcoded or

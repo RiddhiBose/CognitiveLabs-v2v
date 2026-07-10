@@ -136,41 +136,19 @@ export default function ScholarshipFinderPage() {
           </p>
         </header>
 
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="space-y-5">
-            <ScholarshipFinderForm
-              values={formValues}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              loading={loading}
-              isReady={readyState.ready}
-              missingKeys={readyState.missing}
-            />
+        <div className="space-y-5">
+          <ScholarshipFinderForm
+            values={formValues}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            loading={loading}
+            isReady={readyState.ready}
+            missingKeys={readyState.missing}
+          />
 
-            {profileLoading ? <LoadingCard /> : null}
-            <ErrorMessage message={error} />
-            {warning ? <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-700">{warning}</div> : null}
-          </div>
-
-          <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
-            <div className="space-y-2">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-600">Your profile summary</p>
-              <h2 className="text-xl font-bold text-gray-900">Eligibility context</h2>
-            </div>
-            <div className="space-y-3 text-sm text-gray-600">
-              <p><span className="font-semibold text-gray-800">Name:</span> {profile?.full_name ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Qualification:</span> {profile?.qualification ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Current degree:</span> {profile?.specialization ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Current year:</span> {profile?.age ? `${profile.age}` : 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">State:</span> {profile?.state ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">City:</span> {profile?.city ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Gender:</span> {profile?.gender ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Category:</span> {profile?.category ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Annual family income:</span> {profile?.annual_income ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">PWD:</span> {profile?.pwd_status ?? 'Not available'}</p>
-              <p><span className="font-semibold text-gray-800">Occupation:</span> {profile?.occupation ?? 'Not available'}</p>
-            </div>
-          </div>
+          {profileLoading ? <LoadingCard /> : null}
+          <ErrorMessage message={error} />
+          {warning ? <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-700">{warning}</div> : null}
         </div>
 
         <section className="space-y-4">

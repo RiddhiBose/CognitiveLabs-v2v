@@ -8,6 +8,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface NavItem {
@@ -72,7 +73,7 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-export default function Sidebar({ isOpen, onToggle: _onToggle }: SidebarProps) {
+export default function Sidebar({ isOpen, onToggle: _onToggle, onOpenChange }: SidebarProps) {
   const { profile } = useProfile();
   const { savedCount } = useSaved();
   const { unreadCount } = useNotifications();
@@ -91,6 +92,11 @@ export default function Sidebar({ isOpen, onToggle: _onToggle }: SidebarProps) {
   });
 
   const showSidebar = isOpen || isPinned || isHovered;
+
+  // Notify parent whenever showSidebar changes
+  useEffect(() => {
+    onOpenChange?.(showSidebar);
+  }, [showSidebar, onOpenChange]);
 
   const handleMouseEnter = () => {
     if (isPinned) return;

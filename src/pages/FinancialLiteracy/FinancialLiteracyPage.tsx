@@ -111,14 +111,12 @@ export default function FinancialLiteracyPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="space-y-6">
           {/* Form */}
-          <div className="lg:col-span-1">
-            <FinancialLiteracyForm onSearch={handleSearch} isLoading={loading} initialValues={prefill} />
-          </div>
+          <FinancialLiteracyForm onSearch={handleSearch} isLoading={loading} initialValues={prefill} />
 
           {/* Results */}
-          <div className="lg:col-span-2">
+          <div>
             {loading && (
               <div className="bg-white rounded-2xl border border-gray-100 shadow-lg p-8 text-center">
                 <div className="animate-spin inline-block w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full mb-4" />

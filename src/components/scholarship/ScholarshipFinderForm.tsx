@@ -98,7 +98,7 @@ export default function ScholarshipFinderForm({
           <p className="text-sm text-gray-600">Use the current profile for eligibility and this section for the scholarship you want to search for.</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <label className="block space-y-2">
             <span className="text-sm font-medium text-gray-700">Target Education Level</span>
             <select
@@ -123,19 +123,19 @@ export default function ScholarshipFinderForm({
               placeholder="e.g. MTech, MBA, MSc"
             />
           </label>
+
+          <label className="block space-y-2 sm:col-span-2 lg:col-span-1">
+            <span className="text-sm font-medium text-gray-700">Target Specialization (optional)</span>
+            <input
+              value={values.targetSpecialization}
+              onChange={(event) => onChange('targetSpecialization', event.target.value)}
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
+              placeholder="e.g. AI, Data Science, Public Health"
+            />
+          </label>
         </div>
 
-        <label className="block space-y-2">
-          <span className="text-sm font-medium text-gray-700">Target Specialization (optional)</span>
-          <input
-            value={values.targetSpecialization}
-            onChange={(event) => onChange('targetSpecialization', event.target.value)}
-            className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
-            placeholder="e.g. AI, Data Science, Public Health"
-          />
-        </label>
-
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <label className="block space-y-2">
             <span className="text-sm font-medium text-gray-700">Study Location</span>
             <select
@@ -163,31 +163,17 @@ export default function ScholarshipFinderForm({
         </div>
       </div>
 
-      <label className="block space-y-2">
-        <span className="text-sm font-medium text-gray-700">Institution Name (optional)</span>
-        <input
-          value={values.institutionName}
-          onChange={(event) => onChange('institutionName', event.target.value)}
-          className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
-          placeholder="e.g. Indian Institute of Technology"
-        />
-      </label>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <label className="block space-y-2 sm:col-span-2 lg:col-span-1">
+          <span className="text-sm font-medium text-gray-700">Institution Name (optional)</span>
+          <input
+            value={values.institutionName}
+            onChange={(event) => onChange('institutionName', event.target.value)}
+            className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
+            placeholder="e.g. Indian Institute of Technology"
+          />
+        </label>
 
-      <ToggleGroup
-        label="Scholarship Type"
-        options={SCHOLARSHIP_TYPES}
-        selectedValues={values.scholarshipTypes}
-        onChange={(value) => toggleOption('scholarshipTypes', value)}
-      />
-
-      <ToggleGroup
-        label="Funding Coverage"
-        options={FUNDING_COVERAGE_OPTIONS}
-        selectedValues={values.fundingCoverage}
-        onChange={(value) => toggleOption('fundingCoverage', value)}
-      />
-
-      <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-2">
           <span className="text-sm font-medium text-gray-700">Application Status</span>
           <select
@@ -219,12 +205,26 @@ export default function ScholarshipFinderForm({
         </label>
       </div>
 
+      <ToggleGroup
+        label="Scholarship Type"
+        options={SCHOLARSHIP_TYPES}
+        selectedValues={values.scholarshipTypes}
+        onChange={(value) => toggleOption('scholarshipTypes', value)}
+      />
+
+      <ToggleGroup
+        label="Funding Coverage"
+        options={FUNDING_COVERAGE_OPTIONS}
+        selectedValues={values.fundingCoverage}
+        onChange={(value) => toggleOption('fundingCoverage', value)}
+      />
+
       <button
         type="submit"
         disabled={loading || !isReady}
-        className="inline-flex items-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+        className="w-full rounded-xl bg-primary-600 py-3 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
       >
-        {loading ? 'Searching…' : 'Find scholarships'}
+        {loading ? 'Searching…' : 'Find Scholarships'}
       </button>
     </form>
   );

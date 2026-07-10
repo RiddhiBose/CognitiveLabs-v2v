@@ -9,9 +9,9 @@ interface StartupFundingDetailsModalProps {
 function Row({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
   return (
-    <div className="flex flex-col gap-0.5 rounded-lg border border-slate-100 bg-slate-50 px-4 py-3">
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">{label}</p>
-      <p className="text-sm leading-6 text-slate-800">{value}</p>
+    <div className="flex flex-col gap-0.5 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3">
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-gray-500">{label}</p>
+      <p className="text-sm leading-6 text-gray-800">{value}</p>
     </div>
   );
 }
@@ -43,16 +43,16 @@ export default function StartupFundingDetailsModal({
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
             {opportunity.organization && (
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-orange-600">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-600">
                 {opportunity.organization}
               </p>
             )}
-            <h2 id="sf-modal-title" className="mt-1 text-xl font-bold text-slate-900 leading-snug">
+            <h2 id="sf-modal-title" className="mt-1 text-xl font-bold text-gray-900 leading-snug">
               {opportunity.title}
             </h2>
             <div className="mt-2 flex flex-wrap gap-2">
               {opportunity.fundingType && (
-                <span className="rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-700">
+                <span className="rounded-full bg-primary-100 px-2.5 py-1 text-xs font-semibold text-primary-700">
                   {opportunity.fundingType}
                 </span>
               )}
@@ -60,8 +60,8 @@ export default function StartupFundingDetailsModal({
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                     opportunity.sourceType === 'Official'
-                      ? 'bg-indigo-100 text-indigo-700'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-primary-100 text-primary-700'
+                      : 'bg-gray-100 text-gray-600'
                   }`}
                 >
                   {opportunity.sourceType === 'Official' ? '🏛️ Official' : '🔗 Trusted Source'}
@@ -74,7 +74,7 @@ export default function StartupFundingDetailsModal({
           </div>
           <button
             onClick={onClose}
-            className="flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            className="flex-shrink-0 rounded-full p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600"
             aria-label="Close modal"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -86,14 +86,14 @@ export default function StartupFundingDetailsModal({
         <div className="space-y-5">
           {/* ── Summary ─────────────────────────────────────────────────── */}
           <div>
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Summary</p>
-            <p className="text-sm leading-7 text-slate-700">{opportunity.summary}</p>
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-500">Summary</p>
+            <p className="text-sm leading-7 text-gray-700">{opportunity.summary}</p>
           </div>
 
           {/* ── Why it matches ───────────────────────────────────────────── */}
-          <div className="rounded-xl bg-orange-50 p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-orange-600 mb-1.5">Why it matches your startup</p>
-            <p className="text-sm leading-6 text-slate-700">{opportunity.reason}</p>
+          <div className="rounded-xl bg-primary-50 p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-600 mb-1.5">Why it matches your startup</p>
+            <p className="text-sm leading-6 text-gray-700">{opportunity.reason}</p>
           </div>
 
           {/* ── Key info grid ────────────────────────────────────────────── */}
@@ -115,9 +115,9 @@ export default function StartupFundingDetailsModal({
           {/* ── Eligibility ─────────────────────────────────────────────── */}
           {opportunity.eligibility && (
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Eligibility criteria</p>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <p className="whitespace-pre-line text-sm leading-6 text-slate-700">{opportunity.eligibility}</p>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-500">Eligibility criteria</p>
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                <p className="whitespace-pre-line text-sm leading-6 text-gray-700">{opportunity.eligibility}</p>
               </div>
             </div>
           )}
@@ -125,9 +125,9 @@ export default function StartupFundingDetailsModal({
           {/* ── Benefits ────────────────────────────────────────────────── */}
           {opportunity.benefits && (
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Benefits offered</p>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <p className="whitespace-pre-line text-sm leading-6 text-slate-700">{opportunity.benefits}</p>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-500">Benefits offered</p>
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                <p className="whitespace-pre-line text-sm leading-6 text-gray-700">{opportunity.benefits}</p>
               </div>
             </div>
           )}
@@ -136,10 +136,10 @@ export default function StartupFundingDetailsModal({
           <div>
             <div className="mb-2 flex items-center gap-2">
               <span aria-hidden="true" className="text-xl">📋</span>
-              <p className="text-sm font-bold text-slate-900">How to apply</p>
+              <p className="text-sm font-bold text-gray-900">How to apply</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="whitespace-pre-line text-sm leading-7 text-slate-700">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="whitespace-pre-line text-sm leading-7 text-gray-700">
                 {opportunity.applicationProcess ?? 'Please visit the official website for the application process.'}
               </p>
             </div>
@@ -149,30 +149,30 @@ export default function StartupFundingDetailsModal({
           <div>
             <div className="mb-2 flex items-center gap-2">
               <span aria-hidden="true" className="text-xl">📄</span>
-              <p className="text-sm font-bold text-slate-900">Required documents</p>
+              <p className="text-sm font-bold text-gray-900">Required documents</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="whitespace-pre-line text-sm leading-7 text-slate-700">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="whitespace-pre-line text-sm leading-7 text-gray-700">
                 {opportunity.requiredDocuments ?? 'Please visit the official website for document requirements.'}
               </p>
             </div>
           </div>
 
           {/* ── Source attribution ──────────────────────────────────────── */}
-          <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm">
-            <p className="font-semibold text-indigo-800 mb-1">Source information</p>
-            <p className="text-indigo-700">
+          <div className="rounded-xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm">
+            <p className="font-semibold text-primary-800 mb-1">Source information</p>
+            <p className="text-primary-700">
               <span className="font-medium">Source type: </span>
               {opportunity.sourceType ?? 'Not specified'}
             </p>
             {opportunity.source && (
-              <p className="mt-1 text-indigo-700">
+              <p className="mt-1 text-primary-700">
                 <span className="font-medium">Source URL: </span>
                 <a
                   href={opportunity.source}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline hover:text-indigo-900 break-all"
+                  className="underline hover:text-primary-900 break-all"
                 >
                   {opportunity.source}
                 </a>
@@ -187,7 +187,7 @@ export default function StartupFundingDetailsModal({
                 href={applyUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-xl bg-orange-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-orange-700"
+                className="rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-700"
               >
                 Apply Now
               </a>
@@ -197,7 +197,7 @@ export default function StartupFundingDetailsModal({
                 href={opportunity.officialWebsite}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-orange-400 hover:text-orange-600"
+                className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-primary-400 hover:text-primary-600"
               >
                 Visit Official Website
               </a>
@@ -205,7 +205,7 @@ export default function StartupFundingDetailsModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
             >
               Close
             </button>

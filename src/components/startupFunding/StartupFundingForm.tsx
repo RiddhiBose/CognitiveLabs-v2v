@@ -22,15 +22,15 @@ interface StartupFundingFormProps {
   missingKeys: string[];
 }
 
-const labelClass = 'block text-sm font-semibold text-slate-700 mb-1.5';
+const labelClass = 'block text-sm font-semibold text-gray-700 mb-1.5';
 const inputClass =
-  'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100 disabled:opacity-50';
+  'w-full rounded-xl border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-800 shadow-sm transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:opacity-50';
 const selectClass =
-  'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100 disabled:opacity-50';
+  'w-full rounded-xl border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-800 shadow-sm transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:opacity-50';
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600 pt-2">{children}</p>
+    <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-600 pt-2">{children}</p>
   );
 }
 
@@ -51,13 +51,17 @@ export default function StartupFundingForm({
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <form onSubmit={onSubmit} className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">
       <div>
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-orange-600">Startup details</p>
-        <h2 className="mt-1 text-xl font-semibold text-slate-900">Tell us about your startup</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-600">Startup details</p>
+        <h2 className="mt-1 text-xl font-semibold text-gray-900">Tell us about your startup</h2>
+        <p className="mt-1 text-sm text-gray-500">
           Your profile is used automatically. Fill in the startup-specific details below.
         </p>
+      </div>
+
+      <div className="rounded-xl border border-primary-100 bg-primary-50 p-3 text-sm text-primary-700">
+        Your profile details such as age, qualification, occupation, industry, state, and city are reused automatically from your account.
       </div>
 
       {/* ── Basic info ─────────────────────────────────────────────────── */}
@@ -247,8 +251,8 @@ export default function StartupFundingForm({
               key={opt}
               className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
                 checked
-                  ? 'border-orange-400 bg-orange-50 font-semibold text-orange-700'
-                  : 'border-slate-200 text-slate-600 hover:border-orange-300 hover:bg-orange-50/50'
+                  ? 'border-primary-500 bg-primary-50 font-semibold text-primary-700'
+                  : 'border-gray-200 text-gray-600 hover:border-primary-300 hover:bg-primary-50/50'
               }`}
             >
               <input
@@ -260,7 +264,7 @@ export default function StartupFundingForm({
               />
               <span
                 className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border ${
-                  checked ? 'border-orange-500 bg-orange-500' : 'border-slate-300'
+                  checked ? 'border-primary-600 bg-primary-600' : 'border-gray-300'
                 }`}
                 aria-hidden="true"
               >
@@ -306,8 +310,8 @@ export default function StartupFundingForm({
                 key={opt}
                 className={`flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                   checked
-                    ? 'border-orange-400 bg-orange-50 text-orange-700'
-                    : 'border-slate-200 text-slate-600 hover:border-orange-300'
+                    ? 'border-primary-500 bg-primary-50 text-primary-700'
+                    : 'border-gray-200 text-gray-600 hover:border-primary-300'
                 }`}
               >
                 <input
@@ -326,7 +330,7 @@ export default function StartupFundingForm({
 
       {/* ── API key warning ───────────────────────────────────────────── */}
       {!isReady && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
           <p className="font-semibold">Search unavailable</p>
           <p className="mt-0.5">
             Missing environment variables: <span className="font-mono">{missingKeys.join(', ')}</span>. Add them to your <span className="font-mono">.env</span> file.
@@ -338,7 +342,7 @@ export default function StartupFundingForm({
       <button
         type="submit"
         disabled={loading || !isReady}
-        className="w-full rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:from-orange-600 hover:to-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-xl bg-primary-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? 'Searching funding opportunities…' : 'Find Funding Opportunities'}
       </button>

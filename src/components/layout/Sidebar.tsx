@@ -15,7 +15,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'College Finder', path: ROUTES.COLLEGE_FINDER, icon: '&#127979;' },
   { label: 'Scholarships', path: ROUTES.SCHOLARSHIPS, icon: '&#127891;' },
   { label: 'Education Loans', path: ROUTES.EDUCATION_LOANS, icon: '&#128176;' },
-  { label: 'Govt. Schemes', path: ROUTES.GOVERNMENT_SCHEMES, icon: '&#127963;' },
   { label: 'Startup Funding', path: ROUTES.STARTUP_FUNDING, icon: '&#128640;' },
   { label: 'Financial Literacy', path: ROUTES.FINANCIAL_LITERACY, icon: '&#128218;' },
   { label: 'Mentorship', path: ROUTES.MENTORSHIP, icon: '&#129309;' },

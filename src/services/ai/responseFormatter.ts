@@ -7,7 +7,6 @@ import type {
   CollegeRecommendation,
   ScholarshipRecommendation,
   LoanRecommendation,
-  GovernmentSchemeRecommendation,
   StartupFundingRecommendation,
   FinancialLiteracyRecommendation,
 } from '../../types/ai.types';
@@ -164,24 +163,52 @@ function parseLoan(raw: RawItem): LoanRecommendation {
   };
 }
 
-function parseGovernmentScheme(raw: RawItem): GovernmentSchemeRecommendation {
-  const meta = safeMetadata(raw.metadata);
-  return {
-    ...parseBase(raw),
-    ministry: safeString(meta.ministry) || undefined,
-    benefitType: safeString(meta.benefitType) || undefined,
-    deadline: safeString(meta.deadline) || undefined,
-  };
-}
-
 function parseStartupFunding(raw: RawItem): StartupFundingRecommendation {
   const meta = safeMetadata(raw.metadata);
+
+  // applicationProcess and requiredDocuments are MANDATORY
+  const applicationProcess = safeString(meta.applicationProcess);
+  const requiredDocuments = safeString(meta.requiredDocuments);
+
+  if (!applicationProcess) {
+    logger.warn('ResponseFormatter', 'StartupFunding missing mandatory applicationProcess field', raw.title);
+  }
+  if (!requiredDocuments) {
+    logger.warn('ResponseFormatter', 'StartupFunding missing mandatory requiredDocuments field', raw.title);
+  }
+
+  // sourceType must be exactly 'Official' or 'Trusted Public Source'
+  const rawSourceType = safeString(meta.sourceType);
+  const sourceType = rawSourceType === 'Official' ? 'Official'
+    : rawSourceType ? 'Trusted Public Source'
+    : 'Trusted Public Source';
+
   return {
     ...parseBase(raw),
+    // Core
+    organization: safeString(meta.organization) || undefined,
     fundingType: safeString(meta.fundingType) || undefined,
-    maxAmount: safeString(meta.maxAmount) || undefined,
-    stage: safeString(meta.stage) || undefined,
     sector: safeString(meta.sector) || undefined,
+    stage: safeString(meta.stage) || undefined,
+    // Amounts
+    minAmount: safeString(meta.minAmount) || undefined,
+    maxAmount: safeString(meta.maxAmount) || undefined,
+    // Eligibility
+    eligibility: safeString(meta.eligibility) || undefined,
+    womenFounderPreference: safeString(meta.womenFounderPreference) || undefined,
+    registrationRequired: safeString(meta.registrationRequired) || undefined,
+    revenueStageRequired: safeString(meta.revenueStageRequired) || undefined,
+    // Terms
+    equityRequirement: safeString(meta.equityRequirement) || undefined,
+    // Application
+    deadline: safeString(meta.deadline) || undefined,
+    applicationProcess: applicationProcess || 'Please check the official website for the application process.',
+    requiredDocuments: requiredDocuments || 'Please check the official website for required documents.',
+    benefits: safeString(meta.benefits) || undefined,
+    applicationPortal: safeString(meta.applicationPortal) || undefined,
+    contactInfo: safeString(meta.contactInfo) || undefined,
+    // Credibility
+    sourceType,
   };
 }
 
@@ -313,7 +340,6 @@ const PARSERS: Record<FeatureType, (raw: RawItem) => Recommendation> = {
   college: parseCollege,
   scholarship: parseScholarship,
   education_loan: parseLoan,
-  government_scheme: parseGovernmentScheme,
   startup_funding: parseStartupFunding,
   financial_literacy: parseFinancialLiteracy,
 };

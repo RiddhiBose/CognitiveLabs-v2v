@@ -16,7 +16,6 @@ export const ROUTES = {
   COLLEGE_FINDER: '/college-finder',
   SCHOLARSHIPS: '/scholarships',
   EDUCATION_LOANS: '/education-loans',
-  GOVERNMENT_SCHEMES: '/government-schemes',
   STARTUP_FUNDING: '/startup-funding',
   FINANCIAL_LITERACY: '/financial-literacy',
   MENTORSHIP: '/mentorship',

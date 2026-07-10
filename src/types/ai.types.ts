@@ -4,7 +4,6 @@ export type FeatureType =
   | 'college'
   | 'scholarship'
   | 'education_loan'
-  | 'government_scheme'
   | 'startup_funding'
   | 'financial_literacy';
 
@@ -92,17 +91,36 @@ export interface LoanRecommendation extends Recommendation {
   requiredDocuments?: string;
 }
 
-export interface GovernmentSchemeRecommendation extends Recommendation {
-  ministry?: string;
-  benefitType?: string;
-  deadline?: string;
-}
-
 export interface StartupFundingRecommendation extends Recommendation {
+  // Core funding details
   fundingType?: string;
+  organization?: string;
   maxAmount?: string;
+  minAmount?: string;
   stage?: string;
   sector?: string;
+
+  // Eligibility
+  eligibility?: string;
+  womenFounderPreference?: string;
+  registrationRequired?: string;
+  revenueStageRequired?: string;
+
+  // Equity / terms
+  equityRequirement?: string;
+
+  // Application
+  deadline?: string;
+  applicationProcess?: string;
+  requiredDocuments?: string;
+  benefits?: string;
+
+  // Contact / portals
+  applicationPortal?: string;
+  contactInfo?: string;
+
+  // Source credibility
+  sourceType?: string;   // 'Official' | 'Trusted Public Source'
 }
 
 export interface FinancialLiteracyRecommendation extends Recommendation {

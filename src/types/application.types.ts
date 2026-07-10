@@ -3,8 +3,7 @@ export type ApplicationType =
   | 'college'
   | 'scholarship'
   | 'loan'
-  | 'startup_funding'
-  | 'government_scheme';
+  | 'startup_funding';
 
 export type ApplicationStatus =
   | 'draft'

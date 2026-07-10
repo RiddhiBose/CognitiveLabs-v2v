@@ -3,7 +3,6 @@ export type SavedItemType =
   | 'college'
   | 'scholarship'
   | 'loan'
-  | 'government_scheme'
   | 'startup_funding'
   | 'financial_literacy'
   | 'mentor';

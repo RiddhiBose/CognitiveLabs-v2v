@@ -3,7 +3,6 @@ export type SearchCategory =
   | 'college'
   | 'scholarship'
   | 'loan'
-  | 'government_scheme'
   | 'startup_funding'
   | 'financial_literacy'
   | 'mentor'
@@ -56,13 +55,6 @@ export const PREFERRED_DOMAINS: Record<string, string[]> = {
     'pnbindia.in',
     'canarabank.com',
     'unionbankofindia.co.in',
-  ],
-  government_scheme: [
-    'myscheme.gov.in',
-    'india.gov.in',
-    'wcd.nic.in',
-    'mosje.gov.in',
-    'tribal.gov.in',
   ],
   startup_funding: [
     'startupindia.gov.in',

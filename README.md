@@ -59,7 +59,7 @@ By bringing verified opportunities into one AI-powered platform, ElevateHer AI e
 |---|---|
 | 🌐 **Live Deployment** | https://cognitive-labs-v2v.vercel.app/  |
 | 🎥 **Demo Video** | [Coming Soon — add your demo video link here](#) |
-| 💻 **GitHub Repository** | [Coming Soon — add your GitHub repo link here](#) |
+| 💻 **GitHub Repository** |https://github.com/RiddhiBose/CognitiveLabs-v2v|
 
 ---
 

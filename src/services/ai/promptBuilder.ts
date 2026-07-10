@@ -10,6 +10,7 @@ CRITICAL RULES:
 - Only use information present in the search results provided below.
 - Never fabricate, invent, or assume any detail not found in the search results.
 - Never invent eligibility criteria, fees, deadlines, or URLs.
+- For financial literacy courses: officialWebsite and applicationLink are MANDATORY. Only use URLs explicitly present in search results. Never fabricate or guess URLs.
 - For education loans: interest rate is MANDATORY. If not found on official bank website, search trusted sources for estimated rates. Never leave as "Not available".
 - For scholarships: scholarship amount range is MANDATORY. If not found on official website, search trusted sources for estimated amounts. Never leave as "Not available".
 - Prefer official government, institutional and regulatory sources over blogs or news sites.
@@ -68,7 +69,7 @@ const METADATA_HINTS: Record<FeatureType, string> = {
   education_loan: `metadata fields: { "interestRate": string (MANDATORY - must include interest rate, never null), "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null, "applicationSteps": string (MANDATORY - steps to apply from official bank website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official bank website or trusted sources) }`,
   government_scheme: `metadata fields: { "ministry": string | null, "benefitType": string | null, "deadline": string | null }`,
   startup_funding: `metadata fields: { "fundingType": string | null, "maxAmount": string | null, "stage": string | null, "sector": string | null }`,
-  financial_literacy: `metadata fields: { "topic": string | null, "provider": string | null, "duration": string | null, "level": string | null, "isFree": boolean | null }`,
+  financial_literacy: `metadata fields: { "topic": string | null, "provider": string | null, "duration": string | null, "level": string | null, "isFree": boolean | null, "officialWebsite": string | null (MANDATORY - official course page URL from search results, never use catalog pages like exploreAllCourses.html), "applicationLink": string | null (MANDATORY - direct enrollment/application URL from search results, prefer over officialWebsite. For NISM, individual course pages like "https://online.nism.ac.in/module/CourseName.html" ARE the correct enrollment links) }`,
 };
 
 // ── Feature-specific task descriptions ──────────────────────────────────────
@@ -223,20 +224,69 @@ Focus on:
 - Government seed funding
 `.trim();
 
-    case 'financial_literacy':
+    case 'financial_literacy': {
+      const knowledgeLevel = String(featureInput.knowledgeLevel ?? 'Beginner');
+      const learningGoals = Array.isArray(featureInput.learningGoals)
+        ? featureInput.learningGoals.filter((item): item is string => typeof item === 'string')
+        : [];
+      const courseLevel = String(featureInput.courseLevel ?? 'Any');
+      const courseFormat = Array.isArray(featureInput.courseFormat)
+        ? featureInput.courseFormat.filter((item): item is string => typeof item === 'string')
+        : [];
+      const budget = String(featureInput.budget ?? 'Both');
+      const certificate = String(featureInput.certificatePreference ?? 'No Preference');
+      const language = String(featureInput.language ?? 'Any');
+      const platformPreference = Array.isArray(featureInput.platformPreference)
+        ? featureInput.platformPreference.filter((item): item is string => typeof item === 'string')
+        : [];
+
       return `
-Task: Identify financial literacy resources and courses for this user.
-Topics of Interest: ${featureInput.topics ?? 'General financial literacy'}
-Preferred Level: ${featureInput.level ?? 'Beginner'}
-Preferred Format: ${featureInput.format ?? 'Online'}
+Task: Identify verified financial literacy courses this user is eligible for based on their current profile and learning goals.
+Current Qualification: ${profile.qualification ?? 'Not specified'}
+Current Occupation: ${profile.occupation ?? 'Not specified'}
+Current Experience: ${profile.experience ? `${profile.experience} years` : 'Not specified'}
+Current Knowledge Level: ${knowledgeLevel}
+Learning Goals: ${learningGoals.length > 0 ? learningGoals.join(', ') : 'Any'}
+Target Course Level: ${courseLevel}
+Preferred Course Format: ${courseFormat.length > 0 ? courseFormat.join(', ') : 'Any'}
+Budget Preference: ${budget}
+Certificate Requirement: ${certificate}
+Preferred Language: ${language}
+Platform Preference: ${platformPreference.length > 0 ? platformPreference.join(', ') : 'Any'}
+State: ${state}
+
+CRITICAL: Official website URL and enrollment/application URL are MANDATORY for every financial literacy course recommendation.
+- First priority: Extract direct enrollment/application URL from search results (this is the applicationLink) - look for URLs with "enroll", "register", "apply", "join", "sign-up", "enrollment" in the path
+- Second priority: Extract official course catalog/landing page URL from search results (this is the officialWebsite) - the main course page, not individual module/content pages
+- For NISM specifically: Individual course pages are at URLs like "https://online.nism.ac.in/module/CourseName.html" - these ARE the correct course pages and should be used as enrollment links. The catalog page "https://online.nism.ac.in/exploreAllCourses.html" should NOT be used as an enrollment link.
+- NEVER use catalog listing pages (e.g., URLs containing "exploreAllCourses", "catalog", "all-courses", "course-list") as enrollment links - these are listing pages, not individual course pages
+- If the URL is a catalog page, navigate up to find the main course landing page or enrollment page
+- Never fabricate, guess, or invent URLs
+- Never use placeholder URLs like "#", "N/A", "Coming Soon", etc.
+- If an enrollment URL is not found in search results, use the official course page URL as applicationLink
+- If neither URL is found in search results, set both to null - do not invent URLs
+- Only use URLs that are explicitly present in the provided search results
+- Validate that URLs are properly formatted and complete before including them
+
+Ranking priority:
+1. Platform preference and availability
+2. Budget fit
+3. Course level matching current knowledge
+4. Learning goals alignment
+5. Certificate availability
+6. Language preference
+7. Course format preference
+8. Duration and commitment level
 
 Focus on:
-- RBI and SEBI official resources
-- SWAYAM/NPTEL free courses
-- NISM certification courses
-- Investor education programs
-- Savings and investment basics
+- Official course providers and educational platforms only
+- NPTEL, SWAYAM, Coursera, edX verified courses
+- RBI, NISM, NSE Academy official resources
+- Government and institutional financial literacy programs
+- Courses with verifiable instructors and institutions
+- Accurate course metadata and enrollment URLs (MANDATORY - from search results only)
 `.trim();
+    }
 
     default:
       return `Task: Find relevant results for the user based on their profile.`;
@@ -411,13 +461,58 @@ For scholarship recommendations, return every verified scholarship matching the 
           'India 2024',
         ].filter(Boolean).join(' ');
 
-      case 'financial_literacy':
+      case 'financial_literacy': {
+        const knowledgeLevel = String(featureInput.knowledgeLevel ?? 'any level');
+        const learningGoals = Array.isArray(featureInput.learningGoals)
+          ? featureInput.learningGoals
+              .filter((item): item is string => typeof item === 'string' && item.toLowerCase() !== 'any')
+              .join(' ')
+              .toLowerCase()
+          : 'financial literacy';
+        const courseLevel = String(featureInput.courseLevel ?? 'any level');
+        const courseFormats = Array.isArray(featureInput.courseFormat)
+          ? featureInput.courseFormat
+              .filter((item): item is string => typeof item === 'string' && item.toLowerCase() !== 'any')
+              .join(' ')
+              .toLowerCase()
+          : 'any format';
+        const budget = String(featureInput.budget ?? 'both');
+        const certificate = String(featureInput.certificatePreference ?? 'no preference');
+        const language = String(featureInput.language ?? 'any language');
+        const platformPreference = Array.isArray(featureInput.platformPreference)
+          ? featureInput.platformPreference
+              .filter((item): item is string => typeof item === 'string' && item.toLowerCase() !== 'any')
+              .join(' ')
+              .toLowerCase()
+          : 'all platforms';
+
+        const budgetPhrase = budget === 'free' ? 'free' : budget === 'paid' ? 'paid' : 'free and paid';
+        const certificatePhrase = certificate.includes('Required') ? 'with certificate' : '';
+
+        // For NISM, specifically search for individual course pages
+        const nismSpecific = platformPreference.includes('nism')
+          ? 'site:online.nism.ac.in/module/ individual course pages'
+          : '';
+
         return [
-          'financial literacy',
-          featureInput.topics ?? 'investment savings',
-          'India free course',
-          featureInput.level ?? 'beginner',
-        ].filter(Boolean).join(' ');
+          'verified financial literacy courses',
+          learningGoals,
+          `${knowledgeLevel} level`,
+          `${courseLevel} course level`,
+          `${courseFormats} format`,
+          `${budgetPhrase} courses`,
+          certificatePhrase,
+          language,
+          `on ${platformPreference}`,
+          nismSpecific,
+          `for ${profile.occupation || profile.specialization || 'professionals'}`,
+          state ? `in ${state}` : '',
+          'from official providers verified sources',
+          '2024 2025 2026',
+        ]
+          .filter(Boolean)
+          .join(' ');
+      }
 
       default:
         return `${type} opportunities India 2024`;

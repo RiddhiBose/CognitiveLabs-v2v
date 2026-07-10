@@ -10,4 +10,6 @@ export * from './chat.types';
 export * from './search.types';
 export * from './ai.types';
 export * from './college';
+export * from './scholarship';
+export * from './financialLiteracy';
 

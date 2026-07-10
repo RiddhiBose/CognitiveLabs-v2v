@@ -7,4 +7,6 @@ export { GeminiService, TavilyService, PromptBuilder, ResponseFormatter, CacheSe
 export { MentorshipService } from './mentorship';
 export { NotificationService } from './notification';
 export { CollegeService } from './CollegeService';
+export { default as ScholarshipService } from './ScholarshipService';
+export { default as FinancialLiteracyService } from './FinancialLiteracyService';
 

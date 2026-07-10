@@ -187,15 +187,125 @@ function parseStartupFunding(raw: RawItem): StartupFundingRecommendation {
 
 function parseFinancialLiteracy(raw: RawItem): FinancialLiteracyRecommendation {
   const meta = safeMetadata(raw.metadata);
+
+  // Helper to validate URLs
+  const getValidUrl = (...values: unknown[]): string | null => {
+    for (const value of values) {
+      const url = safeString(value);
+      if (!url) continue;
+
+      // Skip placeholder URLs
+      if (['#', 'n/a', 'coming soon', 'not available', 'tbd', 'to be determined'].includes(url.toLowerCase())) {
+        continue;
+      }
+
+      const normalized =
+        /^https?:\/\//i.test(url) ? url : `https://${url}`;
+
+      try {
+        const urlObj = new URL(normalized);
+        // Ensure URL has a valid hostname
+        if (!urlObj.hostname || urlObj.hostname.length < 3) {
+          continue;
+        }
+
+        // Skip lesson/chapter/content pages - these are not enrollment pages
+        const pathLower = urlObj.pathname.toLowerCase();
+        if (pathLower.includes('/lesson/') ||
+            pathLower.includes('/chapter/') ||
+            pathLower.includes('/content/') ||
+            pathLower.includes('/topic/')) {
+          continue;
+        }
+
+        // Skip individual module pages that are clearly lessons (not main course pages)
+        // Pattern: module pages with + in filename are typically individual lessons
+        if (pathLower.includes('/module/') && pathLower.includes('+') && pathLower.endsWith('.html')) {
+          continue;
+        }
+
+        return normalized;
+      } catch {
+        continue;
+      }
+    }
+
+    return null;
+  };
+
+  const officialWebsite = getValidUrl(
+    raw.officialWebsite,
+    meta.officialWebsite,
+    meta.website,
+    meta.url,
+    meta.sourceUrl
+  );
+
+  const applicationLink = getValidUrl(
+    raw.applicationLink,
+    meta.applicationLink,
+    meta.enrollmentLink,
+    meta.applyLink,
+    meta.registrationLink,
+    officialWebsite
+  );
+
+  // Log warnings if URLs are missing
+  if (!officialWebsite && !applicationLink) {
+    logger.warn('ResponseFormatter', 'FinancialLiteracy missing both officialWebsite and applicationLink', raw.title);
+  }
+
   return {
-    ...parseBase(raw),
-    topic: safeString(meta.topic) || undefined,
-    provider: safeString(meta.provider) || undefined,
-    duration: safeString(meta.duration) || undefined,
-    level: safeString(meta.level) || undefined,
-    isFree: meta.isFree === true || meta.isFree === 'true' ? true
-           : meta.isFree === false || meta.isFree === 'false' ? false
-           : undefined,
+    ...parseBase({
+      ...raw,
+      officialWebsite,
+      applicationLink,
+    }),
+
+    topic: safeString(meta.topic) ||
+      safeString((raw as Record<string, unknown>).topic) ||
+      undefined,
+
+    provider:
+      safeString(meta.provider) ||
+      safeString((raw as Record<string, unknown>).provider) ||
+      undefined,
+
+    duration: safeString(meta.duration) ||
+      safeString((raw as Record<string, unknown>).duration) ||
+      undefined,
+
+    level: safeString(meta.level) ||
+      safeString((raw as Record<string, unknown>).level) ||
+      undefined,
+
+    isFree:
+      meta.isFree === true ||
+      meta.isFree === 'true'
+        ? true
+        : meta.isFree === false ||
+            meta.isFree === 'false'
+          ? false
+          : undefined,
+
+    metadata: {
+      ...meta,
+
+      syllabus: meta.syllabus ?? null,
+
+      learningOutcomes: meta.learningOutcomes ?? null,
+
+      prerequisites: meta.prerequisites ?? null,
+
+      certificateAvailable:
+        meta.certificateAvailable ??
+        meta.certificate ??
+        null,
+
+      officialWebsite,
+
+      applicationLink,
+    },
   };
 }
 

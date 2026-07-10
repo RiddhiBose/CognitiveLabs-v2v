@@ -153,6 +153,36 @@ const CacheService = {
   has(key: string): boolean {
     return CacheService.get(key) !== null;
   },
+
+  /**
+   * Invalidate all cache entries for a specific feature type.
+   */
+  invalidateByType(featureType: string): void {
+    const prefix = `${featureType}|`;
+    const keysToRemove: string[] = [];
+
+    // Check memory cache
+    for (const [key] of memoryCache.entries()) {
+      if (key.startsWith(prefix)) {
+        keysToRemove.push(key);
+        memoryCache.delete(key);
+      }
+    }
+
+    // Check localStorage
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k?.startsWith(CACHE_PREFIX + prefix)) {
+          keysToRemove.push(k);
+          localStorage.removeItem(k);
+        }
+      }
+      if (keysToRemove.length > 0) {
+        logger.info('CacheService', `Invalidated ${keysToRemove.length} entries for type: ${featureType}`);
+      }
+    } catch { /* ignore */ }
+  },
 };
 
 function sortKeys(obj: Record<string, unknown>): Record<string, unknown> {

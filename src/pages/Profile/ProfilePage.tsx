@@ -118,28 +118,30 @@ export default function ProfilePage() {
   // --- View mode ---
   if (!isEditing) {
     return (
-      <div className="max-w-2xl">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">My Profile</h1>
-          <button
-            onClick={startEditing}
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-          >
-            Edit Profile
-          </button>
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mb-6 rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-6 text-white shadow-xl">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">My Profile</h1>
+            <button
+              onClick={startEditing}
+              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-primary-700 hover:bg-primary-50"
+            >
+              Edit Profile
+            </button>
+          </div>
         </div>
 
         <SuccessMessage message={success} className="mb-4" />
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="mx-auto max-w-2xl rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
           {/* Avatar placeholder */}
           <div className="mb-5 flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-100 text-2xl font-bold text-primary-700">
               {profile.full_name?.[0]?.toUpperCase() ?? '?'}
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-800">{profile.full_name}</h2>
-              <span className={`text-sm font-medium capitalize ${profile.role === 'mentor' ? 'text-indigo-600' : 'text-green-600'}`}>
+              <span className={`text-sm font-semibold capitalize ${profile.role === 'mentor' ? 'text-primary-600' : 'text-green-600'}`}>
                 {profile.role}
               </span>
             </div>
@@ -161,7 +163,7 @@ export default function ProfilePage() {
 
           {profile.bio && (
             <div className="mt-4 border-t border-gray-100 pt-4">
-              <p className="mb-1 text-xs font-medium uppercase text-gray-400">Bio</p>
+              <p className="mb-1 text-xs font-semibold uppercase text-gray-400">Bio</p>
               <p className="text-sm text-gray-700 whitespace-pre-line">{profile.bio}</p>
             </div>
           )}
@@ -177,21 +179,21 @@ export default function ProfilePage() {
 
   // --- Edit mode ---
   return (
-    <div className="max-w-2xl">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Edit Profile</h1>
+    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mb-6 rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-6 text-white shadow-xl">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Edit Profile</h1>
       </div>
 
       <ErrorMessage message={error} className="mb-4" />
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-5">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-gray-100 bg-white p-6 shadow-lg space-y-5">
         {/* Full Name */}
         <Field label="Full Name" required>
           <input
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -203,7 +205,7 @@ export default function ProfilePage() {
             max={100}
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -212,7 +214,7 @@ export default function ProfilePage() {
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value as Gender | '')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Prefer not to say</option>
             {Object.entries(GENDER_LABELS).map(([v, l]) => (
@@ -227,7 +229,7 @@ export default function ProfilePage() {
             type="text"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -237,7 +239,7 @@ export default function ProfilePage() {
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -247,7 +249,7 @@ export default function ProfilePage() {
             type="text"
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -256,7 +258,7 @@ export default function ProfilePage() {
           <select
             value={annualIncome}
             onChange={(e) => setAnnualIncome(e.target.value as AnnualIncome | '')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select</option>
             {Object.entries(ANNUAL_INCOME_LABELS).map(([v, l]) => (
@@ -270,7 +272,7 @@ export default function ProfilePage() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category | '')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select</option>
             {Object.entries(CATEGORY_LABELS).map(([v, l]) => (
@@ -284,7 +286,7 @@ export default function ProfilePage() {
           <select
             value={pwdStatus}
             onChange={(e) => setPwdStatus(e.target.value as PwdStatus | '')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select</option>
             <option value="yes">Yes</option>
@@ -301,17 +303,17 @@ export default function ProfilePage() {
               onChange={(e) => { setStateSearch(e.target.value); setState(''); setShowStateSuggestions(true); }}
               onFocus={() => setShowStateSuggestions(true)}
               onBlur={() => setTimeout(() => setShowStateSuggestions(false), 150)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Search state..."
               autoComplete="off"
             />
             {showStateSuggestions && filteredStates.length > 0 && (
-              <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-md">
+              <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-lg">
                 {filteredStates.map((s) => (
                   <li
                     key={s}
                     onMouseDown={() => { setState(s); setStateSearch(s); setShowStateSuggestions(false); }}
-                    className="cursor-pointer px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50"
+                    className="cursor-pointer px-3 py-2 text-sm text-gray-700 hover:bg-primary-50"
                   >
                     {s}
                   </li>
@@ -327,7 +329,7 @@ export default function ProfilePage() {
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
           />
         </Field>
 
@@ -337,7 +339,7 @@ export default function ProfilePage() {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={6}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+            className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500 ${
               isOverBioLimit ? 'border-red-400' : 'border-gray-300'
             }`}
           />
@@ -352,7 +354,7 @@ export default function ProfilePage() {
             type="button"
             onClick={cancelEditing}
             disabled={saving}
-            className="flex-1 rounded-md border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+            className="flex-1 rounded-xl border border-gray-300 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
           >
             Cancel
           </button>
@@ -360,7 +362,7 @@ export default function ProfilePage() {
             type="button"
             onClick={handleSave}
             disabled={saving || isOverBioLimit}
-            className="flex-1 rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 flex items-center justify-center gap-2"
+            className="flex-1 rounded-xl bg-primary-600 py-2 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {saving && <Spinner size="sm" />}
             {saving ? 'Saving...' : 'Save Changes'}

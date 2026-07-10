@@ -152,10 +152,22 @@ export interface SavedLoanMetadata {
 
 export interface LoanSearchHistoryFilters {
   course: string;
-  loanAmount: number | string;
-  studyDestination: string;
-  preferredBankType: string;
+  courseOther?: string;
+  studyLevel?: string;
   collegeName?: string;
+  admissionStatus?: string;
+  studyDestination: string;
+  abroadCountry?: string;
+  estimatedCost?: string;
+  loanAmount: number | string;
+  repaymentPreference?: string;
+  collateralAvailable?: string;
+  coapplicant?: string;
+  needMoratorium?: boolean;
+  needFemaleBenefits?: boolean;
+  preferredBankType: string;
+  interestRatePreference?: string;
+  needGovernmentLoan?: boolean;
 }
 
 // ── Loading step messages ─────────────────────────────────────────────────────

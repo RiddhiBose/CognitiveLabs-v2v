@@ -188,7 +188,7 @@ export default function MentorPreferenceForm({ existing, onSave, saving }: Props
       <button
         type="submit"
         disabled={saving}
-        className="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-700 disabled:opacity-60 transition-colors cursor-pointer"
+        className="w-full rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 disabled:opacity-60 transition-colors cursor-pointer"
       >
         {saving ? 'Saving…' : existing ? 'Update Preferences' : 'Save Preferences'}
       </button>

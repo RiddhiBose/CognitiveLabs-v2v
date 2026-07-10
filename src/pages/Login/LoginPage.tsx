@@ -42,77 +42,79 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-      <h1 className="mb-1 text-2xl font-bold text-gray-800">Sign In</h1>
-      <p className="mb-6 text-sm text-gray-500">Welcome back to ElevateHer AI.</p>
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <h1 className="mb-2 text-3xl font-bold text-charcoal">Sign In</h1>
+        <p className="mb-8 text-gray-500">Welcome back! Please enter your details.</p>
 
-      <ErrorMessage message={error} className="mb-4" />
+        <ErrorMessage message={error} className="mb-6" />
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
-              fieldErrors.email ? 'border-red-400' : 'border-gray-300'
-            }`}
-            placeholder="you@example.com"
-            disabled={loading}
-          />
-          {fieldErrors.email && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
-          )}
-        </div>
-
-        {/* Password */}
-        <div>
-          <div className="mb-1 flex items-center justify-between">
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">
-              Password
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-charcoal">
+              Email
             </label>
-            <Link to="/forgot-password" className="text-xs text-indigo-600 hover:underline">
-              Forgot password?
-            </Link>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-50 ${
+                fieldErrors.email ? 'border-red-400 focus:border-red-400 focus:ring-red-50' : ''
+              }`}
+              placeholder="you@example.com"
+              disabled={loading}
+            />
+            {fieldErrors.email && (
+              <p className="mt-2 text-xs text-red-500">{fieldErrors.email}</p>
+            )}
           </div>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
-              fieldErrors.password ? 'border-red-400' : 'border-gray-300'
-            }`}
-            placeholder="••••••••"
+
+          {/* Password */}
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <label htmlFor="password" className="text-sm font-semibold text-charcoal">
+                Password
+              </label>
+              <Link to="/forgot-password" className="text-xs font-medium text-primary-600 hover:text-primary-700">
+                Forgot password?
+              </Link>
+            </div>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-50 ${
+                fieldErrors.password ? 'border-red-400 focus:border-red-400 focus:ring-red-50' : ''
+              }`}
+              placeholder="••••••••"
+              disabled={loading}
+            />
+            {fieldErrors.password && (
+              <p className="mt-2 text-xs text-red-500">{fieldErrors.password}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
             disabled={loading}
-          />
-          {fieldErrors.password && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
-          )}
-        </div>
+            className="w-full rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-200 hover:shadow-xl hover:shadow-primary-300 hover:from-primary-700 hover:to-primary-800 disabled:opacity-60 disabled:shadow-none"
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
-        >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-      </form>
-
-      <p className="mt-5 text-center text-sm text-gray-500">
-        Don&apos;t have an account?{' '}
-        <Link to={ROUTES.REGISTER} className="font-medium text-indigo-600 hover:underline">
-          Create one
-        </Link>
-      </p>
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Don't have an account?{' '}
+          <Link to={ROUTES.REGISTER} className="font-semibold text-primary-600 hover:text-primary-700">
+            Create one
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

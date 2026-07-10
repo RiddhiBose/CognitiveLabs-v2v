@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useSaved } from '../../contexts/SavedContext';
@@ -40,9 +41,11 @@ export default function StartupFundingPage() {
   const { user } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
   const { adjustCount } = useSaved();
+  const location = useLocation();
+  const prefill = (location.state as { prefill?: Partial<StartupFundingFormValues> } | null)?.prefill;
 
   const [formValues, setFormValues] = useState<StartupFundingFormValues>(
-    STARTUP_FUNDING_FORM_DEFAULTS,
+    prefill ? { ...STARTUP_FUNDING_FORM_DEFAULTS, ...prefill } : STARTUP_FUNDING_FORM_DEFAULTS,
   );
   const [results, setResults] = useState<StartupFundingRecommendation[]>([]);
   const [totalFound, setTotalFound] = useState(0);

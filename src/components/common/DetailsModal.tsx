@@ -60,8 +60,8 @@ export default function DetailsModal({
           </div>
 
           {officialWebsite && (
-            <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-4">
-              <p className="text-sm text-indigo-800">
+            <div className="rounded-xl border border-primary-200 bg-primary-50 p-4">
+              <p className="text-sm text-primary-800">
                 <strong>Official Website:</strong>{' '}
                 <a
                   href={officialWebsite}
@@ -79,7 +79,7 @@ export default function DetailsModal({
         <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+            className="rounded-xl bg-primary px-6 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
           >
             Close
           </button>

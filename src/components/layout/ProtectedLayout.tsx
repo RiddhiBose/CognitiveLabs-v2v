@@ -1,18 +1,19 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 
 export default function ProtectedLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6">
-          <Outlet />
-        </main>
-      </div>
+    <div className="min-h-screen bg-cream">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <main className="pt-4 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto transition-all duration-300">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

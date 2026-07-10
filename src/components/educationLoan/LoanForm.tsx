@@ -69,7 +69,7 @@ interface SectionHeadingProps {
 function SectionHeading({ number, title, subtitle }: SectionHeadingProps) {
   return (
     <div className="mb-4 flex items-start gap-3">
-      <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+      <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700">
         {number}
       </span>
       <div>
@@ -115,7 +115,7 @@ function Select({ value, onChange, options, placeholder = 'Select…', hasError 
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+      className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 ${
         hasError
           ? 'border-red-400 bg-red-50'
           : 'border-gray-300 bg-white text-gray-800'
@@ -140,12 +140,12 @@ interface ToggleRowProps {
 
 function ToggleRow({ label, checked, onChange, description }: ToggleRowProps) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 hover:bg-indigo-50 transition-colors">
+    <label className="flex cursor-pointer items-start gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 hover:bg-primary-50 transition-colors">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+        className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
       />
       <div>
         <span className="text-sm font-medium text-gray-800">{label}</span>
@@ -209,7 +209,7 @@ export default function LoanForm({
                   value={form.courseOther}
                   onChange={(e) => onChange('courseOther', e.target.value)}
                   placeholder="e.g. BPT, B.Arch, BHM…"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </FieldWrapper>
             )}
@@ -235,7 +235,7 @@ export default function LoanForm({
                 value={form.collegeName}
                 onChange={(e) => onChange('collegeName', e.target.value)}
                 placeholder="e.g. IIT Delhi, AIIMS, etc."
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </FieldWrapper>
 
@@ -316,7 +316,7 @@ export default function LoanForm({
                   )
                 }
                 placeholder="e.g. 15"
-                className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                   errors.loanAmountRequired ? 'border-red-400 bg-red-50' : 'border-gray-300'
                 }`}
               />
@@ -417,14 +417,14 @@ export default function LoanForm({
             type="button"
             onClick={onReset}
             disabled={loading}
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
           >
             Reset
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? (
               <>

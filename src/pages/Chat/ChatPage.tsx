@@ -41,7 +41,7 @@ function Avatar({
     .join('');
   return (
     <div
-      className={`${dim} flex shrink-0 items-center justify-center rounded-full bg-indigo-600 font-bold text-white`}
+      className={`${dim} flex shrink-0 items-center justify-center rounded-full bg-primary font-bold text-white`}
     >
       {initials}
     </div>
@@ -107,7 +107,7 @@ function ConversationList({
 
       {loading && (
         <div className="flex flex-1 items-center justify-center">
-          <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo-100 border-t-indigo-600" />
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-primary-100 border-t-primary" />
         </div>
       )}
 
@@ -143,7 +143,7 @@ function ConversationList({
                 <div className="relative shrink-0">
                   <Avatar name={conn.other_user_name} avatarUrl={conn.other_user_avatar} />
                   {conn.unread_count > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[9px] font-bold text-white">
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
                       {conn.unread_count > 9 ? '9+' : conn.unread_count}
                     </span>
                   )}
@@ -331,7 +331,7 @@ function ChatWindow({
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 bg-gray-50/50">
         {loadingMsgs && (
           <div className="flex items-center justify-center py-12">
-            <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo-100 border-t-indigo-600" />
+            <div className="h-7 w-7 animate-spin rounded-full border-2 border-primary-100 border-t-primary" />
           </div>
         )}
 
@@ -386,14 +386,14 @@ function ChatWindow({
                     <div
                       className={`mx-2 max-w-[70%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
                         isMine
-                          ? 'rounded-br-sm bg-indigo-600 text-white'
+                          ? 'rounded-br-sm bg-primary text-white'
                           : 'rounded-bl-sm bg-white text-gray-800 border border-gray-100'
                       } ${isOptimistic ? 'opacity-70' : ''}`}
                     >
                       <p className="whitespace-pre-wrap break-words">{msg.content}</p>
                       <p
                         className={`mt-1 text-right text-[10px] ${
-                          isMine ? 'text-indigo-200' : 'text-gray-400'
+                          isMine ? 'text-primary-200' : 'text-gray-400'
                         }`}
                       >
                         {formatTime(msg.created_at)}
@@ -455,7 +455,7 @@ function ChatWindow({
             type="submit"
             disabled={!text.trim() || sending}
             aria-label="Send message"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 transition-colors cursor-pointer"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm hover:bg-primary-700 disabled:opacity-50 transition-colors cursor-pointer"
           >
             {sending ? (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />

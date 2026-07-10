@@ -58,7 +58,7 @@ export default function Step5Bio({ onComplete, onBack, submitting }: Props) {
           value={bio}
           onChange={(e) => setBio(e.target.value)}
           rows={8}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             isOverLimit ? 'border-red-400' : 'border-gray-300'
           }`}
           placeholder="Write about yourself..."
@@ -85,7 +85,7 @@ export default function Step5Bio({ onComplete, onBack, submitting }: Props) {
         <button
           type="submit"
           disabled={submitting || isOverLimit}
-          className="flex-1 rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+          className="flex-1 rounded-xl bg-primary py-2 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-60"
         >
           {submitting ? 'Saving profile...' : 'Complete Profile'}
         </button>

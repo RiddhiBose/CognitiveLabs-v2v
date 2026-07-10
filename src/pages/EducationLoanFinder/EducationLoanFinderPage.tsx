@@ -9,6 +9,7 @@
 //   - Never calls Tavily, Gemini, PromptBuilder, or SearchService directly
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSaved } from '../../contexts/SavedContext';
@@ -50,8 +51,8 @@ function ProfileMissingBanner() {
 function ProfileChip({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-700">
-      <span className="font-medium">{label}:</span> {value}
+    <span className="inline-flex items-center gap-1 rounded-full border border-primary-100 bg-primary-50 px-2.5 py-0.5 text-xs text-primary-700">
+      <span className="font-semibold">{label}:</span> {value}
     </span>
   );
 }
@@ -80,7 +81,7 @@ function ProfilePreview({ profile }: ProfilePreviewProps) {
   };
 
   return (
-    <div className="mb-5 rounded-lg border border-gray-200 bg-white p-4">
+    <div className="mb-5 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
         Auto-filled from your profile
       </p>
@@ -115,11 +116,11 @@ function ProfilePreview({ profile }: ProfilePreviewProps) {
 function PageHeader() {
   return (
     <div className="mb-6">
-      <div className="flex items-center gap-3">
-        <span className="text-3xl" aria-hidden="true">💰</span>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Education Loan Finder</h1>
-          <p className="mt-0.5 text-sm text-gray-500">
+      <div className="rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-8 text-white shadow-xl relative overflow-hidden">
+        <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center pr-10 text-9xl">💰</div>
+        <div className="relative z-10 max-w-2xl">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Education Loan Finder</h1>
+          <p className="mt-2 text-sm text-primary-100">
             AI-powered recommendations from official bank and government portals
           </p>
         </div>
@@ -132,12 +133,12 @@ function PageHeader() {
 
 function ApiWarning({ missing }: { missing: string[] }) {
   return (
-    <div className="mb-5 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-800">
+    <div className="mb-5 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
       <strong>Configuration required:</strong> The following API keys are missing:{' '}
-      <code className="mx-1 rounded bg-orange-100 px-1 font-mono text-xs">
+      <code className="mx-1 rounded bg-yellow-100 px-1 font-mono text-xs">
         {missing.join(', ')}
       </code>
-      . Add them to your <code className="rounded bg-orange-100 px-1 font-mono text-xs">.env</code>{' '}
+      . Add them to your <code className="rounded bg-yellow-100 px-1 font-mono text-xs">.env</code>{' '}
       file to enable AI-powered search.
     </div>
   );
@@ -151,9 +152,13 @@ export default function EducationLoanFinderPage() {
   const { profile, loading: profileLoading } = useProfile();
   const { user } = useAuth();
   const { adjustCount } = useSaved();
+  const location = useLocation();
+  const prefill = (location.state as { prefill?: Partial<LoanFormData> } | null)?.prefill;
 
   // Form state
-  const [form, setForm] = useState<LoanFormData>(EMPTY_LOAN_FORM);
+  const [form, setForm] = useState<LoanFormData>(
+    prefill ? { ...EMPTY_LOAN_FORM, ...prefill } : EMPTY_LOAN_FORM
+  );
   const [errors, setErrors] = useState<LoanFormErrors>({});
 
   // Page state machine
@@ -343,7 +348,7 @@ export default function EducationLoanFinderPage() {
     return (
       <div className="flex items-center justify-center py-16">
         <span
-          className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600"
+          className="h-8 w-8 animate-spin rounded-full border-4 border-primary-100 border-t-primary-600"
           role="status"
           aria-label="Loading profile…"
         />
@@ -355,88 +360,90 @@ export default function EducationLoanFinderPage() {
   const isProfileIncomplete = !profile?.is_profile_complete;
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <PageHeader />
+    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl">
+        <PageHeader />
 
-      {/* API key warning */}
-      {missingKeys.length > 0 && <ApiWarning missing={missingKeys} />}
+        {/* API key warning */}
+        {missingKeys.length > 0 && <ApiWarning missing={missingKeys} />}
 
-      {/* Profile incomplete warning */}
-      {isProfileIncomplete && <ProfileMissingBanner />}
+        {/* Profile incomplete warning */}
+        {isProfileIncomplete && <ProfileMissingBanner />}
 
-      {/* Profile preview (auto-filled data) */}
-      {profile && <ProfilePreview profile={searchProfile} />}
+        {/* Profile preview (auto-filled data) */}
+        {profile && <ProfilePreview profile={searchProfile} />}
 
-      {/* ── Form section ─────────────────────────────────────────────────────── */}
-      {(pageState === 'form' || pageState === 'loading') && (
-        <div className="mb-8">
-          <LoanForm
-            form={form}
-            errors={errors}
-            loading={pageState === 'loading'}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            onReset={handleReset}
-          />
-        </div>
-      )}
-
-      {/* ── Loading state ─────────────────────────────────────────────────────── */}
-      {pageState === 'loading' && (
-        <div className="mt-2">
-          <LoanLoadingState />
-        </div>
-      )}
-
-      {/* ── Results section ───────────────────────────────────────────────────── */}
-      {pageState === 'results' && (
-        <div ref={resultsRef}>
-          {/* Search again link */}
-          <div className="mb-4 flex items-center gap-3">
-            <button
-              onClick={() => setPageState('form')}
-              className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline focus:outline-none"
-            >
-              <span aria-hidden="true">←</span>
-              Modify search
-            </button>
-            <span className="text-gray-300">|</span>
-            <button
-              onClick={handleSubmit}
-              className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline focus:outline-none"
-            >
-              <span aria-hidden="true">🔄</span>
-              Re-run search
-            </button>
+        {/* ── Form section ─────────────────────────────────────────────────────── */}
+        {(pageState === 'form' || pageState === 'loading') && (
+          <div className="mb-8">
+            <LoanForm
+              form={form}
+              errors={errors}
+              loading={pageState === 'loading'}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              onReset={handleReset}
+            />
           </div>
+        )}
 
-          <LoanResults
-            loans={loans}
-            error={searchError}
-            warning={searchWarning}
-            cached={cached}
-            durationMs={durationMs}
-            savedIds={savedIds}
-            savingId={savingId}
-            onSave={handleSave}
-            onUnsave={handleUnsave}
-            onRetry={handleRetry}
-            onViewDetails={handleViewDetails}
+        {/* ── Loading state ─────────────────────────────────────────────────────── */}
+        {pageState === 'loading' && (
+          <div className="mt-2">
+            <LoanLoadingState />
+          </div>
+        )}
+
+        {/* ── Results section ───────────────────────────────────────────────────── */}
+        {pageState === 'results' && (
+          <div ref={resultsRef}>
+            {/* Search again link */}
+            <div className="mb-4 flex items-center gap-3">
+              <button
+                onClick={() => setPageState('form')}
+                className="flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:underline focus:outline-none"
+              >
+                <span aria-hidden="true">←</span>
+                Modify search
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={handleSubmit}
+                className="flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:underline focus:outline-none"
+              >
+                <span aria-hidden="true">🔄</span>
+                Re-run search
+              </button>
+            </div>
+
+            <LoanResults
+              loans={loans}
+              error={searchError}
+              warning={searchWarning}
+              cached={cached}
+              durationMs={durationMs}
+              savedIds={savedIds}
+              savingId={savingId}
+              onSave={handleSave}
+              onUnsave={handleUnsave}
+              onRetry={handleRetry}
+              onViewDetails={handleViewDetails}
+            />
+          </div>
+        )}
+
+        {/* Details Modal */}
+        {selectedLoan && (
+          <DetailsModal
+            isOpen={detailsModalOpen}
+            onClose={() => setDetailsModalOpen(false)}
+            title={selectedLoan.loanSchemeName ?? selectedLoan.title}
+            applicationSteps={typeof selectedLoan.applicationSteps === 'string' ? selectedLoan.applicationSteps : 'Please check official bank website for application process'}
+            requiredDocuments={typeof selectedLoan.requiredDocuments === 'string' ? selectedLoan.requiredDocuments : 'Please check official bank website for document requirements'}
+            officialWebsite={selectedLoan.officialWebsite}
           />
-        </div>
-      )}
-
-      {/* Details Modal */}
-      {selectedLoan && (
-        <DetailsModal
-          isOpen={detailsModalOpen}
-          onClose={() => setDetailsModalOpen(false)}
-          title={selectedLoan.loanSchemeName ?? selectedLoan.title}
-          applicationSteps={typeof selectedLoan.applicationSteps === 'string' ? selectedLoan.applicationSteps : 'Please check official bank website for application process'}
-          requiredDocuments={typeof selectedLoan.requiredDocuments === 'string' ? selectedLoan.requiredDocuments : 'Please check official bank website for document requirements'}
-          officialWebsite={selectedLoan.officialWebsite}
-        />
-      )}
+        )}
+      </div>
     </div>
   );
 }

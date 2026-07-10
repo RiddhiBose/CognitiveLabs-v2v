@@ -91,7 +91,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
             setSpecialization('');
             setSpecializationOther('');
           }}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.qualification ? 'border-red-400' : 'border-gray-300'
           }`}
         >
@@ -116,7 +116,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
             type="text"
             value={qualificationOther}
             onChange={(e) => setQualificationOther(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
             placeholder="Enter your qualification"
           />
         </div>
@@ -158,7 +158,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
             type="text"
             value={specializationOther}
             onChange={(e) => setSpecializationOther(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+            className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
               errors.specializationOther ? 'border-red-400' : 'border-gray-300'
             }`}
             placeholder="Enter your specialization"
@@ -181,7 +181,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
             type="text"
             value={collegeName}
             onChange={(e) => setCollegeName(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
             placeholder="e.g. IIT Bombay, Anna University, BITS Pilani"
           />
           <p className="mt-1 text-xs text-gray-400">
@@ -201,7 +201,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
           type="text"
           value={schoolName}
           onChange={(e) => setSchoolName(e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
           placeholder="e.g. Kendriya Vidyalaya, DAV Public School"
         />
         <p className="mt-1 text-xs text-gray-400">
@@ -219,7 +219,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
         </button>
         <button
           type="submit"
-          className="flex-1 rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+          className="flex-1 rounded-xl bg-primary py-2 text-sm font-semibold text-white hover:bg-primary-700"
         >
           Next &rarr;
         </button>

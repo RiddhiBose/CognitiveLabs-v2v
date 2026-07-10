@@ -58,111 +58,113 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-      <h1 className="mb-1 text-2xl font-bold text-gray-800">Create Account</h1>
-      <p className="mb-6 text-sm text-gray-500">Join ElevateHer AI to get started.</p>
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <h1 className="mb-2 text-3xl font-bold text-charcoal">Create Account</h1>
+        <p className="mb-8 text-gray-500">Join us to start your journey!</p>
 
-      <ErrorMessage message={error} className="mb-4" />
+        <ErrorMessage message={error} className="mb-6" />
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
-              fieldErrors.email ? 'border-red-400' : 'border-gray-300'
-            }`}
-            placeholder="you@example.com"
-            disabled={loading}
-          />
-          {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
-        </div>
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-charcoal">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-50 ${
+                fieldErrors.email ? 'border-red-400 focus:border-red-400 focus:ring-red-50' : ''
+              }`}
+              placeholder="you@example.com"
+              disabled={loading}
+            />
+            {fieldErrors.email && <p className="mt-2 text-xs text-red-500">{fieldErrors.email}</p>}
+          </div>
 
-        {/* Password */}
-        <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
-              fieldErrors.password ? 'border-red-400' : 'border-gray-300'
-            }`}
-            placeholder="Min. 8 characters"
-            disabled={loading}
-          />
-          {/* Strength indicator */}
-          {passwordStrength && (
-            <div className="mt-1 flex items-center gap-2">
-              <div className="h-1.5 flex-1 rounded-full bg-gray-200">
-                <div
-                  className={`h-full rounded-full transition-all ${strengthColor[passwordStrength.strength]}`}
-                  style={{
-                    width:
-                      passwordStrength.strength === 'weak'
-                        ? '33%'
-                        : passwordStrength.strength === 'medium'
-                          ? '66%'
-                          : '100%',
-                  }}
-                />
+          {/* Password */}
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-semibold text-charcoal">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-50 ${
+                fieldErrors.password ? 'border-red-400 focus:border-red-400 focus:ring-red-50' : ''
+              }`}
+              placeholder="Min. 8 characters"
+              disabled={loading}
+            />
+            {/* Strength indicator */}
+            {passwordStrength && (
+              <div className="mt-2 flex items-center gap-2">
+                <div className="h-1.5 flex-1 rounded-full bg-gray-200">
+                  <div
+                    className={`h-full rounded-full transition-all ${strengthColor[passwordStrength.strength]}`}
+                    style={{
+                      width:
+                        passwordStrength.strength === 'weak'
+                          ? '33%'
+                          : passwordStrength.strength === 'medium'
+                            ? '66%'
+                            : '100%',
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-gray-500">{passwordStrength.message}</span>
               </div>
-              <span className="text-xs text-gray-500">{passwordStrength.message}</span>
-            </div>
-          )}
-          {fieldErrors.password && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
-          )}
-        </div>
+            )}
+            {fieldErrors.password && (
+              <p className="mt-2 text-xs text-red-500">{fieldErrors.password}</p>
+            )}
+          </div>
 
-        {/* Confirm Password */}
-        <div>
-          <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-gray-700">
-            Confirm Password
-          </label>
-          <input
-            id="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
-              fieldErrors.confirmPassword ? 'border-red-400' : 'border-gray-300'
-            }`}
-            placeholder="Re-enter your password"
+          {/* Confirm Password */}
+          <div>
+            <label htmlFor="confirmPassword" className="mb-2 block text-sm font-semibold text-charcoal">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-50 ${
+                fieldErrors.confirmPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-50' : ''
+              }`}
+              placeholder="Re-enter your password"
+              disabled={loading}
+            />
+            {fieldErrors.confirmPassword && (
+              <p className="mt-2 text-xs text-red-500">{fieldErrors.confirmPassword}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
             disabled={loading}
-          />
-          {fieldErrors.confirmPassword && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>
-          )}
-        </div>
+            className="w-full rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-200 hover:shadow-xl hover:shadow-primary-300 hover:from-primary-700 hover:to-primary-800 disabled:opacity-60 disabled:shadow-none"
+          >
+            {loading ? 'Creating account...' : 'Create Account'}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
-        >
-          {loading ? 'Creating account...' : 'Create Account'}
-        </button>
-      </form>
-
-      <p className="mt-5 text-center text-sm text-gray-500">
-        Already have an account?{' '}
-        <Link to={ROUTES.LOGIN} className="font-medium text-indigo-600 hover:underline">
-          Sign in
-        </Link>
-      </p>
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Already have an account?{' '}
+          <Link to={ROUTES.LOGIN} className="font-semibold text-primary-600 hover:text-primary-700">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

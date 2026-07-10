@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useSaved } from '../../contexts/SavedContext';
@@ -23,7 +24,11 @@ export default function ScholarshipFinderPage() {
   const { user } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
   const { adjustCount } = useSaved();
-  const [formValues, setFormValues] = useState<ScholarshipFormValues>(SCHOLARSHIP_FORM_DEFAULTS);
+  const location = useLocation();
+  const prefill = (location.state as { prefill?: Partial<ScholarshipFormValues> } | null)?.prefill;
+  const [formValues, setFormValues] = useState<ScholarshipFormValues>(
+    prefill ? { ...SCHOLARSHIP_FORM_DEFAULTS, ...prefill } : SCHOLARSHIP_FORM_DEFAULTS
+  );
   const [results, setResults] = useState<ScholarshipRecommendation[]>([]);
   const [resultCount, setResultCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -121,12 +126,12 @@ export default function ScholarshipFinderPage() {
   const allMatching = results.slice(5);
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="rounded-3xl bg-gradient-to-r from-violet-600 to-fuchsia-600 p-8 text-white shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-violet-100">AI scholarship finder</p>
-          <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">Find scholarships from official sources</h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-violet-50 sm:text-base">
+    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-6">
+        <header className="rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-8 text-white shadow-xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-100">AI scholarship finder</p>
+          <h1 className="mt-3 text-3xl font-bold sm:text-4xl">Find scholarships from official sources</h1>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-primary-50 sm:text-base">
             Your profile details are reused automatically for eligibility, while the search goal section defines the scholarship level, degree and location you want to discover.
           </p>
         </header>
@@ -144,34 +149,34 @@ export default function ScholarshipFinderPage() {
 
             {profileLoading ? <LoadingCard /> : null}
             <ErrorMessage message={error} />
-            {warning ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">{warning}</div> : null}
+            {warning ? <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-700">{warning}</div> : null}
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
             <div className="space-y-2">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Your profile summary</p>
-              <h2 className="text-xl font-semibold text-slate-900">Eligibility context</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-600">Your profile summary</p>
+              <h2 className="text-xl font-bold text-gray-900">Eligibility context</h2>
             </div>
-            <div className="space-y-3 text-sm text-slate-600">
-              <p><span className="font-semibold text-slate-800">Name:</span> {profile?.full_name ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Qualification:</span> {profile?.qualification ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Current degree:</span> {profile?.specialization ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Current year:</span> {profile?.age ? `${profile.age}` : 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">State:</span> {profile?.state ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">City:</span> {profile?.city ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Gender:</span> {profile?.gender ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Category:</span> {profile?.category ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Annual family income:</span> {profile?.annual_income ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">PWD:</span> {profile?.pwd_status ?? 'Not available'}</p>
-              <p><span className="font-semibold text-slate-800">Occupation:</span> {profile?.occupation ?? 'Not available'}</p>
+            <div className="space-y-3 text-sm text-gray-600">
+              <p><span className="font-semibold text-gray-800">Name:</span> {profile?.full_name ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Qualification:</span> {profile?.qualification ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Current degree:</span> {profile?.specialization ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Current year:</span> {profile?.age ? `${profile.age}` : 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">State:</span> {profile?.state ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">City:</span> {profile?.city ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Gender:</span> {profile?.gender ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Category:</span> {profile?.category ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Annual family income:</span> {profile?.annual_income ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">PWD:</span> {profile?.pwd_status ?? 'Not available'}</p>
+              <p><span className="font-semibold text-gray-800">Occupation:</span> {profile?.occupation ?? 'Not available'}</p>
             </div>
           </div>
         </div>
 
         <section className="space-y-4">
           {loading ? (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-3 text-sm font-medium text-slate-700">{statusMessage || 'Preparing scholarship results…'}</div>
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
+              <div className="mb-3 text-sm font-medium text-gray-700">{statusMessage || 'Preparing scholarship results…'}</div>
               <div className="space-y-3">
                 <LoadingCard />
                 <LoadingCard />
@@ -180,22 +185,22 @@ export default function ScholarshipFinderPage() {
           ) : null}
 
           {!loading && results.length === 0 && !error ? (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-600 shadow-sm">
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-sm text-gray-600 shadow-lg">
               No scholarships matching your profile were found from official sources yet. Try adjusting your filters and searching again.
             </div>
           ) : null}
 
           {results.length > 0 ? (
             <div className="space-y-4">
-              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+              <div className="rounded-2xl border border-gray-100 bg-white px-4 py-3 text-sm text-gray-600 shadow-lg">
                 Showing {resultCount || results.length} verified scholarships matching your search.
               </div>
 
               {topRecommended.length > 0 ? (
-                <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="space-y-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
                   <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-slate-900">⭐ Top Recommended</h3>
-                    <span className="text-sm text-slate-500">Highest match opportunities</span>
+                    <h3 className="text-lg font-bold text-gray-900">⭐ Top Recommended</h3>
+                    <span className="text-sm text-gray-500">Highest match opportunities</span>
                   </div>
                   <div className="grid gap-4 xl:grid-cols-2">
                     {topRecommended.map((scholarship) => (
@@ -213,10 +218,10 @@ export default function ScholarshipFinderPage() {
               ) : null}
 
               {allMatching.length > 0 ? (
-                <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="space-y-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
                   <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-slate-900">All Matching Scholarships</h3>
-                    <span className="text-sm text-slate-500">Every verified match sorted by relevance</span>
+                    <h3 className="text-lg font-bold text-gray-900">All Matching Scholarships</h3>
+                    <span className="text-sm text-gray-500">Every verified match sorted by relevance</span>
                   </div>
                   <div className="grid gap-4 xl:grid-cols-2">
                     {allMatching.map((scholarship) => (

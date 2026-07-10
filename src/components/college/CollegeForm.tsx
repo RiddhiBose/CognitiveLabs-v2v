@@ -13,6 +13,7 @@ interface CollegeFormProps {
   onSubmit: (formData: CollegeFinderFormData) => void;
   isLoading: boolean;
   profile: Profile | null;
+  initialValues?: Partial<CollegeFinderFormData>;
 }
 
 const EXAM_GROUPS = [
@@ -87,7 +88,7 @@ const EXAM_FIELDS: Record<string, { rank: boolean; score: boolean; percentile: b
   'MAT': { rank: false, score: false, percentile: true },
 };
 
-export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, profile }) => {
+export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, profile, initialValues }) => {
   // Determine missing profile fields
   const missingQualification = !profile?.qualification;
   const missingState = !profile?.state;
@@ -116,6 +117,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
     category: 'general',
     annual_income: 'below_2l',
     pwd_status: 'no',
+    ...initialValues,
   });
 
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -260,7 +262,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
       {/* 1. Academic Details Section */}
       <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
         <h3 className="mb-4 text-base font-semibold text-gray-800 flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-600">
             1
           </span>
           Academic Performance (Class 12)
@@ -279,7 +281,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               onChange={handleChange}
               placeholder="e.g. 85.50"
               required
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             />
           </div>
 
@@ -294,7 +296,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               onChange={handleChange}
               placeholder="e.g. 2024"
               required
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             />
           </div>
 
@@ -306,7 +308,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="board"
               value={formData.board}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="CBSE">CBSE</option>
               <option value="CISCE (ISC)">CISCE (ISC)</option>
@@ -326,7 +328,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="course"
               value={formData.course}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="BTech">BTech</option>
               <option value="MBBS">MBBS</option>
@@ -352,7 +354,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
               >
                 {availableSpecs.map((spec) => (
                   <option key={spec} value={spec}>
@@ -367,7 +369,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                 value={formData.specialization}
                 onChange={handleChange}
                 placeholder="e.g. Computer Science, Science, Humanities"
-                className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
               />
             )}
           </div>
@@ -377,7 +379,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
       {/* 2. Entrance Exams Section */}
       <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
         <h3 className="mb-4 text-base font-semibold text-gray-800 flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-600">
             2
           </span>
           Entrance Exams
@@ -401,7 +403,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                       onClick={() => handleExamToggle(exam)}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 ${
                         isChecked
-                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                          ? 'bg-primary-600 text-white border-primary-600 shadow-sm'
                           : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
                       }`}
                     >
@@ -416,8 +418,8 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
 
         {/* Selected Exams Detail Fields */}
         {formData.selectedExams.length > 0 && (
-          <div className="mt-6 rounded-lg border border-indigo-50 bg-indigo-50/20 p-4 space-y-4">
-            <h4 className="text-xs font-bold text-indigo-800 uppercase tracking-wide">
+          <div className="mt-6 rounded-lg border border-primary-50 bg-primary-50/20 p-4 space-y-4">
+            <h4 className="text-xs font-bold text-primary-800 uppercase tracking-wide">
               Selected Exam Details
             </h4>
             {formData.selectedExams.map((exam) => {
@@ -425,7 +427,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               const details = formData.examsDetails[exam] || { rank: '', score: '', percentile: '' };
 
               return (
-                <div key={exam} className="grid grid-cols-1 gap-3 sm:grid-cols-4 items-center bg-white p-3 rounded-lg border border-indigo-100/50">
+                <div key={exam} className="grid grid-cols-1 gap-3 sm:grid-cols-4 items-center bg-white p-3 rounded-lg border border-primary-100/50">
                   <div className="text-sm font-semibold text-gray-700">{exam}</div>
                   
                   {fields.rank && (
@@ -435,7 +437,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                         placeholder="Rank (e.g. 1542)"
                         value={details.rank}
                         onChange={(e) => handleExamDetailsChange(exam, 'rank', e.target.value)}
-                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-indigo-500"
+                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-primary-500"
                         required
                       />
                     </div>
@@ -448,7 +450,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                         placeholder="Score/Marks (e.g. 620)"
                         value={details.score}
                         onChange={(e) => handleExamDetailsChange(exam, 'score', e.target.value)}
-                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-indigo-500"
+                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-primary-500"
                         required
                       />
                     </div>
@@ -461,7 +463,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                         placeholder="Percentile (e.g. 98.45)"
                         value={details.percentile}
                         onChange={(e) => handleExamDetailsChange(exam, 'percentile', e.target.value)}
-                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-indigo-500"
+                        className="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-xs text-gray-800 outline-none focus:border-primary-500"
                         required
                       />
                     </div>
@@ -476,7 +478,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
       {/* 3. User Preferences Section */}
       <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
         <h3 className="mb-4 text-base font-semibold text-gray-800 flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-600">
             3
           </span>
           Admission & College Preferences
@@ -491,7 +493,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="preferredState"
               value={formData.preferredState}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="Any State">Any State</option>
               {INDIAN_STATES.map((state) => (
@@ -510,7 +512,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="budget"
               value={formData.budget}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="No Preference">No Preference</option>
               <option value="Below ₹1 Lakh">Below ₹1 Lakh</option>
@@ -530,7 +532,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="collegeType"
               value={formData.collegeType}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="Any">Any Type</option>
               <option value="Government">Government Only</option>
@@ -554,7 +556,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                   name="hostelRequired"
                   checked={formData.hostelRequired === 'yes'}
                   onChange={() => handleRadioChange('hostelRequired', 'yes')}
-                  className="accent-indigo-600"
+                  className="accent-primary-600"
                 />
                 Required
               </label>
@@ -564,7 +566,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                   name="hostelRequired"
                   checked={formData.hostelRequired === 'no'}
                   onChange={() => handleRadioChange('hostelRequired', 'no')}
-                  className="accent-indigo-600"
+                  className="accent-primary-600"
                 />
                 Not Required
               </label>
@@ -582,7 +584,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                   name="girlsOnly"
                   checked={formData.girlsOnly === 'yes'}
                   onChange={() => handleRadioChange('girlsOnly', 'yes')}
-                  className="accent-indigo-600"
+                  className="accent-primary-600"
                 />
                 Yes
               </label>
@@ -592,7 +594,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
                   name="girlsOnly"
                   checked={formData.girlsOnly === 'no'}
                   onChange={() => handleRadioChange('girlsOnly', 'no')}
-                  className="accent-indigo-600"
+                  className="accent-primary-600"
                 />
                 No Preference
               </label>
@@ -607,7 +609,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-primary-500 focus:bg-white"
             >
               <option value="No Preference">No Preference</option>
               <option value="Urban">Urban</option>
@@ -747,7 +749,7 @@ export const CollegeForm: React.FC<CollegeFormProps> = ({ onSubmit, isLoading, p
         <button
           type="submit"
           disabled={isLoading}
-          className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+          className="rounded-lg bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
         >
           {isLoading ? (
             <>

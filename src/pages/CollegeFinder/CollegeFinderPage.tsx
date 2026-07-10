@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useSaved } from '../../contexts/SavedContext';
 import { LoadingScreen } from '../../components/common';
@@ -19,6 +20,8 @@ const LOADING_STEPS = [
 export default function CollegeFinderPage() {
   const { profile, loading: profileLoading } = useProfile();
   const { adjustCount } = useSaved();
+  const location = useLocation();
+  const prefill = (location.state as { prefill?: Partial<CollegeFinderFormData> } | null)?.prefill;
   const [isSearching, setIsSearching] = useState(false);
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [colleges, setColleges] = useState<CollegeRecommendation[]>([]);
@@ -195,11 +198,11 @@ export default function CollegeFinderPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
       {/* Header Banner */}
-      <div className="mb-6 rounded-2xl bg-gradient-to-r from-indigo-900 to-indigo-700 p-6 text-white shadow-sm relative overflow-hidden">
+      <div className="mb-6 rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-6 text-white shadow-xl relative overflow-hidden">
         <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center pr-10 text-9xl">🏛️</div>
         <div className="relative z-10 max-w-2xl">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">AI College Finder</h1>
-          <p className="mt-2 text-sm text-indigo-100">
+          <p className="mt-2 text-sm text-primary-100">
             Find the best matching universities in India using real-time search grounding and customized recommendation algorithms based on your academic score, entrance exams, and preferences.
           </p>
         </div>
@@ -222,24 +225,25 @@ export default function CollegeFinderPage() {
         <div className="lg:col-span-3 space-y-6">
           {/* Main search card */}
           {!isSearching && colleges.length === 0 && (
-            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-lg">
               <h2 className="mb-4 text-lg font-bold text-gray-800">Profile & Preferences</h2>
               <CollegeForm
                 onSubmit={executeSearch}
                 isLoading={isSearching}
                 profile={profile}
+                initialValues={prefill}
               />
             </div>
           )}
 
           {/* Loader View */}
           {isSearching && (
-            <div className="rounded-2xl border border-gray-100 bg-white p-12 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+            <div className="rounded-2xl border border-gray-100 bg-white p-12 shadow-lg flex flex-col items-center justify-center min-h-[400px]">
               <div className="relative flex items-center justify-center mb-6">
-                <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+                <div className="h-16 w-16 animate-spin rounded-full border-4 border-primary-100 border-t-primary-600" />
                 <span className="absolute text-xl">🏛️</span>
               </div>
-              <h3 className="text-lg font-bold text-indigo-900 animate-pulse transition-all duration-300">
+              <h3 className="text-lg font-bold text-primary-900 animate-pulse transition-all duration-300">
                 {LOADING_STEPS[loadingStepIndex]}
               </h3>
               <p className="text-xs text-gray-400 mt-2 text-center max-w-sm">
@@ -260,7 +264,7 @@ export default function CollegeFinderPage() {
                   setErrorMsg(null);
                   setColleges([]);
                 }}
-                className="rounded bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 cursor-pointer"
+                className="rounded-xl bg-red-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-red-700 cursor-pointer transition-colors"
               >
                 Back to Search Form
               </button>
@@ -277,7 +281,7 @@ export default function CollegeFinderPage() {
                 </div>
                 <button
                   onClick={() => setColleges([])}
-                  className="text-xs font-semibold text-indigo-600 hover:underline cursor-pointer"
+                  className="text-xs font-semibold text-primary-600 hover:underline cursor-pointer"
                 >
                   ← Modify Search
                 </button>
@@ -307,7 +311,7 @@ export default function CollegeFinderPage() {
 
         {/* Right Side: Search History (takes 1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-lg">
             <h3 className="mb-3 text-sm font-bold text-gray-800 flex items-center gap-1.5">
               <span>⏱️</span> Recent Searches
             </h3>
@@ -319,9 +323,9 @@ export default function CollegeFinderPage() {
                   <div
                     key={item.id}
                     onClick={() => handleReRunSearch(item)}
-                    className="group rounded-lg border border-gray-100 p-3 hover:border-indigo-100 hover:bg-indigo-50/20 transition-all cursor-pointer text-left"
+                    className="group rounded-xl border border-gray-100 p-3 hover:border-primary-100 hover:bg-primary-50/20 transition-all cursor-pointer text-left"
                   >
-                    <div className="font-bold text-xs text-gray-700 group-hover:text-indigo-700 flex items-center justify-between">
+                    <div className="font-bold text-xs text-gray-700 group-hover:text-primary-700 flex items-center justify-between">
                       <span>{item.filters?.course || 'Course Not Specified'}</span>
                       <span className="text-[10px] text-gray-400 font-medium font-mono">
                         {new Date(item.created_at).toLocaleDateString()}
@@ -341,11 +345,11 @@ export default function CollegeFinderPage() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-indigo-50 bg-indigo-50/20 p-5">
-            <h4 className="text-xs font-bold text-indigo-900 uppercase tracking-wide mb-1">
+          <div className="rounded-2xl border border-primary-50 bg-primary-50/20 p-5">
+            <h4 className="text-xs font-bold text-primary-900 uppercase tracking-wide mb-1">
               Live Grounded Search
             </h4>
-            <p className="text-[11px] text-indigo-700 leading-relaxed">
+            <p className="text-[11px] text-primary-700 leading-relaxed">
               We aggregate from sources like <span className="font-semibold">JoSAA</span>, <span className="font-semibold">CSAB</span>, <span className="font-semibold">NTA</span>, <span className="font-semibold">UGC</span>, and AICTE to deliver accurate recommendations.
             </p>
           </div>

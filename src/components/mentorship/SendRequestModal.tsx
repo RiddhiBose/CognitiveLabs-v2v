@@ -29,7 +29,7 @@ export default function SendRequestModal({ mentor, onConfirm, onClose, sending }
 
         <p className="mb-4 text-sm text-gray-600">
           You are sending a mentorship request to{' '}
-          <span className="font-semibold text-indigo-700">{mentor.full_name}</span>.
+          <span className="font-semibold text-primary-700">{mentor.full_name}</span>.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,7 +59,7 @@ export default function SendRequestModal({ mentor, onConfirm, onClose, sending }
             <button
               type="submit"
               disabled={sending}
-              className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-60 transition-colors cursor-pointer"
+              className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary-700 disabled:opacity-60 transition-colors cursor-pointer"
             >
               {sending ? 'Sending…' : 'Send Request'}
             </button>

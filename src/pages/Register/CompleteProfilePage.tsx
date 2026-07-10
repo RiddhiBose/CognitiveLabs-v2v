@@ -99,7 +99,7 @@ export default function CompleteProfilePage() {
       <div className="mx-auto max-w-lg px-4">
         {/* Header */}
         <div className="mb-6 text-center">
-          <h1 className="text-xl font-bold text-indigo-600">{APP_NAME}</h1>
+          <h1 className="text-xl font-bold text-primary">{APP_NAME}</h1>
           <h2 className="mt-2 text-2xl font-bold text-gray-800">Complete Your Profile</h2>
           <p className="mt-1 text-sm text-gray-500">
             Help us personalize your experience. Step {currentStep} of {TOTAL_STEPS}.
@@ -109,7 +109,7 @@ export default function CompleteProfilePage() {
         {/* Progress bar */}
         <div className="mb-6 h-2 w-full rounded-full bg-gray-200">
           <div
-            className="h-full rounded-full bg-indigo-600 transition-all duration-300"
+            className="h-full rounded-full bg-primary transition-all duration-300"
             style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
           />
         </div>

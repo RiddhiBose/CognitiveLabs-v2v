@@ -31,7 +31,7 @@ function ToggleGroup({
 }) {
   return (
     <div>
-      <p className="mb-2 text-sm font-medium text-slate-700">{label}</p>
+      <p className="mb-2 text-sm font-medium text-gray-700">{label}</p>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const checked = selectedValues.includes(option);
@@ -40,7 +40,7 @@ function ToggleGroup({
               key={option}
               type="button"
               onClick={() => onChange(option)}
-              className={`rounded-full border px-3 py-1.5 text-sm transition ${checked ? 'border-violet-600 bg-violet-600 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-violet-400 hover:text-violet-600'}`}
+              className={`rounded-full border px-3 py-1.5 text-sm transition ${checked ? 'border-primary-600 bg-primary-600 text-white' : 'border-gray-300 bg-white text-gray-600 hover:border-primary-400 hover:text-primary-600'}`}
             >
               {option}
             </button>
@@ -75,11 +75,11 @@ export default function ScholarshipFinderForm({
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <form onSubmit={onSubmit} className="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Scholarship preferences</p>
-        <h2 className="text-xl font-semibold text-slate-900">Discover every verified scholarship that fits your goals</h2>
-        <p className="text-sm text-slate-600">Your current profile is reused automatically for eligibility, while this form defines the scholarship goal you want to search for.</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-600">Scholarship preferences</p>
+        <h2 className="text-xl font-semibold text-gray-900">Discover every verified scholarship that fits your goals</h2>
+        <p className="text-sm text-gray-600">Your current profile is reused automatically for eligibility, while this form defines the scholarship goal you want to search for.</p>
       </div>
 
       {!isReady && (
@@ -88,23 +88,23 @@ export default function ScholarshipFinderForm({
         </div>
       )}
 
-      <div className="rounded-xl border border-violet-100 bg-violet-50 p-3 text-sm text-violet-700">
+      <div className="rounded-xl border border-primary-100 bg-primary-50 p-3 text-sm text-primary-700">
         Current profile details such as qualification, degree, semester, category, income, gender, state and PWD status are reused automatically from your account.
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="space-y-4 rounded-2xl border border-gray-200 bg-gray-50 p-4">
         <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-900">Scholarship Goal</p>
-          <p className="text-sm text-slate-600">Use the current profile for eligibility and this section for the scholarship you want to search for.</p>
+          <p className="text-sm font-semibold text-gray-900">Scholarship Goal</p>
+          <p className="text-sm text-gray-600">Use the current profile for eligibility and this section for the scholarship you want to search for.</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">Target Education Level</span>
+            <span className="text-sm font-medium text-gray-700">Target Education Level</span>
             <select
               value={values.targetEducationLevel}
               onChange={(event) => onChange('targetEducationLevel', event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-violet-500"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary-500"
             >
               {SCHOLARSHIP_EDUCATION_LEVELS.map((option) => (
                 <option key={option} value={option}>
@@ -115,33 +115,33 @@ export default function ScholarshipFinderForm({
           </label>
 
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">Target Degree (optional)</span>
+            <span className="text-sm font-medium text-gray-700">Target Degree (optional)</span>
             <input
               value={values.targetDegree}
               onChange={(event) => onChange('targetDegree', event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-violet-500"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
               placeholder="e.g. MTech, MBA, MSc"
             />
           </label>
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">Target Specialization (optional)</span>
+          <span className="text-sm font-medium text-gray-700">Target Specialization (optional)</span>
           <input
             value={values.targetSpecialization}
             onChange={(event) => onChange('targetSpecialization', event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-violet-500"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
             placeholder="e.g. AI, Data Science, Public Health"
           />
         </label>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">Study Location</span>
+            <span className="text-sm font-medium text-gray-700">Study Location</span>
             <select
               value={values.studyLocation}
               onChange={(event) => onChange('studyLocation', event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-violet-500"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary-500"
             >
               {STUDY_LOCATION_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -152,11 +152,11 @@ export default function ScholarshipFinderForm({
           </label>
 
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">Preferred Country (optional)</span>
+            <span className="text-sm font-medium text-gray-700">Preferred Country (optional)</span>
             <input
               value={values.preferredCountry}
               onChange={(event) => onChange('preferredCountry', event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-violet-500"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
               placeholder="e.g. Japan, Germany, USA"
             />
           </label>
@@ -164,11 +164,11 @@ export default function ScholarshipFinderForm({
       </div>
 
       <label className="block space-y-2">
-        <span className="text-sm font-medium text-slate-700">Institution Name (optional)</span>
+        <span className="text-sm font-medium text-gray-700">Institution Name (optional)</span>
         <input
           value={values.institutionName}
           onChange={(event) => onChange('institutionName', event.target.value)}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-violet-500"
+          className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none ring-0 focus:border-primary-500"
           placeholder="e.g. Indian Institute of Technology"
         />
       </label>
@@ -189,11 +189,11 @@ export default function ScholarshipFinderForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">Application Status</span>
+          <span className="text-sm font-medium text-gray-700">Application Status</span>
           <select
             value={values.applicationStatus}
             onChange={(event) => onChange('applicationStatus', event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary-500"
           >
             {APPLICATION_STATUS_OPTIONS.map((option) => (
               <option key={option} value={option}>
@@ -204,11 +204,11 @@ export default function ScholarshipFinderForm({
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">Maximum Distance</span>
+          <span className="text-sm font-medium text-gray-700">Maximum Distance</span>
           <select
             value={values.maximumDistance}
             onChange={(event) => onChange('maximumDistance', event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary-500"
           >
             {MAXIMUM_DISTANCE_OPTIONS.map((option) => (
               <option key={option} value={option}>
@@ -222,7 +222,7 @@ export default function ScholarshipFinderForm({
       <button
         type="submit"
         disabled={loading || !isReady}
-        className="inline-flex items-center rounded-full bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+        className="inline-flex items-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
       >
         {loading ? 'Searching…' : 'Find scholarships'}
       </button>

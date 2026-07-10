@@ -1,5 +1,6 @@
 // Application-wide constants
 
+export const TEAM_NAME = 'COGNITIVE LABS';
 export const APP_NAME = 'ElevateHer AI';
 export const APP_TAGLINE =
   'One Platform. Endless Opportunities. Empowering Women Through Education, Career, Finance and Mentorship.';

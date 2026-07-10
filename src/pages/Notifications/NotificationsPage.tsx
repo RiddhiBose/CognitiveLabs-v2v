@@ -28,7 +28,7 @@ const CATEGORY_STYLES: Record<string, string> = {
   startup_funding: 'bg-blue-50 text-blue-700 border-blue-200',
   financial_literacy: 'bg-teal-50 text-teal-700 border-teal-200',
   college: 'bg-rose-50 text-rose-700 border-rose-200',
-  mentorship: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  mentorship: 'bg-primary-50 text-primary-700 border-primary-200',
   messaging: 'bg-sky-50 text-sky-700 border-sky-200',
   system: 'bg-gray-100 text-gray-700 border-gray-300',
   general: 'bg-gray-50 text-gray-700 border-gray-200',
@@ -91,7 +91,7 @@ export default function NotificationsPage() {
     if (groupNotifications.length === 0) return null;
 
     return (
-      <div className="mb-8">
+      <div key={title} className="mb-8">
         <div className="mb-4 flex items-center gap-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">{title}</h2>
           <div className="h-px flex-1 bg-gray-100" />
@@ -106,18 +106,18 @@ export default function NotificationsPage() {
             return (
               <li
                 key={n.id}
-                className={`relative overflow-hidden rounded-xl border bg-white p-5 shadow-xs transition-all duration-300 hover:shadow-md ${
-                  n.is_read ? 'border-gray-200/80 bg-white/60' : 'border-indigo-150 bg-indigo-50/20'
+                className={`relative overflow-hidden rounded-2xl border bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl ${
+                  n.is_read ? 'border-gray-100' : 'border-primary-100 bg-primary-50/10'
                 }`}
               >
                 {/* Unread Left Border Highlight Indicator */}
                 {!n.is_read && (
-                  <div className="absolute top-0 bottom-0 left-0 w-1 bg-indigo-600" />
+                  <div className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-primary-600 to-primary-800" />
                 )}
 
                 <div className="flex gap-4">
                   {/* Category Icon */}
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 border border-gray-100 text-xl shadow-xs">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-50 border border-gray-100 text-2xl">
                     {icon}
                   </div>
 
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
                       <div className="flex items-center gap-2">
-                        <span className={`rounded-md border px-2 py-0.5 text-xs font-semibold uppercase tracking-wider ${badgeClass}`}>
+                        <span className={`rounded-xl border px-3 py-1 text-xs font-bold uppercase tracking-wider ${badgeClass}`}>
                           {cat.replace(/_/g, ' ')}
                         </span>
                         {n.source && (
@@ -134,23 +134,23 @@ export default function NotificationsPage() {
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-gray-400 font-medium">
+                      <span className="text-xs text-gray-400 font-bold">
                         {timeAgo(n.created_at)}
                       </span>
                     </div>
 
-                    <h3 className={`mt-2 text-sm font-semibold text-gray-900 ${!n.is_read ? 'text-indigo-950 font-bold' : ''}`}>
+                    <h3 className={`mt-3 text-base font-bold text-gray-900 ${!n.is_read ? 'text-primary-900' : ''}`}>
                       {n.title}
                     </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                    <p className="mt-2 text-sm leading-relaxed text-gray-600">
                       {n.message}
                     </p>
 
                     {/* Actions Panel */}
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100/60 pt-3">
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100 pt-3">
                       <Link
                         to={route}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-600 hover:text-primary-800 transition-colors"
                       >
                         View Details <span aria-hidden="true">→</span>
                       </Link>
@@ -159,14 +159,14 @@ export default function NotificationsPage() {
                         {!n.is_read && (
                           <button
                             onClick={() => markAsRead(n.id)}
-                            className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors"
+                            className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-primary-700 bg-primary-100 hover:bg-primary-200 transition-colors"
                           >
                             Mark Read
                           </button>
                         )}
                         <button
                           onClick={() => deleteNotification(n.id)}
-                          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors"
+                          className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors"
                           aria-label="Delete Notification"
                         >
                           Delete
@@ -184,38 +184,41 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-4">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Notifications
-            {unreadCount > 0 && (
-              <span className="ml-3 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
-                {unreadCount} unread
-              </span>
-            )}
-          </h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Stay updated with mentorship requests, messages, and saved recommendation updates.
-          </p>
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+      {/* Header */}
+      <div className="mb-8 rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Notifications
+              {unreadCount > 0 && (
+                <span className="ml-3 inline-flex items-center rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold">
+                  {unreadCount} new
+                </span>
+              )}
+            </h1>
+            <p className="mt-2 text-sm text-primary-100">
+              Stay updated with your opportunities and messages
+            </p>
+          </div>
+          
+          {unreadCount > 0 && (
+            <button
+              onClick={markAllAsRead}
+              className="rounded-xl bg-white/20 hover:bg-white/30 px-5 py-3 text-sm font-bold text-white transition-colors"
+            >
+              Mark all as read
+            </button>
+          )}
         </div>
-        
-        {unreadCount > 0 && (
-          <button
-            onClick={markAllAsRead}
-            className="self-start sm:self-center inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-xs hover:bg-gray-50 hover:text-indigo-600 transition-all cursor-pointer"
-          >
-            Mark all as read
-          </button>
-        )}
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-12">
+        <div className="flex justify-center py-16">
           <Spinner />
         </div>
       ) : !hasNotifications ? (
-        <div className="rounded-xl border border-gray-150 bg-white p-8 text-center shadow-xs">
+        <div className="rounded-2xl border border-gray-100 bg-white p-14 text-center shadow-lg">
           <EmptyState
             message="No notifications"
             description="You are all caught up! New updates, messages, and opportunities will appear here."

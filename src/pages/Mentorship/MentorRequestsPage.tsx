@@ -11,7 +11,7 @@ const STATUS_STYLES: Record<string, string> = {
   accepted: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   rejected: 'bg-red-50 text-red-700 border-red-200',
   cancelled: 'bg-gray-100 text-gray-600 border-gray-200',
-  completed: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  completed: 'bg-primary-50 text-primary-700 border-primary-200',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -83,7 +83,7 @@ export default function MentorRequestsPage() {
         <p className="text-sm text-gray-500 mb-5">
           This page is only accessible to users with the Mentor role.
         </p>
-        <button onClick={() => navigate('/mentorship')} className="text-sm text-indigo-600 hover:underline cursor-pointer">
+        <button onClick={() => navigate('/mentorship')} className="text-sm text-primary hover:underline cursor-pointer">
           ← Back to Mentorship
         </button>
       </div>
@@ -96,16 +96,16 @@ export default function MentorRequestsPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       {/* Header */}
-      <div className="mb-6 rounded-2xl bg-gradient-to-r from-indigo-900 to-indigo-700 p-6 text-white shadow-sm relative overflow-hidden">
+      <div className="mb-6 rounded-3xl bg-gradient-to-r from-primary-900 to-primary-700 p-6 text-white shadow-sm relative overflow-hidden">
         <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center pr-10 text-9xl">📬</div>
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-1">
-            <button onClick={() => navigate('/mentorship')} className="text-indigo-300 hover:text-white text-sm cursor-pointer">
+            <button onClick={() => navigate('/mentorship')} className="text-primary-200 hover:text-white text-sm cursor-pointer">
               ← Mentorship
             </button>
           </div>
           <h1 className="text-2xl font-bold">Mentorship Requests</h1>
-          <p className="mt-1 text-sm text-indigo-200">
+          <p className="mt-1 text-sm text-primary-200">
             {pendingCount > 0
               ? `You have ${pendingCount} pending request${pendingCount > 1 ? 's' : ''} awaiting your response.`
               : 'No pending requests at the moment.'}
@@ -121,8 +121,8 @@ export default function MentorRequestsPage() {
             onClick={() => setFilter(f)}
             className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
               filter === f
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-indigo-300 hover:text-indigo-700'
+                ? 'bg-primary text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-700'
             }`}
           >
             {f === 'all' ? `All (${requests.length})` : `${STATUS_LABEL[f]} (${requests.filter((r) => r.status === f).length})`}
@@ -141,7 +141,7 @@ export default function MentorRequestsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-100 border-t-primary" />
         </div>
       ) : error ? (
         <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
@@ -198,7 +198,7 @@ export default function MentorRequestsPage() {
                     {(degree || l?.specialization) && (
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {degree && (
-                          <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                          <span className="rounded-md bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
                             🎓 {degree}
                           </span>
                         )}

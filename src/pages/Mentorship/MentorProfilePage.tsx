@@ -10,11 +10,11 @@ import type { MentorCandidate, MentorPreferences, RankedMentor, MentorshipReques
 
 function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }) {
   if (avatarUrl) {
-    return <img src={avatarUrl} alt={name} className="h-24 w-24 rounded-full object-cover ring-4 ring-indigo-100" />;
+    return <img src={avatarUrl} alt={name} className="h-24 w-24 rounded-full object-cover ring-4 ring-primary-100" />;
   }
   const initials = name.split(' ').slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('');
   return (
-    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-indigo-600 text-3xl font-bold text-white ring-4 ring-indigo-100">
+    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary text-3xl font-bold text-white ring-4 ring-primary-100">
       {initials}
     </div>
   );
@@ -121,7 +121,7 @@ export default function MentorProfilePage() {
       {/* Back */}
       <button
         onClick={() => navigate(-1)}
-        className="mb-5 flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:underline cursor-pointer"
+        className="mb-5 flex items-center gap-1.5 text-sm font-medium text-primary hover:underline cursor-pointer"
       >
         ← Back to Mentors
       </button>
@@ -183,9 +183,9 @@ export default function MentorProfilePage() {
 
           {/* Experience badge */}
           {mentor.experience != null && (
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-center">
-              <p className="text-3xl font-extrabold text-indigo-700">{mentor.experience}</p>
-              <p className="text-xs text-indigo-500 font-semibold uppercase tracking-wider">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-center">
+              <p className="text-3xl font-extrabold text-primary-700">{mentor.experience}</p>
+              <p className="text-xs text-primary-500 font-semibold uppercase tracking-wider">
                 Years of Experience
               </p>
             </div>

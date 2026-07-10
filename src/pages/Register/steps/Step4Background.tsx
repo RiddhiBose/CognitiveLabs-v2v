@@ -76,7 +76,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
           id="annualIncome"
           value={annualIncome}
           onChange={(e) => setAnnualIncome(e.target.value as AnnualIncome | '')}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.annualIncome ? 'border-red-400' : 'border-gray-300'
           }`}
         >
@@ -97,7 +97,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value as Category | '')}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.category ? 'border-red-400' : 'border-gray-300'
           }`}
         >
@@ -118,7 +118,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
           id="pwdStatus"
           value={pwdStatus}
           onChange={(e) => setPwdStatus(e.target.value as PwdStatus | '')}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.pwdStatus ? 'border-red-400' : 'border-gray-300'
           }`}
         >
@@ -145,7 +145,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
           }}
           onFocus={() => setShowStateSuggestions(true)}
           onBlur={() => setTimeout(() => setShowStateSuggestions(false), 150)}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.state ? 'border-red-400' : 'border-gray-300'
           }`}
           placeholder="Search state..."
@@ -177,7 +177,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.city ? 'border-red-400' : 'border-gray-300'
           }`}
           placeholder="Your city"
@@ -195,7 +195,7 @@ export default function Step4Background({ initialData, onComplete, onBack }: Pro
         </button>
         <button
           type="submit"
-          className="flex-1 rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+          className="flex-1 rounded-xl bg-primary py-2 text-sm font-semibold text-white hover:bg-primary-700"
         >
           Next &rarr;
         </button>

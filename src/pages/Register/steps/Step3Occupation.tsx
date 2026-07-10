@@ -71,7 +71,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
           id="occupation"
           value={occupation}
           onChange={(e) => setOccupation(e.target.value as Occupation | '')}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+          className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
             errors.occupation ? 'border-red-400' : 'border-gray-300'
           }`}
         >
@@ -93,7 +93,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
             type="text"
             value={occupationOther}
             onChange={(e) => setOccupationOther(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
             placeholder="Enter your occupation"
           />
           {errors.occupationOther && (
@@ -124,7 +124,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
               max={60}
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
-              className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400 ${
+              className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400 ${
                 errors.experience ? 'border-red-400' : 'border-gray-300'
               }`}
               placeholder="0"
@@ -149,7 +149,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
               placeholder="e.g. Software Engineer"
             />
           </div>
@@ -164,7 +164,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
               placeholder="e.g. Infosys"
             />
           </div>
@@ -179,7 +179,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
               type="text"
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
               placeholder="e.g. Technology"
             />
           </div>
@@ -193,7 +193,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
               id="employmentType"
               value={employmentType}
               onChange={(e) => setEmploymentType(e.target.value as EmploymentType | '')}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-400"
             >
               <option value="">Select type</option>
               {Object.entries(EMPLOYMENT_TYPE_LABELS).map(([value, label]) => (
@@ -214,7 +214,7 @@ export default function Step3Occupation({ initialData, onComplete, onBack }: Pro
         </button>
         <button
           type="submit"
-          className="flex-1 rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+          className="flex-1 rounded-xl bg-primary py-2 text-sm font-semibold text-white hover:bg-primary-700"
         >
           Next &rarr;
         </button>

@@ -16,7 +16,7 @@ interface Props {
 function ScoreBadge({ score }: { score: number }) {
   const color =
     score >= 80 ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
-    score >= 60 ? 'bg-indigo-100 text-indigo-700 border-indigo-200' :
+    score >= 60 ? 'bg-primary-100 text-primary-700 border-primary-200' :
     score >= 40 ? 'bg-amber-100 text-amber-700 border-amber-200' :
                   'bg-gray-100 text-gray-600 border-gray-200';
 
@@ -33,7 +33,7 @@ function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }
       <img
         src={avatarUrl}
         alt={name}
-        className="h-14 w-14 rounded-full object-cover ring-2 ring-indigo-100"
+        className="h-14 w-14 rounded-full object-cover ring-2 ring-primary-100"
       />
     );
   }
@@ -43,7 +43,7 @@ function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }
     .map((w) => w[0]?.toUpperCase() ?? '')
     .join('');
   return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-lg font-bold text-white ring-2 ring-indigo-100">
+    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-lg font-bold text-white ring-2 ring-primary-100">
       {initials}
     </div>
   );
@@ -105,7 +105,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
   const requestButtonDisabled = requesting || requestStatus === 'pending' || requestStatus === 'accepted';
 
   return (
-    <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-lg hover:shadow-xl transition-shadow">
       {/* Header */}
       <div className="flex items-start gap-4 mb-4">
         <Avatar name={mentor.full_name} avatarUrl={mentor.avatar_url} />
@@ -114,7 +114,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
             <div>
               <h3 className="text-base font-bold text-gray-900 leading-tight">{mentor.full_name}</h3>
               {mentor.job_title && (
-                <p className="text-sm text-indigo-600 font-medium mt-0.5">{mentor.job_title}</p>
+                <p className="text-sm text-primary-600 font-medium mt-0.5">{mentor.job_title}</p>
               )}
             </div>
             <ScoreBadge score={mentor.compatibilityScore} />
@@ -134,7 +134,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
       {(degree || mentor.specialization) && (
         <div className="flex flex-wrap gap-2 mb-3">
           {degree && (
-            <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+            <span className="rounded-md bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
               🎓 {degree}
             </span>
           )}
@@ -153,14 +153,14 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
 
       {/* Match Reasons */}
       {mentor.reasons.length > 0 && (
-        <div className="mb-4 rounded-xl bg-indigo-50/60 border border-indigo-100 px-3 py-2.5">
-          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-indigo-500">
+        <div className="mb-4 rounded-xl bg-primary-50/60 border border-primary-100 px-3 py-2.5">
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-500">
             Why this mentor
           </p>
           <ul className="space-y-1">
             {mentor.reasons.slice(0, 4).map((r, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-xs text-indigo-800">
-                <span className="mt-0.5 shrink-0 text-indigo-400">✓</span>
+              <li key={i} className="flex items-start gap-1.5 text-xs text-primary-800">
+                <span className="mt-0.5 shrink-0 text-primary-400">✓</span>
                 {r}
               </li>
             ))}
@@ -172,7 +172,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
       <div className="mt-auto flex flex-wrap gap-2 pt-1">
         <button
           onClick={() => navigate(`/mentorship/mentor/${mentor.user_id}`)}
-          className="flex-1 rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs font-semibold text-indigo-700 hover:bg-indigo-50 transition-colors cursor-pointer"
+          className="flex-1 rounded-xl border border-primary-200 bg-white px-3 py-2.5 text-xs font-semibold text-primary-700 hover:bg-primary-50 transition-colors cursor-pointer"
         >
           View Profile
         </button>
@@ -191,7 +191,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
         {requestStatus === 'accepted' && chatConnectionId ? (
           <button
             onClick={() => navigate(`/chat/${chatConnectionId}`)}
-            className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition-colors cursor-pointer"
+            className="flex-1 rounded-xl bg-primary-600 px-3 py-2.5 text-xs font-bold text-white hover:bg-primary-700 transition-colors cursor-pointer shadow-md shadow-primary-200"
           >
             💬 Message
           </button>
@@ -199,7 +199,7 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
           <button
             onClick={() => onSendRequest(mentor)}
             disabled={requestButtonDisabled}
-            className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-bold text-white hover:bg-indigo-700 disabled:opacity-60 transition-colors cursor-pointer"
+            className="flex-1 rounded-xl bg-primary-600 px-3 py-2.5 text-xs font-bold text-white hover:bg-primary-700 disabled:opacity-60 transition-colors cursor-pointer shadow-md shadow-primary-200"
           >
             {requestButtonLabel()}
           </button>

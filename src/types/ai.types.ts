@@ -88,7 +88,7 @@ export interface LoanRecommendation extends Recommendation {
   repaymentPeriod?: string;
   bank?: string;
   applicationSteps?: string;
-  requiredDocuments?: string;
+  requiredDocuments?: string | string[];
 }
 
 export interface StartupFundingRecommendation extends Recommendation {

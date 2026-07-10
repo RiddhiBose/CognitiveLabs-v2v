@@ -171,10 +171,22 @@ const LoanService = {
 
     const filters: LoanSearchHistoryFilters = {
       course,
-      loanAmount: form.loanAmountRequired || 'Not specified',
+      courseOther: form.courseOther || undefined,
+      studyLevel: form.studyLevel || undefined,
+      collegeName: form.collegeName.trim() || undefined,
+      admissionStatus: form.admissionStatus || undefined,
       studyDestination: form.studyDestination || 'India',
+      abroadCountry: form.abroadCountry || undefined,
+      estimatedCost: form.estimatedCost || undefined,
+      loanAmount: form.loanAmountRequired || 'Not specified',
+      repaymentPreference: form.repaymentPreference || undefined,
+      collateralAvailable: form.collateralAvailable || undefined,
+      coapplicant: form.coapplicant || undefined,
+      needMoratorium: form.needMoratorium,
+      needFemaleBenefits: form.needFemaleBenefits,
       preferredBankType: form.preferredBankType || 'Any',
-      ...(form.collegeName.trim() ? { collegeName: form.collegeName.trim() } : {}),
+      interestRatePreference: form.interestRatePreference || undefined,
+      needGovernmentLoan: form.needGovernmentLoan,
     };
 
     const query = [

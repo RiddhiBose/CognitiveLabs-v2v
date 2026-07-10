@@ -64,6 +64,17 @@ function parseBase(raw: RawItem): Recommendation {
 
 function parseCollege(raw: RawItem): CollegeRecommendation {
   const meta = safeMetadata(raw.metadata);
+  const applicationSteps = safeString(meta.applicationSteps);
+  const requiredDocuments = safeString(meta.requiredDocuments);
+  
+  // MANDATORY: Application steps and required documents must be present
+  if (!applicationSteps) {
+    logger.warn('ResponseFormatter', 'College missing mandatory applicationSteps field', raw.title);
+  }
+  if (!requiredDocuments) {
+    logger.warn('ResponseFormatter', 'College missing mandatory requiredDocuments field', raw.title);
+  }
+  
   return {
     ...parseBase(raw),
     courseName: safeString(meta.courseName) || undefined,
@@ -75,28 +86,82 @@ function parseCollege(raw: RawItem): CollegeRecommendation {
     hostelAvailable: typeof meta.hostelAvailable === 'boolean' ? meta.hostelAvailable : undefined,
     girlsOnly: typeof meta.girlsOnly === 'boolean' ? meta.girlsOnly : undefined,
     locationType: safeString(meta.locationType) || undefined,
+    applicationSteps: applicationSteps || 'Please check official college website for application process',
+    requiredDocuments: requiredDocuments || 'Please check official college website for document requirements',
   };
 }
 
 function parseScholarship(raw: RawItem): ScholarshipRecommendation {
   const meta = safeMetadata(raw.metadata);
+  const amount = safeString(meta.amount);
+  const applicationSteps = safeString(meta.applicationSteps);
+  const requiredDocuments = safeString(meta.requiredDocuments);
+  
+  // MANDATORY: Scholarship amount, application steps, and required documents must be present
+  if (!amount) {
+    logger.warn('ResponseFormatter', 'Scholarship missing mandatory amount field', raw.title);
+  }
+  if (!applicationSteps) {
+    logger.warn('ResponseFormatter', 'Scholarship missing mandatory applicationSteps field', raw.title);
+  }
+  if (!requiredDocuments) {
+    logger.warn('ResponseFormatter', 'Scholarship missing mandatory requiredDocuments field', raw.title);
+  }
+  
   return {
     ...parseBase(raw),
-    amount: safeString(meta.amount) || undefined,
+    amount: amount || 'Amount not specified - please check official website',
     deadline: safeString(meta.deadline) || undefined,
     eligibility: safeString(meta.eligibility) || undefined,
     provider: safeString(meta.provider) || undefined,
+    applicationSteps: applicationSteps || 'Please check official scholarship website for application process',
+    requiredDocuments: requiredDocuments || 'Please check official scholarship website for document requirements',
   };
 }
 
 function parseLoan(raw: RawItem): LoanRecommendation {
   const meta = safeMetadata(raw.metadata);
+  const interestRate = safeString(meta.interestRate);
+  const applicationSteps = safeString(meta.applicationSteps);
+  const requiredDocuments = safeString(meta.requiredDocuments);
+  
+  // MANDATORY: Interest rate, application steps, and required documents must be present
+  if (!interestRate) {
+    logger.warn('ResponseFormatter', 'Loan missing mandatory interestRate field', raw.title);
+  }
+  if (!applicationSteps) {
+    logger.warn('ResponseFormatter', 'Loan missing mandatory applicationSteps field', raw.title);
+  }
+  if (!requiredDocuments) {
+    logger.warn('ResponseFormatter', 'Loan missing mandatory requiredDocuments field', raw.title);
+  }
+  
+  const base = parseBase(raw);
+  
+  // Special handling for PM Vidyalaxmi scheme to ensure correct official website
+  const titleLower = safeString(raw.title).toLowerCase();
+  const isPMVidyalaxmi = titleLower.includes('pm vidyalaxmi') || 
+                         titleLower.includes('pm vidya laxmi') ||
+                         titleLower.includes('vidyalaxmi');
+  
+  let officialWebsite = base.officialWebsite;
+  let applicationLink = base.applicationLink;
+  
+  if (isPMVidyalaxmi) {
+    officialWebsite = 'https://pmvidyalaxmi.co.in/AboutScheme.aspx';
+    applicationLink = 'https://pmvidyalaxmi.co.in/';
+  }
+  
   return {
-    ...parseBase(raw),
-    interestRate: safeString(meta.interestRate) || undefined,
+    ...base,
+    officialWebsite,
+    applicationLink,
+    interestRate: interestRate || 'Rate not specified - please check official bank website',
     maxAmount: safeString(meta.maxAmount) || undefined,
     repaymentPeriod: safeString(meta.repaymentPeriod) || undefined,
     bank: safeString(meta.bank) || undefined,
+    applicationSteps: applicationSteps || 'Please check official bank website for application process',
+    requiredDocuments: requiredDocuments || 'Please check official bank website for document requirements',
   };
 }
 

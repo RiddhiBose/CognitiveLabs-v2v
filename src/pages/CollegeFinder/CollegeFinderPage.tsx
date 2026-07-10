@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useProfile } from '../../contexts/ProfileContext';
 import { LoadingScreen } from '../../components/common';
+import DetailsModal from '../../components/common/DetailsModal';
 import SearchService from '../../services/search/searchService';
 import CollegeService from '../../services/CollegeService';
+import ApplicationService from '../../services/ApplicationService';
 import { CollegeForm, CollegeResultCard } from '../../components/college';
 import type { CollegeRecommendation, CollegeFinderFormData } from '../../types/college';
 import type { UserProfileForSearch } from '../../types';
@@ -26,6 +28,8 @@ export default function CollegeFinderPage() {
   const [searchWarning, setSearchWarning] = useState<string | null>(null);
   const [isConfigError, setIsConfigError] = useState(false);
   const [configMissingKeys, setConfigMissingKeys] = useState<string[]>([]);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedCollege, setSelectedCollege] = useState<CollegeRecommendation | null>(null);
 
   // Check if keys are ready on mount
   useEffect(() => {
@@ -164,6 +168,21 @@ export default function CollegeFinderPage() {
     setSavingName(null);
   };
 
+  const handleApply = async (college: CollegeRecommendation) => {
+    if (!profile?.user_id) return;
+    const res = await ApplicationService.saveCollegeApplication(profile.user_id, college);
+    if (!res.error) {
+      console.log('Application saved successfully');
+    } else {
+      console.error('Failed to save application', res.error);
+    }
+  };
+
+  const handleViewDetails = (college: CollegeRecommendation) => {
+    setSelectedCollege(college);
+    setDetailsModalOpen(true);
+  };
+
   const handleReRunSearch = async (historyItem: any) => {
     const f = historyItem.filters;
     if (!f) return;
@@ -294,6 +313,8 @@ export default function CollegeFinderPage() {
                     isSaved={savedColleges.includes(college.title)}
                     onSaveToggle={() => handleSaveToggle(college)}
                     saving={savingName === college.title}
+                    onApply={handleApply}
+                    onViewDetails={handleViewDetails}
                   />
                 ))}
               </div>
@@ -347,6 +368,18 @@ export default function CollegeFinderPage() {
           </div>
         </div>
       </div>
+
+      {/* Details Modal */}
+      {selectedCollege && (
+        <DetailsModal
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          title={selectedCollege.title}
+          applicationSteps={selectedCollege.applicationSteps || 'Please check official college website for application process'}
+          requiredDocuments={selectedCollege.requiredDocuments || 'Please check official college website for document requirements'}
+          officialWebsite={selectedCollege.officialWebsite}
+        />
+      )}
     </div>
   );
 }

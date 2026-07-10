@@ -6,6 +6,8 @@ interface CollegeResultCardProps {
   isSaved: boolean;
   onSaveToggle: () => void;
   saving: boolean;
+  onApply?: (college: CollegeRecommendation) => void;
+  onViewDetails?: (college: CollegeRecommendation) => void;
 }
 
 export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
@@ -13,6 +15,8 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
   isSaved,
   onSaveToggle,
   saving,
+  onApply,
+  onViewDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -121,17 +125,38 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
               {showDetails ? 'Hide Details ▲' : 'Show Details ▼'}
             </button>
 
-            <button
-              onClick={onSaveToggle}
-              disabled={saving}
-              className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-semibold border transition-all cursor-pointer ${
-                isSaved
-                  ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
-                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
-              }`}
-            >
-              <span>{isSaved ? '❤️ Saved' : '🤍 Save College'}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {onViewDetails && (
+                <button
+                  onClick={() => onViewDetails(college)}
+                  className="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                >
+                  📋 View Details
+                </button>
+              )}
+              {officialWebsite && (
+                <a
+                  href={officialWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => onApply && onApply(college)}
+                  className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors cursor-pointer"
+                >
+                  🎓 Apply
+                </a>
+              )}
+              <button
+                onClick={onSaveToggle}
+                disabled={saving}
+                className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-semibold border transition-all cursor-pointer ${
+                  isSaved
+                    ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
+                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                }`}
+              >
+                <span>{isSaved ? '❤️ Saved' : '🤍 Save'}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

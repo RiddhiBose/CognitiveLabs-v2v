@@ -59,6 +59,8 @@ interface LoanCardProps {
   onSave: (loan: EducationLoanRecommendation) => void;
   onUnsave: (loan: EducationLoanRecommendation) => void;
   saveLoading?: boolean;
+  onApply?: (loan: EducationLoanRecommendation) => void;
+  onViewDetails?: (loan: EducationLoanRecommendation) => void;
 }
 
 export default function LoanCard({
@@ -67,6 +69,8 @@ export default function LoanCard({
   onSave,
   onUnsave,
   saveLoading = false,
+  onApply,
+  onViewDetails,
 }: LoanCardProps) {
   const bankName = loan.bankName ?? loan.bank ?? '';
   const schemeName = loan.loanSchemeName ?? loan.title;
@@ -214,6 +218,16 @@ export default function LoanCard({
       {/* ── CTA buttons ──────────────────────────────────────────────────────── */}
       <div className="mt-auto border-t border-gray-100 p-4">
         <div className="flex flex-col gap-2 sm:flex-row">
+          {onViewDetails && (
+            <button
+              onClick={() => onViewDetails(loan)}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              aria-label={`View details for ${schemeName}`}
+            >
+              <span aria-hidden="true">📋</span>
+              View Details
+            </button>
+          )}
           <a
             href={websiteUrl}
             target="_blank"
@@ -228,6 +242,7 @@ export default function LoanCard({
             href={applyUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => onApply && onApply(loan)}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
             aria-label={`Apply now for ${schemeName}`}
           >

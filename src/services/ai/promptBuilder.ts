@@ -9,14 +9,15 @@ const SHARED_RULES = `
 CRITICAL RULES:
 - Only use information present in the search results provided below.
 - Never fabricate, invent, or assume any detail not found in the search results.
-- Never invent eligibility criteria, fees, deadlines, interest rates, amounts or URLs.
-- If a piece of information is not found in the search results, state "Not available in current sources" for that field.
+- Never invent eligibility criteria, fees, deadlines, or URLs.
+- For education loans: interest rate is MANDATORY. If not found on official bank website, search trusted sources for estimated rates. Never leave as "Not available".
+- For scholarships: scholarship amount range is MANDATORY. If not found on official website, search trusted sources for estimated amounts. Never leave as "Not available".
 - Prefer official government, institutional and regulatory sources over blogs or news sites.
 - Respect user preferences as hard constraints whenever possible.
 - If the user selects International scholarships, prioritize international scholarships first.
 - Only recommend Indian scholarships if the user selected India, Both, or no verified international scholarship exists.
 - Your entire response MUST be a valid JSON array only — no markdown, no explanation text, no code fences.
-- Each item must have all required fields. Use null for unavailable fields.
+- Each item must have all required fields. Use null for unavailable fields (except mandatory fields).
 - matchScore must be an integer from 0 to 100 based on how well this matches the user profile.
 `.trim();
 
@@ -62,9 +63,9 @@ function buildProfileSummary(profile: UserProfileForSearch): string {
 // ── Feature-specific metadata hints ─────────────────────────────────────────
 
 const METADATA_HINTS: Record<FeatureType, string> = {
-  college: `metadata fields: { "courseName": string, "entranceExam": string | null, "fees": string | null, "ranking": string | null, "cutoff": string | null, "collegeType": string | null, "hostelAvailable": boolean | null, "girlsOnly": boolean | null, "locationType": string | null }`,
-  scholarship: `metadata fields: { "amount": string | null, "deadline": string | null, "eligibility": string | null, "provider": string | null }`,
-  education_loan: `metadata fields: { "interestRate": string | null, "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null }`,
+  college: `metadata fields: { "courseName": string, "entranceExam": string | null, "fees": string | null, "ranking": string | null, "cutoff": string | null, "collegeType": string | null, "hostelAvailable": boolean | null, "girlsOnly": boolean | null, "locationType": string | null, "applicationSteps": string (MANDATORY - steps to apply from official college website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official college website or trusted sources) }`,
+  scholarship: `metadata fields: { "amount": string (MANDATORY - must include scholarship amount range, never null), "deadline": string | null, "eligibility": string | null, "provider": string | null, "applicationSteps": string (MANDATORY - steps to apply from official scholarship website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official scholarship website or trusted sources) }`,
+  education_loan: `metadata fields: { "interestRate": string (MANDATORY - must include interest rate, never null), "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null, "applicationSteps": string (MANDATORY - steps to apply from official bank website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official bank website or trusted sources) }`,
   government_scheme: `metadata fields: { "ministry": string | null, "benefitType": string | null, "deadline": string | null }`,
   startup_funding: `metadata fields: { "fundingType": string | null, "maxAmount": string | null, "stage": string | null, "sector": string | null }`,
   internship: `metadata fields: { "company": string | null, "duration": string | null, "stipend": string | null, "skills": string[] | null, "applyBy": string | null }`,
@@ -92,6 +93,12 @@ Class 12 Percentage: ${featureInput.class12Percentage ?? 'Not specified'}
 Passing Year: ${featureInput.passingYear ?? 'Not specified'}
 Board: ${featureInput.board ?? 'Not specified'}
 
+CRITICAL: Application steps and required documents are MANDATORY for every college recommendation.
+- First priority: Search official college website for admission process and document requirements
+- If not found on official website: Search trusted educational portals, government counseling websites, or verified sources
+- Never leave application steps or required documents as "Not available" or null
+- If exact information is unavailable, provide general application process based on trusted sources
+
 Focus on:
 - Accreditation status (NAAC, NBA, AICTE approval)
 - Admission process and entrance exams
@@ -104,6 +111,8 @@ Focus on:
 - Whether the college is girls-only (if user requested)
 - Whether the location type matches the user's preference
 - Class 12 percentage eligibility criteria
+- Application steps (MANDATORY - from official college website or trusted sources)
+- Required documents (MANDATORY - from official college website or trusted sources)
 `.trim();
 
     case 'scholarship':
@@ -128,6 +137,12 @@ Income: ${profile.annual_income ?? 'Not specified'}
 Category: ${profile.category ?? 'Not specified'}
 PWD: ${profile.pwd_status === 'yes' ? 'Yes' : 'No'}
 
+CRITICAL: Scholarship amount range, application steps, and required documents are MANDATORY for every scholarship recommendation.
+- First priority: Search official scholarship websites, university pages, and government portals for exact amounts and application details
+- If not found on official website: Search trusted scholarship databases, education portals, or verified sources for estimated amounts and application process
+- Never leave scholarship amount, application steps, or required documents as "Not available" or null
+- If exact information is unavailable, provide estimated ranges and general application process based on trusted sources
+
 Ranking priority:
 1. Study location and country preference
 2. Eligibility from the current profile
@@ -142,7 +157,9 @@ Focus on:
 - International scholarships first when the user selected International or Both
 - India-only scholarships when the user selected India
 - Broad search behavior when scholarship type, funding coverage or location are set to Any
-- Application deadlines, funding amounts, eligibility, and official links
+- Application deadlines, scholarship amounts (MANDATORY - from official websites or trusted sources), eligibility, and official links
+- Application steps (MANDATORY - from official scholarship website or trusted sources)
+- Required documents (MANDATORY - from official scholarship website or trusted sources)
 `.trim();
 
     case 'education_loan':
@@ -155,10 +172,19 @@ State: ${state}
 Income: ${profile.annual_income ?? 'Not specified'}
 Category: ${profile.category ?? 'Not specified'}
 
+CRITICAL: Interest rate, application steps, and required documents are MANDATORY for every loan recommendation.
+- First priority: Search official bank websites for current interest rates and application process
+- If not found on official website: Search trusted financial sources, government portals, or comparison sites for estimated rates and application details
+- Never leave interest rate, application steps, or required documents as "Not available" or null
+- If exact information is unavailable, provide estimated ranges and general application process based on trusted sources
+
 Focus on:
 - Government bank loans (SBI, BOB, PNB, Canara)
 - Vidya Lakshmi portal schemes
-- Interest rates and subsidy availability
+- Interest rates (MANDATORY - from official bank websites or trusted sources)
+- Application steps (MANDATORY - from official bank website or trusted sources)
+- Required documents (MANDATORY - from official bank website or trusted sources)
+- Subsidy availability
 - Moratorium periods and repayment
 - Collateral requirements
 `.trim();
@@ -301,10 +327,13 @@ For scholarship recommendations, return every verified scholarship matching the 
         return [
           featureInput.course ?? spec,
           'college admission cutoff 2024 2025',
+          'admission process steps',
+          'documents required for admission',
           featureInput.state ?? state,
           featureInput.entranceExam,
           featureInput.collegeType && featureInput.collegeType !== 'Any' ? featureInput.collegeType : '',
           featureInput.budget && featureInput.budget !== 'No Preference' ? featureInput.budget : '',
+          'official college website',
         ].filter(Boolean).join(' ');
 
       case 'scholarship': {
@@ -350,6 +379,10 @@ For scholarship recommendations, return every verified scholarship matching the 
           typesPhrase,
           goalPhrase,
           countryPhrase,
+          'scholarship amount range',
+          'application process steps',
+          'documents required',
+          'official scholarship website',
           category ? category.toLowerCase() : '',
           state,
           profile.annual_income?.includes('below') || profile.annual_income?.includes('2l') ? 'low income' : '',
@@ -361,12 +394,16 @@ For scholarship recommendations, return every verified scholarship matching the 
 
       case 'education_loan':
         return [
-          'education loan',
+          'education loan interest rate',
+          'application process steps',
+          'documents required',
           featureInput.course ?? qual,
           featureInput.institution,
-          'India bank',
+          'official bank website',
+          'SBI PNB Canara Bank of Baroda interest rates',
+          'Vidya Lakshmi portal',
           category ? `${category} subsidy` : '',
-          '2024',
+          'India 2024',
         ].filter(Boolean).join(' ');
 
       case 'government_scheme':

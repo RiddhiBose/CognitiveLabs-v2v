@@ -3,8 +3,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../contexts/ProfileContext';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import LoadingCard from '../../components/common/LoadingCard';
+import DetailsModal from '../../components/common/DetailsModal';
 import { ScholarshipFinderForm, ScholarshipResultCard } from '../../components/scholarship';
 import ScholarshipService from '../../services/ScholarshipService';
+import ApplicationService from '../../services/ApplicationService';
 import type { ScholarshipRecommendation } from '../../types/ai.types';
 import { SCHOLARSHIP_FORM_DEFAULTS, type ScholarshipFormValues } from '../../types/scholarship';
 import { SearchService } from '../../services/search';
@@ -29,6 +31,8 @@ export default function ScholarshipFinderPage() {
   const [statusMessage, setStatusMessage] = useState('');
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedScholarship, setSelectedScholarship] = useState<ScholarshipRecommendation | null>(null);
 
   const readyState = SearchService.isReady();
 
@@ -104,6 +108,21 @@ export default function ScholarshipFinderPage() {
     } else {
       setError(result.error ?? 'Could not save this scholarship right now.');
     }
+  };
+
+  const handleApply = async (scholarship: ScholarshipRecommendation) => {
+    if (!user?.id) return;
+    const res = await ApplicationService.saveScholarshipApplication(user.id, scholarship);
+    if (!res.error) {
+      console.log('Application saved successfully');
+    } else {
+      console.error('Failed to save application', res.error);
+    }
+  };
+
+  const handleViewDetails = (scholarship: ScholarshipRecommendation) => {
+    setSelectedScholarship(scholarship);
+    setDetailsModalOpen(true);
   };
 
   const topRecommended = results.slice(0, 5);
@@ -194,6 +213,8 @@ export default function ScholarshipFinderPage() {
                         onSave={() => handleSave(scholarship)}
                         saving={savingId === `${scholarship.title}-${scholarship.provider ?? scholarship.source}`}
                         saved={savedIds.includes(`${scholarship.title}-${scholarship.provider ?? scholarship.source}`)}
+                        onApply={handleApply}
+                        onViewDetails={handleViewDetails}
                       />
                     ))}
                   </div>
@@ -214,6 +235,8 @@ export default function ScholarshipFinderPage() {
                         onSave={() => handleSave(scholarship)}
                         saving={savingId === `${scholarship.title}-${scholarship.provider ?? scholarship.source}`}
                         saved={savedIds.includes(`${scholarship.title}-${scholarship.provider ?? scholarship.source}`)}
+                        onApply={handleApply}
+                        onViewDetails={handleViewDetails}
                       />
                     ))}
                   </div>
@@ -223,6 +246,18 @@ export default function ScholarshipFinderPage() {
           ) : null}
         </section>
       </div>
+
+      {/* Details Modal */}
+      {selectedScholarship && (
+        <DetailsModal
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          title={selectedScholarship.title}
+          applicationSteps={selectedScholarship.applicationSteps || 'Please check official scholarship website for application process'}
+          requiredDocuments={selectedScholarship.requiredDocuments || 'Please check official scholarship website for document requirements'}
+          officialWebsite={selectedScholarship.officialWebsite}
+        />
+      )}
     </div>
   );
 }

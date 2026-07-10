@@ -71,6 +71,8 @@ export interface CollegeRecommendation extends Recommendation {
   hostelAvailable?: boolean;
   girlsOnly?: boolean;
   locationType?: string;
+  applicationSteps?: string;
+  requiredDocuments?: string;
 }
 
 export interface ScholarshipRecommendation extends Recommendation {
@@ -78,6 +80,8 @@ export interface ScholarshipRecommendation extends Recommendation {
   deadline?: string;
   eligibility?: string;
   provider?: string;
+  applicationSteps?: string;
+  requiredDocuments?: string;
 }
 
 export interface LoanRecommendation extends Recommendation {
@@ -85,6 +89,8 @@ export interface LoanRecommendation extends Recommendation {
   maxAmount?: string;
   repaymentPeriod?: string;
   bank?: string;
+  applicationSteps?: string;
+  requiredDocuments?: string;
 }
 
 export interface GovernmentSchemeRecommendation extends Recommendation {

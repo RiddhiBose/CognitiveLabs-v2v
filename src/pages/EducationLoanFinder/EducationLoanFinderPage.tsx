@@ -12,7 +12,9 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useAuth } from '../../contexts/AuthContext';
 import LoanService from '../../services/LoanService';
+import ApplicationService from '../../services/ApplicationService';
 import SearchService from '../../services/search/searchService';
+import DetailsModal from '../../components/common/DetailsModal';
 import {
   LoanForm,
   LoanLoadingState,
@@ -166,6 +168,10 @@ export default function EducationLoanFinderPage() {
   // Save state
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [savingId, setSavingId] = useState<string | null>(null);
+
+  // Details modal state
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedLoan, setSelectedLoan] = useState<EducationLoanRecommendation | null>(null);
 
   // API readiness
   const [missingKeys, setMissingKeys] = useState<string[]>([]);
@@ -323,6 +329,24 @@ export default function EducationLoanFinderPage() {
     [user?.id],
   );
 
+  const handleApply = useCallback(
+    async (loan: EducationLoanRecommendation) => {
+      if (!user?.id) return;
+      const res = await ApplicationService.saveLoanApplication(user.id, loan);
+      if (!res.error) {
+        console.log('Application saved successfully');
+      } else {
+        console.error('Failed to save application', res.error);
+      }
+    },
+    [user?.id],
+  );
+
+  const handleViewDetails = useCallback((loan: EducationLoanRecommendation) => {
+    setSelectedLoan(loan);
+    setDetailsModalOpen(true);
+  }, []);
+
   // ── Render ──────────────────────────────────────────────────────────────────
 
   if (profileLoading) {
@@ -407,8 +431,22 @@ export default function EducationLoanFinderPage() {
             onSave={handleSave}
             onUnsave={handleUnsave}
             onRetry={handleRetry}
+            onApply={handleApply}
+            onViewDetails={handleViewDetails}
           />
         </div>
+      )}
+
+      {/* Details Modal */}
+      {selectedLoan && (
+        <DetailsModal
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          title={selectedLoan.loanSchemeName ?? selectedLoan.title}
+          applicationSteps={typeof selectedLoan.applicationSteps === 'string' ? selectedLoan.applicationSteps : 'Please check official bank website for application process'}
+          requiredDocuments={typeof selectedLoan.requiredDocuments === 'string' ? selectedLoan.requiredDocuments : 'Please check official bank website for document requirements'}
+          officialWebsite={selectedLoan.officialWebsite}
+        />
       )}
     </div>
   );

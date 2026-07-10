@@ -28,7 +28,7 @@ function SourceBadge({ sourceType }: { sourceType?: string }) {
     <span
       className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
         isOfficial
-          ? 'bg-indigo-100 text-indigo-700'
+          ? 'bg-primary-100 text-primary-700'
           : 'bg-slate-100 text-slate-600'
       }`}
       title={isOfficial ? 'Information from an official government or organisation website' : 'Information from a trusted public source'}
@@ -41,7 +41,7 @@ function SourceBadge({ sourceType }: { sourceType?: string }) {
 function MatchScoreBadge({ score }: { score: number }) {
   const colour =
     score >= 80 ? 'bg-emerald-100 text-emerald-700' :
-    score >= 60 ? 'bg-orange-100 text-orange-700' :
+    score >= 60 ? 'bg-primary-100 text-primary-700' :
     'bg-slate-100 text-slate-600';
   return (
     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${colour}`}>
@@ -70,7 +70,7 @@ export default function StartupFundingResultCard({
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold uppercase tracking-[0.16em] text-orange-600">
+          <p className="truncate text-sm font-semibold uppercase tracking-[0.16em] text-primary-600">
             {opportunity.organization ?? opportunity.source ?? 'Organisation'}
           </p>
           <h3 className="mt-1 text-lg font-semibold leading-snug text-slate-900">{opportunity.title}</h3>
@@ -82,7 +82,7 @@ export default function StartupFundingResultCard({
       <div className="mt-3 flex flex-wrap gap-2">
         <MatchScoreBadge score={opportunity.matchScore} />
         {opportunity.fundingType && (
-          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-700 ring-1 ring-orange-200">
+          <span className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-700 ring-1 ring-primary-200">
             {opportunity.fundingType}
           </span>
         )}
@@ -142,7 +142,7 @@ export default function StartupFundingResultCard({
       </div>
 
       {/* ── Why it matches ─────────────────────────────────────────────── */}
-      <div className="mt-4 rounded-xl bg-orange-50 p-3 text-sm text-slate-700">
+      <div className="mt-4 rounded-xl bg-primary-50 p-3 text-sm text-slate-700">
         <p className="font-semibold text-slate-900">Why it matches</p>
         <p className="mt-1 leading-5">{opportunity.reason}</p>
       </div>
@@ -160,7 +160,7 @@ export default function StartupFundingResultCard({
         <button
           type="button"
           onClick={() => onViewDetails(opportunity)}
-          className="rounded-full bg-orange-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-orange-700"
+          className="rounded-full bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-primary-700"
         >
           📋 View Details
         </button>
@@ -170,7 +170,7 @@ export default function StartupFundingResultCard({
             href={applyUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            className="rounded-full bg-primary-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-primary-800"
           >
             Apply Now
           </a>
@@ -181,7 +181,7 @@ export default function StartupFundingResultCard({
             href={opportunity.officialWebsite}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-orange-400 hover:text-orange-600"
+            className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-400 hover:text-primary-600"
           >
             Official Website
           </a>
@@ -202,7 +202,7 @@ export default function StartupFundingResultCard({
           type="button"
           onClick={onSave}
           disabled={saving || saved}
-          className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-orange-400 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-400 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saved ? '✓ Saved' : saving ? 'Saving…' : 'Save Opportunity'}
         </button>

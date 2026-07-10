@@ -89,7 +89,7 @@ export default function LoanCard({
       <div className="border-b border-gray-100 p-5">
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <p className="truncate text-xs font-medium uppercase tracking-wide text-indigo-500">
+            <p className="truncate text-xs font-medium uppercase tracking-wide text-primary-600">
               {bankName || 'Bank'}
             </p>
             <h3 className="mt-0.5 text-base font-bold leading-snug text-gray-900">
@@ -103,8 +103,8 @@ export default function LoanCard({
             aria-label={isSaved ? `Unsave ${schemeName}` : `Save ${schemeName}`}
             className={`flex-shrink-0 rounded-full p-1.5 transition-colors disabled:opacity-50 ${
               isSaved
-                ? 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
-                : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-indigo-500'
+                ? 'bg-primary-100 text-primary-600 hover:bg-primary-200'
+                : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-primary-500'
             }`}
           >
             <svg
@@ -183,7 +183,7 @@ export default function LoanCard({
           <ul className="space-y-0.5">
             {loan.requiredDocuments.slice(0, 5).map((doc, i) => (
               <li key={i} className="flex items-start gap-1.5 text-xs text-gray-600">
-                <span className="mt-0.5 text-indigo-400" aria-hidden="true">•</span>
+                <span className="mt-0.5 text-primary-400" aria-hidden="true">•</span>
                 {doc}
               </li>
             ))}
@@ -205,7 +205,7 @@ export default function LoanCard({
               href={loan.source}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-indigo-400 hover:underline"
+              className="text-primary-500 hover:underline"
             >
               {loan.source.replace(/^https?:\/\//, '').split('/')[0]}
             </a>
@@ -230,7 +230,7 @@ export default function LoanCard({
             href={websiteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-indigo-200 bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-primary-100"
             aria-label={`Visit official website for ${schemeName}`}
           >
             <span aria-hidden="true">🌐</span>
@@ -240,7 +240,7 @@ export default function LoanCard({
             href={applyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             aria-label={`Apply now for ${schemeName}`}
           >
             <span aria-hidden="true">✍️</span>
@@ -252,7 +252,7 @@ export default function LoanCard({
           disabled={saveLoading}
           className={`mt-2 w-full rounded-md border px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 ${
             isSaved
-              ? 'border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+              ? 'border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100'
               : 'border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100'
           }`}
         >

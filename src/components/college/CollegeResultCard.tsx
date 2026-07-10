@@ -36,25 +36,24 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
   const girlsOnly = college.girlsOnly ?? (college.metadata?.girlsOnly as boolean);
   const locationType = college.locationType || (college.metadata?.locationType as string) || 'Not specified';
 
-
   // Determine score color
   const getScoreColorClass = (val: number) => {
     if (val >= 90) return 'text-green-600 border-green-200 bg-green-50';
-    if (val >= 75) return 'text-indigo-600 border-indigo-200 bg-indigo-50';
+    if (val >= 75) return 'text-primary-600 border-primary-200 bg-primary-50';
     if (val >= 50) return 'text-yellow-600 border-yellow-200 bg-yellow-50';
     return 'text-red-600 border-red-200 bg-red-50';
   };
 
   const getScoreProgressColor = (val: number) => {
     if (val >= 90) return 'bg-green-500';
-    if (val >= 75) return 'bg-indigo-500';
+    if (val >= 75) return 'bg-primary-500';
     if (val >= 50) return 'bg-yellow-500';
     return 'bg-red-500';
   };
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md flex flex-col h-full">
-      {/* Top Banner (subtle gradient/color side line) */}
+      {/* Top Banner */}
       <div className={`h-1.5 w-full ${getScoreProgressColor(score)}`} />
 
       {/* Main Card Content */}
@@ -62,20 +61,18 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
         <div>
           {/* Header Row: Course & Match Score */}
           <div className="flex items-start justify-between gap-3 mb-3">
-            <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+            <span className="inline-flex items-center rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-semibold text-primary-700">
               {course}
             </span>
             <div
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs font-bold ${getScoreColorClass(
-                score,
-              )}`}
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs font-bold ${getScoreColorClass(score)}`}
             >
               🎯 {score}% Match
             </div>
           </div>
 
           {/* College Name */}
-          <h3 className="text-lg font-bold text-gray-800 leading-snug mb-1 hover:text-indigo-600 transition-colors">
+          <h3 className="text-lg font-bold text-gray-800 leading-snug mb-1 hover:text-primary-600 transition-colors">
             {name}
           </h3>
 
@@ -108,7 +105,7 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
           </div>
 
           {/* Core Reason why recommended */}
-          <p className="text-xs text-gray-600 italic bg-indigo-50/10 rounded-md border-l-2 border-indigo-400 p-2.5 mb-3 line-clamp-3">
+          <p className="text-xs text-gray-600 italic bg-primary-50 rounded-md border-l-2 border-primary-400 p-2.5 mb-3 line-clamp-3">
             <strong>Why Recommended:</strong> {reason}
           </p>
         </div>
@@ -118,7 +115,7 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
           <div className="flex items-center justify-between gap-2 pt-2 border-t border-gray-100">
             <button
               onClick={() => setShowDetails(!showDetails)}
-              className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-0.5 py-1.5 cursor-pointer"
+              className="text-xs font-semibold text-primary-600 hover:text-primary-800 transition-colors flex items-center gap-0.5 py-1.5 cursor-pointer"
             >
               {showDetails ? 'Hide Details ▲' : 'Show Details ▼'}
             </button>
@@ -137,7 +134,7 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
                   href={officialWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 transition-colors cursor-pointer"
                 >
                   🎓 Apply
                 </a>
@@ -197,7 +194,7 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
                   href={officialWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded bg-indigo-600 px-2.5 py-1.5 font-semibold text-white hover:bg-indigo-700 transition-colors"
+                  className="inline-flex items-center gap-1 rounded bg-primary-600 px-2.5 py-1.5 font-semibold text-white hover:bg-primary-700 transition-colors"
                 >
                   🌐 Visit Website
                 </a>
@@ -221,7 +218,7 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
                   href={source}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-indigo-500"
+                  className="underline hover:text-primary-500"
                 >
                   {source}
                 </a>

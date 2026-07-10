@@ -8,3 +8,5 @@ export * from './application.types';
 export * from './mentorship.types';
 export * from './search.types';
 export * from './ai.types';
+export * from './college';
+

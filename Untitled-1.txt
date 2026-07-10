@@ -1,0 +1,35 @@
+[debug] [vite] connecting...
+[debug] [vite] connected.
+[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[info] [CollegeFinder] executeSearch called with form: [object Object]
+[info] [CollegeFinder] profileForSearch: [object Object]
+[info] [CollegeService] recommendColleges called
+[info] [CollegeService] featureInput: [object Object]
+[info] [CollegeService] calling SearchService.search with params: [object Object]
+[info] [SearchService] search called with request: [object Object]
+[info] [SearchService] cache key: college|{"board":"cbse","budget":"no_preference","class12percentage":"88.95","collegetype":"any","course":"btech_(computer_science)","entranceexam":"jee_main_(rank:_1547,_score:_not_specified,_percentile:_98)","girlsonly":"no","hostelrequired":"no","location":"no_preference","passingyear":"2026","state":"any_state"}|class_12|computer_science|student|uttar_pradesh|8l_12l|general|no|10
+[info] [SearchService] Built Tavily search query: BTech (Computer Science) college admission Any State JEE Main (Rank: 1547, Score: Not specified, Percentile: 98) 2024 2025
+[info] [2026-07-09T20:20:22.958Z] [INFO] [SearchService] Starting search — type: college, query: "BTech (Computer Science) college admission Any State JEE Main (Rank: 1547, Score: Not specified, Percentile: 98) 2024 2025" 
+[info] [SearchService] Calling TavilyService.search...
+[info] [2026-07-09T20:20:30.726Z] [INFO] [TavilyService] search: "BTech (Computer Science) college admission Any State JEE Main (Rank: 1547, Score: Not specified, Percentile: 98) 2024 2025" completed in 7767ms 
+[info] [2026-07-09T20:20:30.726Z] [INFO] [TavilyService] Returned 10 results for query: "BTech (Computer Science) college admission Any State JEE Main (Rank: 1547, Score: Not specified, Percentile: 98) 2024 2025" 
+[info] [SearchService] Tavily result: [object Object]
+[info] [SearchService] Filtered Tavily results (score >=0.2): [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]
+[info] [SearchService] Built Gemini prompt (first 500 chars): You are an AI assistant for ElevateHer AI, a platform that helps women in India find educational, financial and career opportunities.
+
+CRITICAL RULES:
+- Only use information present in the search results provided below.
+- Never fabricate, invent, or assume any detail not found in the search results.
+- Never invent eligibility criteria, fees, deadlines, interest rates, amounts or URLs.
+- If a piece of information is not found in the search results, state "Not available in current sources" for tha
+[info] [SearchService] Calling GeminiService.generate...
+[info] [2026-07-09T20:20:30.728Z] [INFO] [GeminiService] Sending prompt to gemini-1.5-flash (10 search results) 
+[warning] [2026-07-09T20:20:31.755Z] [WARN] [GeminiService] Non-retriable error on attempt 1 [object Object]
+[info] [2026-07-09T20:20:31.756Z] [INFO] [GeminiService] generate completed in 1028ms 
+[error] [2026-07-09T20:20:31.757Z] [ERROR] [GeminiService] Generation failed Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+[info] [SearchService] Gemini result: [object Object]
+[error] [SearchService] Gemini generation failed! The AI model is unavailable. Please try again later.
+[error] [2026-07-09T20:20:31.758Z] [ERROR] [SearchService] Gemini generation failed The AI model is unavailable. Please try again later.
+[info] [CollegeService] SearchService response: [object Object]
+[info] [CollegeFinder] CollegeService response: [object Object]
+[error] [CollegeFinder] CollegeService returned error: The AI model is unavailable. Please try again later.

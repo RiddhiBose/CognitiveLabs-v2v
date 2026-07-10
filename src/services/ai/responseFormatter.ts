@@ -70,6 +70,11 @@ function parseCollege(raw: RawItem): CollegeRecommendation {
     entranceExam: safeString(meta.entranceExam) || undefined,
     fees: safeString(meta.fees) || undefined,
     ranking: safeString(meta.ranking) || undefined,
+    cutoff: safeString(meta.cutoff) || undefined,
+    collegeType: safeString(meta.collegeType) || undefined,
+    hostelAvailable: typeof meta.hostelAvailable === 'boolean' ? meta.hostelAvailable : undefined,
+    girlsOnly: typeof meta.girlsOnly === 'boolean' ? meta.girlsOnly : undefined,
+    locationType: safeString(meta.locationType) || undefined,
   };
 }
 

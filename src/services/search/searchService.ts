@@ -5,6 +5,8 @@
 import { supabase } from '../supabase/client';
 import TavilyService from '../ai/tavilyService';
 import GeminiService from '../ai/geminiService';
+import GroqService from '../ai/groqService';
+import OpenRouterService from '../ai/openRouterService';
 import PromptBuilder from '../ai/promptBuilder';
 import ResponseFormatter from '../ai/responseFormatter';
 import CacheService from '../ai/cacheService';
@@ -15,11 +17,39 @@ import type {
   Recommendation,
   SearchCategory,
 } from '../../types';
+import type { TavilySearchResult } from '../../types/ai.types';
 import type { SearchHistory } from '../../types/search.types';
 import { logger } from '../../utils/logger';
 import { parseError } from '../../utils/errorHandler';
 
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+
+function buildFallbackRecommendations(searchResults: TavilySearchResult[]): Recommendation[] {
+  return searchResults.slice(0, 6).map((result) => {
+    let sourceHost = 'web search';
+    try {
+      sourceHost = new URL(result.url).hostname.replace(/^www\./, '');
+    } catch {
+      // Keep the default fallback host
+    }
+
+    return {
+      title: result.title || 'Search result',
+      summary: result.content?.slice(0, 220) || 'No summary available.',
+      matchScore: Math.max(40, Math.round(result.score * 100)),
+      reason: 'This result was retrieved from live web search because AI summarization is temporarily unavailable.',
+      officialWebsite: result.url,
+      applicationLink: result.url,
+      source: sourceHost,
+      location: null,
+      metadata: {
+        sourceUrl: result.url,
+        publishedDate: result.publishedDate ?? null,
+        fallback: true,
+      },
+    };
+  });
+}
 
 export interface SearchServiceResult<T = null> {
   data: T | null;
@@ -43,12 +73,15 @@ const SearchService = {
   async search<T extends Recommendation = Recommendation>(
     request: SearchRequest,
   ): Promise<SearchResponse<T>> {
+    console.log('[SearchService] search called with request:', request);
     const startTime = performance.now();
 
     // ── 1. Cache check ────────────────────────────────────────────────────
     const cacheKey = CacheService.buildKey(request);
+    console.log('[SearchService] cache key:', cacheKey);
     const cached = CacheService.get<T[]>(cacheKey);
     if (cached) {
+      console.log('[SearchService] Cache hit!');
       logger.info('SearchService', `Cache HIT for ${request.type}`);
       return {
         results: cached,
@@ -67,24 +100,30 @@ const SearchService = {
       request.profile,
       request.featureInput,
     );
+    console.log('[SearchService] Built Tavily search query:', query);
     logger.info('SearchService', `Starting search — type: ${request.type}, query: "${query}"`);
 
     // ── 3. Tavily web search ──────────────────────────────────────────────
+    console.log('[SearchService] Calling TavilyService.search...');
     const tavilyResult = await TavilyService.search({
       query,
       preferredDomains: request.preferredDomains,
       maxResults: request.maxResults ?? 8,
       searchDepth: request.searchDepth ?? 'advanced',
     });
+    console.log('[SearchService] Tavily result:', tavilyResult);
 
     if (tavilyResult.error || !tavilyResult.data) {
+      console.error('[SearchService] Tavily search failed!', tavilyResult.error);
       logger.error('SearchService', 'Tavily search failed', tavilyResult.error);
       return SearchService.errorResponse(request, tavilyResult.error ?? 'Search failed.', startTime);
     }
 
     const searchResults = TavilyService.filterByScore(tavilyResult.data.results, 0.2);
+    console.log('[SearchService] Filtered Tavily results (score >=0.2):', searchResults);
 
     if (searchResults.length === 0) {
+      console.warn('[SearchService] No usable Tavily results');
       logger.warn('SearchService', 'No usable Tavily results returned');
       return {
         results: [],
@@ -105,26 +144,70 @@ const SearchService = {
       searchResults,
       featureInput: request.featureInput,
     });
+    console.log('[SearchService] Built Gemini prompt (first 500 chars):', prompt.slice(0, 500));
 
     // ── 5. Gemini analysis ────────────────────────────────────────────────
-    const geminiResult = await GeminiService.generate({
+    console.log('[SearchService] Calling GeminiService.generate...');
+    let aiResult = await GeminiService.generate({
       prompt,
       searchResults,
     });
+    console.log('[SearchService] Gemini result:', aiResult);
 
-    if (geminiResult.error || !geminiResult.data) {
-      logger.error('SearchService', 'Gemini generation failed', geminiResult.error);
-      return SearchService.errorResponse(request, geminiResult.error ?? 'AI processing failed.', startTime);
+    if (aiResult.error || !aiResult.data) {
+      console.warn('[SearchService] Gemini generation failed, trying Groq fallback...', aiResult.error);
+      logger.warn('SearchService', 'Gemini generation failed, trying Groq fallback', aiResult.error);
+
+      if (GroqService.isConfigured()) {
+        aiResult = await GroqService.generate({
+          prompt,
+          searchResults,
+        });
+        console.log('[SearchService] Groq result:', aiResult);
+      }
+    }
+
+    if (aiResult.error || !aiResult.data) {
+      console.warn('[SearchService] Groq generation failed, trying OpenRouter fallback...', aiResult.error);
+      logger.warn('SearchService', 'Groq generation failed, trying OpenRouter fallback', aiResult.error);
+
+      if (OpenRouterService.isConfigured()) {
+        aiResult = await OpenRouterService.generate({
+          prompt,
+          searchResults,
+        });
+        console.log('[SearchService] OpenRouter result:', aiResult);
+      }
+    }
+
+    if (aiResult.error || !aiResult.data) {
+      console.error('[SearchService] AI generation failed!', aiResult.error);
+      logger.error('SearchService', 'AI generation failed', aiResult.error);
+
+      const fallbackResults = buildFallbackRecommendations(searchResults) as T[];
+      return {
+        results: fallbackResults,
+        query,
+        featureType: request.type,
+        totalFound: fallbackResults.length,
+        cached: false,
+        searchDurationMs: Math.round(performance.now() - startTime),
+        error: null,
+        warning: 'AI summarization is temporarily unavailable. Showing live web results instead.',
+      };
     }
 
     // ── 6. Parse + format ─────────────────────────────────────────────────
+    console.log('[SearchService] Calling ResponseFormatter.parse with text:', aiResult.data.text);
     const recommendations = ResponseFormatter.parse<T>(
-      geminiResult.data.text,
+      aiResult.data.text,
       request.type,
     );
+    console.log('[SearchService] Parsed recommendations:', recommendations);
 
     // ── 7. Cache ──────────────────────────────────────────────────────────
     if (recommendations.length > 0) {
+      console.log('[SearchService] Saving to cache');
       CacheService.set(cacheKey, recommendations, CACHE_TTL_MS);
     }
 

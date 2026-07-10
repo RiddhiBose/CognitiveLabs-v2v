@@ -91,23 +91,33 @@ export const checkAIConfig = (): { gemini: boolean; tavily: boolean } => {
 
 // Parse AI / external API errors specifically
 export const parseAIError = (error: unknown): string => {
-  const base = parseError(error);
-  const msg = base.toLowerCase();
+  // Get original error message first before any mapping
+  let originalMsg = '';
+  if (typeof error === 'string') originalMsg = error;
+  else if (error instanceof Error) originalMsg = error.message;
+  else if (typeof error === 'object' && error !== null) {
+    const err = error as Record<string, unknown>;
+    if (typeof err.message === 'string') originalMsg = err.message;
+  }
+  const originalLower = originalMsg.toLowerCase();
 
-  if (msg.includes('429') || msg.includes('quota') || msg.includes('resource_exhausted')) {
+  // Check AI-specific error patterns on the original message first
+  if (originalLower.includes('429') || originalLower.includes('quota') || originalLower.includes('resource_exhausted')) {
     return 'AI service rate limit reached. Please wait a moment and try again.';
   }
-  if (msg.includes('api_key') || msg.includes('api key') || msg.includes('invalid key')) {
+  if (originalLower.includes('api_key') || originalLower.includes('api key') || originalLower.includes('invalid key')) {
     return 'AI service key is invalid or missing. Please check your configuration.';
   }
-  if (msg.includes('safety') || msg.includes('blocked')) {
+  if (originalLower.includes('safety') || originalLower.includes('blocked')) {
     return 'The request was blocked by safety filters. Please try a different query.';
   }
-  if (msg.includes('model not found') || msg.includes('not supported')) {
+  if (originalLower.includes('model not found') || originalLower.includes('not supported')) {
     return 'The AI model is unavailable. Please try again later.';
   }
-  if (msg.includes('context length') || msg.includes('too long')) {
+  if (originalLower.includes('context length') || originalLower.includes('too long')) {
     return 'The search returned too much data. Please narrow your query.';
   }
-  return base;
+
+  // If none of the above, use the base error handling
+  return parseError(error);
 };

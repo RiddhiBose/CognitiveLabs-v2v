@@ -59,7 +59,7 @@ function buildProfileSummary(profile: UserProfileForSearch): string {
 // ── Feature-specific metadata hints ─────────────────────────────────────────
 
 const METADATA_HINTS: Record<FeatureType, string> = {
-  college: `metadata fields: { "courseName": string, "entranceExam": string | null, "fees": string | null, "ranking": string | null }`,
+  college: `metadata fields: { "courseName": string, "entranceExam": string | null, "fees": string | null, "ranking": string | null, "cutoff": string | null, "collegeType": string | null, "hostelAvailable": boolean | null, "girlsOnly": boolean | null, "locationType": string | null }`,
   scholarship: `metadata fields: { "amount": string | null, "deadline": string | null, "eligibility": string | null, "provider": string | null }`,
   education_loan: `metadata fields: { "interestRate": string | null, "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null }`,
   government_scheme: `metadata fields: { "ministry": string | null, "benefitType": string | null, "deadline": string | null }`,
@@ -80,14 +80,27 @@ Task: Identify the most relevant colleges/universities for this user based on th
 Preferred Course: ${featureInput.course ?? profile.specialization ?? 'Not specified'}
 Preferred State: ${featureInput.state ?? state}
 Entrance Exam: ${featureInput.entranceExam ?? 'Not specified'}
-Budget: ${featureInput.budget ?? profile.annual_income ?? 'Not specified'}
+College Type: ${featureInput.collegeType ?? 'Any'}
+Budget: ${featureInput.budget ?? 'No Preference'}
+Hostel Required: ${featureInput.hostelRequired ?? 'No Preference'}
+Girls Only: ${featureInput.girlsOnly ?? 'No Preference'}
+Location: ${featureInput.location ?? 'No Preference'}
+Class 12 Percentage: ${featureInput.class12Percentage ?? 'Not specified'}
+Passing Year: ${featureInput.passingYear ?? 'Not specified'}
+Board: ${featureInput.board ?? 'Not specified'}
 
 Focus on:
 - Accreditation status (NAAC, NBA, AICTE approval)
 - Admission process and entrance exams
-- Fees and scholarship availability
+- Fees and scholarship availability (must align with user's budget)
 - NIRF rankings where available
 - Government / aided / private distinction
+- Cutoff information mentioned in the sources, especially for the user's entrance exam rank/score/percentile
+- Whether the college is a good fit for the preferred state and college type
+- Whether hostels are available (if user requested)
+- Whether the college is girls-only (if user requested)
+- Whether the location type matches the user's preference
+- Class 12 percentage eligibility criteria
 `.trim();
 
     case 'scholarship':
@@ -238,7 +251,7 @@ ${OUTPUT_SCHEMA}
 Additional ${featureType} specific metadata:
 ${metadataHint}
 
-Return ONLY the JSON array. No explanation. No markdown. No code fences.
+For college recommendations, add a metadata.cutoff field whenever the source explicitly mentions a cutoff or closing rank. If the cutoff is unavailable in the source, set metadata.cutoff to "Not available in current sources". When estimating matchScore, weigh the student's entrance exam rank/score/percentile against the stated cutoff and prefer colleges that match the preferred state and college type. Return ONLY the JSON array. No explanation. No markdown. No code fences.
 Return at most 6 results, sorted by matchScore descending.
 If no relevant results are found in the search data, return an empty array: []
 `.trim();
@@ -264,10 +277,11 @@ If no relevant results are found in the search data, return an empty array: []
       case 'college':
         return [
           featureInput.course ?? spec,
-          'college admission',
+          'college admission cutoff 2024 2025',
           featureInput.state ?? state,
           featureInput.entranceExam,
-          '2024 2025',
+          featureInput.collegeType && featureInput.collegeType !== 'Any' ? featureInput.collegeType : '',
+          featureInput.budget && featureInput.budget !== 'No Preference' ? featureInput.budget : '',
         ].filter(Boolean).join(' ');
 
       case 'scholarship':

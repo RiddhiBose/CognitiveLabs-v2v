@@ -8,7 +8,7 @@ import { withRetry } from '../../utils/retry';
 import { parseAIError } from '../../utils/errorHandler';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
-const MODEL_NAME = 'gemini-2.0-flash';
+const MODEL_NAME = (import.meta.env.VITE_GEMINI_MODEL as string | undefined)?.trim() || 'gemini-2.0-flash';
 
 // Lazy-initialise client so missing key doesn't crash at module load
 let _client: GoogleGenerativeAI | null = null;

@@ -66,6 +66,11 @@ export interface CollegeRecommendation extends Recommendation {
   entranceExam?: string;
   fees?: string;
   ranking?: string;
+  cutoff?: string;
+  collegeType?: string;
+  hostelAvailable?: boolean;
+  girlsOnly?: boolean;
+  locationType?: string;
 }
 
 export interface ScholarshipRecommendation extends Recommendation {

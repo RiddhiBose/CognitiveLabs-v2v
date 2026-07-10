@@ -6,3 +6,5 @@ export { SearchService } from './search';
 export { GeminiService, TavilyService, PromptBuilder, ResponseFormatter, CacheService } from './ai';
 export { MentorshipService } from './mentorship';
 export { NotificationService } from './notification';
+export { CollegeService } from './CollegeService';
+

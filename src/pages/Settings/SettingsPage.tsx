@@ -83,13 +83,17 @@ export default function SettingsPage() {
           <p className="mb-4 text-sm text-gray-500">Toggle between light and dark mode.</p>
           <button
             onClick={toggleTheme}
-            className="rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all"
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-all cursor-pointer"
           >
-            Current: <span className="capitalize">{theme}</span> — Switch to {theme === 'light' ? 'Dark' : 'Light'}
+            <span className="text-xl" aria-hidden="true">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </span>
+            {theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+            <span className="ml-auto rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-bold text-indigo-700 capitalize">
+              {theme}
+            </span>
           </button>
-          <p className="mt-2 text-xs text-gray-400">
-            Full theme redesign will be available in a future update.
-          </p>
         </section>
 
         {/* Notification Preferences */}

@@ -20,9 +20,417 @@
   --color-charcoal: #1f2937;
 }
 
+/* ── Dark mode variant (class-based — toggled by ThemeContext on <html>) ── */
+@variant dark (&:where(.dark, .dark *));
+
 body {
   background-color: var(--color-cream);
   color: var(--color-charcoal);
+}
+
+/* Dark mode base overrides */
+.dark body {
+  background-color: #0f172a; /* slate-900 */
+  color: #e8e4d9;            /* warm wheat — comfortable default body text */
+}
+
+/* Page wrapper / main content background */
+.dark #root,
+.dark main,
+.dark [data-main-content] {
+  background-color: #0f172a;
+}
+
+/* ProtectedLayout wrapper */
+.dark .bg-cream,
+.dark .min-h-screen.bg-cream {
+  background-color: #0f172a !important;
+}
+
+/* Public layout background */
+.dark .min-h-screen {
+  background-color: #0f172a !important;
+}
+
+/* ── Header banner gradients ─────────────────────────────────────────────── */
+/* All pages use bg-gradient-to-br/r from-primary-* — replace with deep slate */
+
+.dark .bg-gradient-to-br,
+.dark .bg-gradient-to-r,
+.dark .bg-gradient-to-bl,
+.dark .bg-gradient-to-l {
+  background-image: none !important;
+}
+
+/* Specific gradient banner overrides — deep slate-indigo with good contrast */
+.dark [class*="from-primary-"] {
+  background-color: #1e293b !important; /* slate-800 */
+  background-image: linear-gradient(135deg, #1e293b 0%, #312e81 50%, #1e1b4b 100%) !important;
+  color: #f1f5f9 !important;
+}
+
+/* Dashboard hero specifically */
+.dark .from-primary-600 {
+  background-image: linear-gradient(135deg, #1e293b 0%, #3730a3 60%, #1e1b4b 100%) !important;
+}
+
+/* Settings header */
+.dark .from-primary-600.via-primary-700 {
+  background-image: linear-gradient(135deg, #1e293b 0%, #312e81 100%) !important;
+}
+
+/* Text inside gradient banners — keep white/light */
+.dark [class*="from-primary-"] h1,
+.dark [class*="from-primary-"] h2,
+.dark [class*="from-primary-"] p,
+.dark [class*="from-primary-"] span,
+.dark [class*="from-primary-"] a {
+  color: #f1f5f9 !important;
+}
+
+.dark [class*="from-primary-"] .text-primary-100,
+.dark [class*="from-primary-"] .text-primary-200,
+.dark [class*="from-primary-"] .text-primary-300 {
+  color: #cbd5e1 !important; /* slate-300 — good contrast on dark indigo */
+}
+
+/* ── Indigo gradient banners (Mentorship, Saved, etc.) ───────────────────── */
+.dark [class*="from-indigo-"] {
+  background-image: linear-gradient(135deg, #1e293b 0%, #312e81 60%, #1e1b4b 100%) !important;
+}
+
+.dark [class*="from-indigo-"] h1,
+.dark [class*="from-indigo-"] h2,
+.dark [class*="from-indigo-"] p,
+.dark [class*="from-indigo-"] span {
+  color: #f1f5f9 !important;
+}
+
+/* ── Stat/icon gradient chips (from-orange-100, from-green-100 etc.) ──────── */
+/* These small colored icon backgrounds should stay visible but muted */
+.dark .from-orange-100,
+.dark .from-green-100,
+.dark .from-purple-100,
+.dark .from-blue-100 {
+  background-image: none !important;
+  background-color: #334155 !important; /* slate-700 */
+}
+
+.dark .from-orange-100 svg,
+.dark .from-green-100 svg,
+.dark .from-purple-100 svg,
+.dark .from-blue-100 svg {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* Cards / surfaces */
+.dark .bg-white {
+  background-color: #1e293b !important; /* slate-800 */
+  color: #e8e4d9;  /* warm wheat body text on cards */
+}
+
+.dark .bg-gray-50 {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #334155 !important; /* slate-700 */
+}
+
+/* Borders */
+.dark .border-gray-100,
+.dark .border-gray-200 {
+  border-color: #334155 !important;
+}
+
+/* Text — bright off-white/cream scale for dark mode */
+/* Scale: 900=brightest (headlines) → 400=dimmest (hints), all clearly readable */
+.dark .text-gray-900 { color: #f8fafc !important; }   /* near white — headlines */
+.dark .text-gray-800 { color: #f1f5f9 !important; }   /* off-white — subheadings */
+.dark .text-gray-700 { color: #e8e4d9 !important; }   /* warm wheat — body text */
+.dark .text-gray-600 { color: #d4cfc4 !important; }   /* light wheat — secondary text */
+.dark .text-gray-500 { color: #b8b3a8 !important; }   /* muted cream — captions */
+.dark .text-gray-400 { color: #96918a !important; }   /* dim wheat — hints/placeholders */
+
+/* Sidebar */
+.dark aside {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+/* Navbar */
+.dark header,
+.dark nav.sticky {
+  background-color: #161b2e !important; /* slightly darker than body #0f172a, clearly above it */
+  border-color: #2a2250 !important;     /* subtle purple-tinted border — ties to accent */
+  backdrop-filter: none !important;
+  background-image: none !important;
+}
+
+/* ── Navbar text visibility in dark mode ────────────────────────────────────
+   APP_NAME ("ElevateHer AI") and user name use text-charcoal (#1f2937)
+   which is near-black and invisible on the dark navbar background.
+   TEAM_NAME ("Cognitive Labs") uses text-primary-600 which maps to violet-400
+   — brighter it up specifically inside the navbar.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* APP_NAME — "ElevateHer AI" — bold title, near-white */
+.dark nav.sticky .text-charcoal {
+  color: #f5f0e8 !important; /* warm off-white — wheat tone, not harsh pure white */
+}
+
+/* TEAM_NAME — "Cognitive Labs" — small uppercase label, bright violet-lavender */
+.dark nav.sticky .text-primary-600 {
+  color: #c4b5fd !important; /* violet-300 — visibly bright on dark navbar */
+}
+
+/* User full name — cream white */
+.dark nav.sticky .text-sm.font-semibold {
+  color: #f5f0e8 !important; /* warm off-white */
+}
+
+/* User role — muted but still readable cream */
+.dark nav.sticky .text-xs.capitalize {
+  color: #c9c4b8 !important; /* light cream — clearly visible, not too bright */
+}
+
+/* Inputs / selects / textareas */
+.dark input:not([type='checkbox']):not([type='radio']),
+.dark select,
+.dark textarea {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #96918a;  /* dim wheat — same as text-gray-400 */
+}
+
+/* Scrollbar for dark mode */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ── PRIMARY COLOR REMAPPING FOR DARK MODE ───────────────────────────────────
+   Accent colour: #481fc2 (custom purple) family
+   Solid buttons use #481fc2 directly. Text uses lighter violet shades
+   (violet-400 #a78bfa) for readability on dark slate surfaces.
+   #a78bfa on #1e293b = ~6.1:1 contrast — WCAG AA ✓
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Solid primary buttons ───────────────────────────────────────────────── */
+.dark .bg-primary-600,
+.dark .bg-primary {
+  background-color: #481fc2 !important;
+}
+.dark .hover\:bg-primary-700:hover,
+.dark .bg-primary-700 {
+  background-color: #3b18a0 !important;
+}
+.dark .hover\:bg-primary-600:hover {
+  background-color: #481fc2 !important;
+}
+.dark .bg-primary-800,
+.dark .hover\:bg-primary-800:hover {
+  background-color: #2e1280 !important;
+}
+
+/* ── Light primary surfaces ─────────────────────────────────────────────── */
+.dark .bg-primary-50,
+.dark .bg-primary-50\/20 {
+  background-color: #1e1030 !important; /* very dark purple tint */
+}
+.dark .bg-primary-100 {
+  background-color: #2e1260 !important;
+}
+.dark .hover\:bg-primary-50:hover {
+  background-color: #1e1030 !important;
+}
+.dark .hover\:bg-primary-100:hover {
+  background-color: #2e1260 !important;
+}
+
+/* ── Primary text colours ────────────────────────────────────────────────── */
+.dark .text-primary-600,
+.dark .text-primary,
+.dark .hover\:text-primary-600:hover {
+  color: #a78bfa !important; /* violet-400 — medium-light purple */
+}
+.dark .text-primary-700,
+.dark .hover\:text-primary-700:hover {
+  color: #c4b5fd !important; /* violet-300 */
+}
+.dark .text-primary-800,
+.dark .hover\:text-primary-800:hover {
+  color: #ddd6fe !important; /* violet-200 */
+}
+.dark .text-primary-500,
+.dark .text-primary-400 {
+  color: #a78bfa !important; /* violet-400 */
+}
+.dark .text-primary-100,
+.dark .text-primary-200,
+.dark .text-primary-300 {
+  color: #ede9fe !important; /* violet-100 — for text inside dark gradient banners */
+}
+.dark .hover\:text-primary-500:hover {
+  color: #c4b5fd !important;
+}
+
+/* ── Primary borders ─────────────────────────────────────────────────────── */
+.dark .border-primary-50,
+.dark .border-primary-100 {
+  border-color: #2e1260 !important;
+}
+.dark .border-primary-200 {
+  border-color: #5b21b6 !important; /* violet-700 */
+}
+.dark .border-primary-400 {
+  border-color: #7c3aed !important; /* violet-600 */
+}
+.dark .border-primary-600 {
+  border-color: #481fc2 !important;
+}
+
+/* ── Focus rings ─────────────────────────────────────────────────────────── */
+.dark .focus\:border-primary-500:focus,
+.dark .focus\:ring-primary-500:focus,
+.dark .focus-visible\:outline-primary-600:focus-visible {
+  border-color: #7c3aed !important;
+  --tw-ring-color: #7c3aed !important;
+  outline-color: #7c3aed !important;
+}
+
+/* ── Accent colours (checkboxes, ranges) ────────────────────────────────── */
+.dark .accent-primary-600 {
+  accent-color: #481fc2 !important;
+}
+
+/* ── Spinner border ──────────────────────────────────────────────────────── */
+.dark .border-t-primary {
+  border-top-color: #a78bfa !important;
+}
+.dark .border-primary-100 {
+  border-color: #2e1260 !important;
+}
+
+/* ── Outline button (border-primary-200 bg-primary-50) ──────────────────── */
+.dark .border-primary-200.bg-primary-50 {
+  background-color: #1e1030 !important;
+  border-color: #5b21b6 !important;
+  color: #c4b5fd !important;
+}
+
+/* ── Hover cards ─────────────────────────────────────────────────────────── */
+.dark .hover\:border-primary-200:hover {
+  border-color: #5b21b6 !important;
+}
+
+/* ── Header banner gradients — slate → #481fc2 purple ───────────────────── */
+.dark [class*="from-primary-"] {
+  background-color: #1e1030 !important;
+  background-image: linear-gradient(135deg, #1a1035 0%, #481fc2 55%, #1e1030 100%) !important;
+  color: #f1f5f9 !important;
+}
+.dark .from-primary-600 {
+  background-image: linear-gradient(135deg, #1a1035 0%, #481fc2 60%, #1e1030 100%) !important;
+}
+.dark .from-primary-600.via-primary-700 {
+  background-image: linear-gradient(135deg, #1a1035 0%, #3b18a0 100%) !important;
+}
+.dark [class*="from-primary-"] h1,
+.dark [class*="from-primary-"] h2,
+.dark [class*="from-primary-"] p,
+.dark [class*="from-primary-"] span,
+.dark [class*="from-primary-"] a {
+  color: #f1f5f9 !important;
+}
+.dark [class*="from-primary-"] .text-primary-100,
+.dark [class*="from-primary-"] .text-primary-200,
+.dark [class*="from-primary-"] .text-primary-300 {
+  color: #ddd6fe !important; /* violet-200 — readable on dark purple banner */
+}
+
+/* ── Indigo gradient banners (Mentorship, Saved, etc.) ───────────────────── */
+.dark [class*="from-indigo-"] {
+  background-image: linear-gradient(135deg, #1a1035 0%, #481fc2 60%, #1e1030 100%) !important;
+}
+.dark [class*="from-indigo-"] h1,
+.dark [class*="from-indigo-"] h2,
+.dark [class*="from-indigo-"] p,
+.dark [class*="from-indigo-"] span {
+  color: #f1f5f9 !important;
+}
+
+/* ── Chat sent message bubble ────────────────────────────────────────────── */
+.dark .bg-indigo-600 {
+  background-color: #481fc2 !important;
+}
+.dark .hover\:bg-indigo-700:hover,
+.dark .bg-indigo-700 {
+  background-color: #3b18a0 !important;
+}
+
+/* ── Indigo UI elements (mentorship cards, badges) ───────────────────────── */
+.dark .bg-indigo-50  { background-color: #1e1030 !important; }
+.dark .text-indigo-600 { color: #a78bfa !important; }
+.dark .text-indigo-700 { color: #c4b5fd !important; }
+.dark .text-indigo-800 { color: #ddd6fe !important; }
+.dark .border-indigo-100,
+.dark .border-indigo-200 { border-color: #5b21b6 !important; }
+
+/* ── Notification / alert backgrounds ───────────────────────────────────── */
+.dark .bg-amber-50   { background-color: #1c1208 !important; }
+.dark .bg-red-50     { background-color: #1c0a0a !important; }
+.dark .bg-emerald-50 { background-color: #052e16 !important; }
+.dark .bg-blue-50    { background-color: #0c1a2e !important; }
+.dark .bg-purple-50  { background-color: #1e1030 !important; }
+.dark .bg-slate-50   { background-color: #1e293b !important; }
+
+.dark .border-amber-200  { border-color: #78350f !important; }
+.dark .border-red-200    { border-color: #7f1d1d !important; }
+.dark .border-emerald-200 { border-color: #064e3b !important; }
+.dark .border-blue-200   { border-color: #1e3a5f !important; }
+
+.dark .text-amber-700  { color: #fbbf24 !important; }
+.dark .text-amber-800  { color: #fcd34d !important; }
+.dark .text-red-700    { color: #f87171 !important; }
+.dark .text-red-800    { color: #fca5a5 !important; }
+.dark .text-emerald-700 { color: #34d399 !important; }
+.dark .text-green-700  { color: #4ade80 !important; }
+.dark .text-blue-800   { color: #93c5fd !important; }
+.dark .text-blue-900   { color: #bfdbfe !important; }
+
+/* ── Stat icon chips ─────────────────────────────────────────────────────── */
+.dark .from-orange-100,
+.dark .from-green-100,
+.dark .from-purple-100,
+.dark .from-blue-100 {
+  background-image: none !important;
+  background-color: #2e1260 !important; /* dark purple tint */
+}
+.dark .from-orange-100 svg,
+.dark .from-green-100 svg,
+.dark .from-purple-100 svg,
+.dark .from-blue-100 svg {
+  color: #a78bfa !important; /* violet-400 */
+}
+
+/* ── Match score / badge backgrounds ────────────────────────────────────── */
+.dark .text-primary-700.bg-primary-50,
+.dark [class*="bg-primary-50"][class*="text-primary"] {
+  background-color: #1e1030 !important;
+  color: #c4b5fd !important;
 }
 
 /* Smooth transitions */
@@ -33,7 +441,7 @@ body {
   transition-duration: 150ms;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar (light) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -48,4 +456,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
-

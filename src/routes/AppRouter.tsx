@@ -19,7 +19,6 @@ import SettingsPage from '../pages/Settings/SettingsPage';
 import CollegeFinderPage from '../pages/CollegeFinder/CollegeFinderPage';
 import ScholarshipsPage from '../pages/Scholarships/ScholarshipsPage';
 import EducationLoansPage from '../pages/EducationLoans/EducationLoansPage';
-import GovernmentSchemesPage from '../pages/GovernmentSchemes/GovernmentSchemesPage';
 import StartupFundingPage from '../pages/StartupFunding/StartupFundingPage';
 import FinancialLiteracyPage from '../pages/FinancialLiteracy/FinancialLiteracyPage';
 import MentorshipPage from '../pages/Mentorship/MentorshipPage';
@@ -53,7 +52,6 @@ export default function AppRouter() {
             <Route path={ROUTES.COLLEGE_FINDER} element={<CollegeFinderPage />} />
             <Route path={ROUTES.SCHOLARSHIPS} element={<ScholarshipsPage />} />
             <Route path={ROUTES.EDUCATION_LOANS} element={<EducationLoansPage />} />
-            <Route path={ROUTES.GOVERNMENT_SCHEMES} element={<GovernmentSchemesPage />} />
             <Route path={ROUTES.STARTUP_FUNDING} element={<StartupFundingPage />} />
             <Route path={ROUTES.FINANCIAL_LITERACY} element={<FinancialLiteracyPage />} />
             <Route path={ROUTES.MENTORSHIP} element={<MentorshipPage />} />

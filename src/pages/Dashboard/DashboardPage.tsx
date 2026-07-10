@@ -14,7 +14,6 @@ const NAV_CARDS: NavCard[] = [
   { title: 'College Finder', description: 'Discover colleges that match your goals.', path: ROUTES.COLLEGE_FINDER, icon: '🏛️' },
   { title: 'Scholarships', description: 'Find scholarships you are eligible for.', path: ROUTES.SCHOLARSHIPS, icon: '🎓' },
   { title: 'Education Loans', description: 'Explore loan options for your education.', path: ROUTES.EDUCATION_LOANS, icon: '💰' },
-  { title: 'Government Schemes', description: 'Browse schemes designed for you.', path: ROUTES.GOVERNMENT_SCHEMES, icon: '🏛' },
   { title: 'Startup Funding', description: 'Find funding for your startup idea.', path: ROUTES.STARTUP_FUNDING, icon: '🚀' },
   { title: 'Financial Literacy', description: 'Learn to manage and grow your money.', path: ROUTES.FINANCIAL_LITERACY, icon: '📚' },
   { title: 'Mentorship', description: 'Connect with mentors in your field.', path: ROUTES.MENTORSHIP, icon: '🤝' },

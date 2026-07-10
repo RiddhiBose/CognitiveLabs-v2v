@@ -67,8 +67,26 @@ const METADATA_HINTS: Record<FeatureType, string> = {
   college: `metadata fields: { "courseName": string, "entranceExam": string | null, "fees": string | null, "ranking": string | null, "cutoff": string | null, "collegeType": string | null, "hostelAvailable": boolean | null, "girlsOnly": boolean | null, "locationType": string | null, "applicationSteps": string (MANDATORY - steps to apply from official college website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official college website or trusted sources) }`,
   scholarship: `metadata fields: { "amount": string (MANDATORY - must include scholarship amount range, never null), "deadline": string | null, "eligibility": string | null, "provider": string | null, "applicationSteps": string (MANDATORY - steps to apply from official scholarship website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official scholarship website or trusted sources) }`,
   education_loan: `metadata fields: { "interestRate": string (MANDATORY - must include interest rate, never null), "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null, "applicationSteps": string (MANDATORY - steps to apply from official bank website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official bank website or trusted sources) }`,
-  government_scheme: `metadata fields: { "ministry": string | null, "benefitType": string | null, "deadline": string | null }`,
-  startup_funding: `metadata fields: { "fundingType": string | null, "maxAmount": string | null, "stage": string | null, "sector": string | null }`,
+  startup_funding: `metadata fields: {
+  "organization": string | null (name of investor / incubator / government body / accelerator),
+  "fundingType": string | null (e.g. Grant, Seed Funding, Angel Investment, VC, Incubation, Accelerator, Government Scheme, CSR, Pitch Competition),
+  "sector": string | null (industry focus of the opportunity),
+  "stage": string | null (supported startup stages, e.g. Idea Stage, MVP, Early Revenue),
+  "minAmount": string | null (minimum funding amount if publicly available),
+  "maxAmount": string | null (maximum funding amount if publicly available),
+  "eligibility": string | null (minimum eligibility criteria from official source),
+  "womenFounderPreference": string | null (e.g. Women-only, Women-preferred, Open to all),
+  "registrationRequired": string | null (e.g. DPIIT, MSME, Startup India, None),
+  "revenueStageRequired": string | null (e.g. Pre-Revenue, Any, Early Revenue),
+  "equityRequirement": string | null (e.g. No equity, 2-5% equity, Varies),
+  "deadline": string | null (application deadline if publicly available — never fabricate),
+  "applicationProcess": string (MANDATORY — step-by-step application process from official source or trusted public source),
+  "requiredDocuments": string (MANDATORY — list of documents required from official source or trusted public source),
+  "benefits": string | null (non-monetary benefits: mentorship, office space, network, etc.),
+  "applicationPortal": string | null (direct application URL if different from officialWebsite),
+  "contactInfo": string | null (publicly available contact email or phone),
+  "sourceType": string (MANDATORY — must be exactly "Official" if from a government/organization website, or "Trusted Public Source" if from news/community/aggregator)
+}`,
   financial_literacy: `metadata fields: { "topic": string | null, "provider": string | null, "duration": string | null, "level": string | null, "isFree": boolean | null, "officialWebsite": string | null (MANDATORY - official course page URL from search results, never use catalog pages like exploreAllCourses.html), "applicationLink": string | null (MANDATORY - direct enrollment/application URL from search results, prefer over officialWebsite. For NISM, individual course pages like "https://online.nism.ac.in/module/CourseName.html" ARE the correct enrollment links) }`,
 };
 
@@ -189,40 +207,89 @@ Focus on:
 - Collateral requirements
 `.trim();
 
-    case 'government_scheme':
+    case 'startup_funding': {
+      const lookingFor = Array.isArray(featureInput.lookingFor)
+        ? (featureInput.lookingFor as string[]).join(', ')
+        : 'All types';
+      const additionalPrefs = Array.isArray(featureInput.additionalPreferences)
+        ? (featureInput.additionalPreferences as string[]).join(', ')
+        : 'None';
+
       return `
-Task: Identify government schemes this user is eligible for.
-State: ${state}
-Category: ${profile.category ?? 'Not specified'}
-Income: ${profile.annual_income ?? 'Not specified'}
+Task: Identify startup funding opportunities that best match this founder's profile and startup description.
+
+FOUNDER CONTEXT (auto-retrieved from profile — do not ask again):
+Name: ${profile.full_name}
 Occupation: ${profile.occupation ?? 'Not specified'}
-PWD: ${profile.pwd_status === 'yes' ? 'Yes' : 'No'}
-Scheme Type Preference: ${featureInput.schemeType ?? 'All'}
-
-Focus on:
-- Central government schemes (myscheme.gov.in)
-- State government welfare schemes
-- Women empowerment schemes
-- Education and skill development schemes
-- Financial assistance schemes
-`.trim();
-
-    case 'startup_funding':
-      return `
-Task: Identify startup funding opportunities for this user.
-Startup Stage: ${featureInput.stage ?? 'Not specified'}
-Sector: ${featureInput.sector ?? profile.industry ?? 'Not specified'}
+Experience: ${profile.experience != null ? `${profile.experience} years` : 'Not specified'}
 State: ${state}
-Funding Type Preference: ${featureInput.fundingType ?? 'All'}
+City: ${profile.city ?? 'Not specified'}
+Industry background: ${profile.industry ?? 'Not specified'}
+Qualification: ${profile.qualification ?? 'Not specified'}
+Role: ${profile.role}
 
-Focus on:
-- Startup India schemes
-- SIDBI funding programs
-- MSME grants
-- Women entrepreneur schemes
-- State incubation programs
-- Government seed funding
+STARTUP DETAILS:
+Startup Name: ${featureInput.startupName ?? 'Not specified'}
+Startup Idea: ${featureInput.startupIdea ?? 'Not specified'}
+Industry / Sector: ${featureInput.sector ?? 'Not specified'}
+Startup Stage: ${featureInput.startupStage ?? 'Not specified'}
+Funding Required: ${featureInput.fundingRequired ?? 'Not specified'}
+Business Model: ${featureInput.businessModel ?? 'Not specified'}
+Startup Registration: ${featureInput.startupRegistration ?? 'Not Registered'}
+Women-led: ${featureInput.womenLed ?? 'Not specified'}
+Current Revenue: ${featureInput.currentRevenue ?? 'Not specified'}
+Looking For: ${lookingFor}
+Preferred Location: ${featureInput.preferredLocation ?? 'Anywhere in India'}
+Additional Preferences: ${additionalPrefs}
+
+RANKING CRITERIA (apply in order):
+1. Startup stage compatibility — the opportunity must support the stated stage
+2. Industry / sector alignment — prefer opportunities focused on the startup's sector
+3. Funding amount match — prefer opportunities whose range covers the stated funding requirement
+4. Women-founder preference — strongly prioritize women-only or women-preferred opportunities when "Women-led" is Yes or Co-founded
+5. Registration eligibility — filter out opportunities requiring DPIIT if startup is Not Registered (unless registration is easy to obtain)
+6. Revenue stage eligibility — match pre-revenue vs revenue-stage requirements
+7. Location preference — prefer opportunities in the stated state or open to all India
+8. Additional preferences — women-only, government-backed, no equity, remote application, currently accepting
+9. Credibility — prefer official government portals, recognized incubators, verified investors
+10. Recency — prefer opportunities that are currently open or recently announced
+
+STRICT RULES:
+- Never fabricate funding programs, investors, incubators, grants, accelerators, or deadlines.
+- Never invent eligibility criteria, funding amounts, or application URLs.
+- Clearly mark sourceType as "Official" for government/organization websites.
+- Clearly mark sourceType as "Trusted Public Source" for news sites, aggregators, community sources.
+- Every recommendation MUST include its original source URL (set as "source" field).
+- applicationProcess and requiredDocuments are MANDATORY — use official website or trusted public source.
+- If an application deadline is not found in the search results, set deadline to null — never guess.
+- Return every relevant opportunity found in the search results — do not arbitrarily limit to a small number.
+- Return an empty array [] if no relevant verified opportunities are found in the search data.
+
+PREFERRED OFFICIAL SOURCES (search these first):
+startupindia.gov.in, dpiit.gov.in, investindia.gov.in, msme.gov.in, myscheme.gov.in,
+sidbi.in, dst.gov.in, dbtindia.gov.in, nsrcel.org, t-hub.co,
+official incubator and accelerator websites, official university incubation centres,
+official government portals
+
+TRUSTED PUBLIC SOURCES (use only when official information is unavailable):
+inc42.com, yourstory.com, techcrunch.com, crunchbase.com, ycombinator.com,
+linkedin.com company pages, wellfound.com, reddit.com, quora.com, official company blogs
+
+Focus on finding:
+- Government grants and seed funding (Startup India, DPIIT, MSME, DST, DBT)
+- SIDBI and financial institution programs for startups
+- Women entrepreneur-specific programs (StreeShakti, Udyogini, WEP, etc.)
+- State-level incubators and government incubation centers
+- Private accelerators and incubators accepting applications
+- Angel networks and seed-stage investors active in India
+- CSR funding programs for startups
+- Pitch competitions and startup challenges currently open
+- University incubation centers
+- Corporate innovation programs
+- Private Schemes (if selected): private startup support schemes, corporate startup schemes, NGO startup programs, foundation grants, women entrepreneur private initiatives, startup fellowships, industry-sponsored startup programs, private incubation initiatives — prefer official company, foundation, NGO, and CSR websites
+- Investments (if selected): angel investors, venture capital firms, family offices, venture studios, investment networks, syndicate investments, strategic investors, corporate venture capital, startup investment platforms — prefer official VC, angel network, investment fund, and startup platform websites; use Crunchbase, LinkedIn, Wellfound, Inc42, YourStory as trusted public sources when official websites are unavailable
 `.trim();
+    }
 
     case 'financial_literacy': {
       const knowledgeLevel = String(featureInput.knowledgeLevel ?? 'Beginner');
@@ -337,6 +404,7 @@ ${metadataHint}
 
 For college recommendations, add a metadata.cutoff field whenever the source explicitly mentions a cutoff or closing rank. If the cutoff is unavailable in the source, set metadata.cutoff to "Not available in current sources". When estimating matchScore, weigh the student's entrance exam rank/score/percentile against the stated cutoff and prefer colleges that match the preferred state and college type. Return ONLY the JSON array. No explanation. No markdown. No code fences.
 For scholarship recommendations, return every verified scholarship matching the user's current profile and their target scholarship goal. Do not summarize into only a few recommendations. Preserve the complete result set and rank it by relevance descending. If the user selected Any for scholarship type, funding coverage, status, or location, treat that as a broad search and do not narrow the results unnecessarily. Do not fabricate scholarships, deadlines, eligibility criteria, or links. Use only verified official sources. If no relevant results are found in the search data, return an empty array: []
+For startup_funding recommendations, return every verified funding opportunity found in the search results. Do not limit to a small number. Rank by matchScore descending. Never fabricate programs, investors, deadlines, amounts, or eligibility. Set sourceType to "Official" for government/org websites and "Trusted Public Source" for all others. applicationProcess and requiredDocuments are MANDATORY — never null. If no relevant results are found in the search data, return an empty array: []
 `.trim();
   },
 
@@ -440,26 +508,66 @@ For scholarship recommendations, return every verified scholarship matching the 
           'India 2024',
         ].filter(Boolean).join(' ');
 
-      case 'government_scheme':
-        return [
-          'government scheme',
-          'women',
-          featureInput.schemeType ?? '',
-          state,
-          category,
-          profile.pwd_status === 'yes' ? 'disability' : '',
-          'India 2024',
-        ].filter(Boolean).join(' ');
+      case 'startup_funding': {
+        const sector = String(featureInput.sector ?? profile.industry ?? '').toLowerCase();
+        const startupStage = String(featureInput.startupStage ?? '').toLowerCase();
+        const fundingRequired = String(featureInput.fundingRequired ?? '').toLowerCase();
+        const womenLed = String(featureInput.womenLed ?? '').toLowerCase();
+        const registration = String(featureInput.startupRegistration ?? '').toLowerCase();
+        const preferredLocation = String(featureInput.preferredLocation ?? state);
+        const lookingForArr = Array.isArray(featureInput.lookingFor)
+          ? (featureInput.lookingFor as string[])
+          : [];
+        const additionalPrefs = Array.isArray(featureInput.additionalPreferences)
+          ? (featureInput.additionalPreferences as string[])
+          : [];
 
-      case 'startup_funding':
+        const womenPhrase = womenLed === 'yes' || womenLed === 'co-founded by woman'
+          ? 'women entrepreneur women founder'
+          : '';
+        const govBackedPhrase = additionalPrefs.includes('Government-backed only')
+          ? 'government scheme grant'
+          : '';
+        const noEquityPhrase = additionalPrefs.includes('No equity funding')
+          ? 'grant non-dilutive no equity'
+          : '';
+        const openPhrase = additionalPrefs.includes('Currently accepting applications')
+          ? 'currently open accepting applications 2025'
+          : '2025 2024';
+        const regPhrase = registration.includes('dpiit') || registration.includes('startup india')
+          ? 'DPIIT registered startup india'
+          : '';
+
+        // Expand Private Schemes and Investments into meaningful search terms
+        const privateSchemePhrase = lookingForArr.includes('Private Schemes')
+          ? 'private startup schemes corporate startup support NGO foundation grants fellowship startup programs women entrepreneur private initiatives industry-sponsored incubation'
+          : '';
+        const investmentsPhrase = lookingForArr.includes('Investments')
+          ? 'angel investors venture capital family office venture studio investment network syndicate corporate venture capital startup investment platform'
+          : '';
+
+        // Base lookingFor phrase — exclude the two new options (already expanded above)
+        const baseLookingFor = lookingForArr
+          .filter((v) => v !== 'Private Schemes' && v !== 'Investments')
+          .join(' ');
+
         return [
-          'startup funding',
-          'women entrepreneur',
-          featureInput.sector ?? profile.industry ?? '',
-          featureInput.stage ?? 'early stage',
-          state,
-          'India 2024',
+          'startup funding India',
+          sector,
+          startupStage,
+          fundingRequired,
+          baseLookingFor,
+          privateSchemePhrase,
+          investmentsPhrase,
+          womenPhrase,
+          govBackedPhrase,
+          noEquityPhrase,
+          regPhrase,
+          preferredLocation !== 'Anywhere in India' ? preferredLocation : state,
+          openPhrase,
+          'official startupindia dpiit msme sidbi incubator accelerator grant scheme',
         ].filter(Boolean).join(' ');
+      }
 
       case 'financial_literacy': {
         const knowledgeLevel = String(featureInput.knowledgeLevel ?? 'any level');

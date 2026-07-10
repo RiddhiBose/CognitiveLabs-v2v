@@ -86,8 +86,10 @@ A user simply describes their background and goals, and the platform intelligent
 ### AI & Search
 | Technology | Purpose |
 |---|---|
-| ![Gemini](https://img.shields.io/badge/-Google%20Gemini-4285F4?logo=google&logoColor=white) Google Gemini API | AI reasoning, response generation, and content synthesis |
-| ![Tavily](https://img.shields.io/badge/-Tavily%20Search-FF6B35?logo=searchengin&logoColor=white) Tavily Search API | Real-time web search for live opportunity data |
+| ![Google Gemini](https://img.shields.io/badge/-Google%20Gemini-4285F4?logo=google&logoColor=white) Google Gemini API | Primary AI provider for recommendation generation and intelligent analysis |
+| ![Groq](https://img.shields.io/badge/-Groq-F55036?logo=groq&logoColor=white) Groq API | First fallback AI provider for high-speed inference when Gemini is unavailable |
+| ![OpenRouter](https://img.shields.io/badge/-OpenRouter-7C3AED?logo=openai&logoColor=white) OpenRouter API | Second fallback AI provider supporting multiple LLMs for improved reliability |
+| ![Tavily](https://img.shields.io/badge/-Tavily%20Search-FF6B35?logo=searchengin&logoColor=white) Tavily Search API | Real-time search of trusted web sources for scholarships, colleges, loans, courses, and government schemes |
 
 ### Deployment
 | Technology | Purpose |

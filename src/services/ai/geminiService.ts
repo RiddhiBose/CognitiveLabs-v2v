@@ -8,7 +8,6 @@ import { withRetry } from '../../utils/retry';
 import { parseAIError } from '../../utils/errorHandler';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
-console.log("Gemini key:", GEMINI_API_KEY);
 const MODEL_NAME = 'gemini-2.0-flash';
 
 // Lazy-initialise client so missing key doesn't crash at module load

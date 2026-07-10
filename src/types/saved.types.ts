@@ -5,7 +5,6 @@ export type SavedItemType =
   | 'loan'
   | 'government_scheme'
   | 'startup_funding'
-  | 'internship'
   | 'financial_literacy'
   | 'mentor';
 

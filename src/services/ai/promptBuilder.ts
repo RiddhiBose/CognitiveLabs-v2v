@@ -68,7 +68,6 @@ const METADATA_HINTS: Record<FeatureType, string> = {
   education_loan: `metadata fields: { "interestRate": string (MANDATORY - must include interest rate, never null), "maxAmount": string | null, "repaymentPeriod": string | null, "bank": string | null, "applicationSteps": string (MANDATORY - steps to apply from official bank website or trusted sources), "requiredDocuments": string (MANDATORY - documents required from official bank website or trusted sources) }`,
   government_scheme: `metadata fields: { "ministry": string | null, "benefitType": string | null, "deadline": string | null }`,
   startup_funding: `metadata fields: { "fundingType": string | null, "maxAmount": string | null, "stage": string | null, "sector": string | null }`,
-  internship: `metadata fields: { "company": string | null, "duration": string | null, "stipend": string | null, "skills": string[] | null, "applyBy": string | null }`,
   financial_literacy: `metadata fields: { "topic": string | null, "provider": string | null, "duration": string | null, "level": string | null, "isFree": boolean | null }`,
 };
 
@@ -222,21 +221,6 @@ Focus on:
 - Women entrepreneur schemes
 - State incubation programs
 - Government seed funding
-`.trim();
-
-    case 'internship':
-      return `
-Task: Identify internship opportunities for this user.
-Skills: ${featureInput.skills ?? profile.specialization ?? 'Not specified'}
-Preferred Location: ${featureInput.location ?? state}
-Duration Preference: ${featureInput.duration ?? 'Not specified'}
-Stipend Requirement: ${featureInput.stipend ?? 'Not specified'}
-
-Focus on:
-- AICTE internship portal
-- NATS (National Apprenticeship Training Scheme)
-- Government and PSU internships
-- Core sector internships matching the user's specialization
 `.trim();
 
     case 'financial_literacy':
@@ -424,14 +408,6 @@ For scholarship recommendations, return every verified scholarship matching the 
           featureInput.sector ?? profile.industry ?? '',
           featureInput.stage ?? 'early stage',
           state,
-          'India 2024',
-        ].filter(Boolean).join(' ');
-
-      case 'internship':
-        return [
-          'internship',
-          featureInput.skills ?? spec,
-          featureInput.location ?? state,
           'India 2024',
         ].filter(Boolean).join(' ');
 

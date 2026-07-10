@@ -21,9 +21,11 @@ import ScholarshipsPage from '../pages/Scholarships/ScholarshipsPage';
 import EducationLoansPage from '../pages/EducationLoans/EducationLoansPage';
 import GovernmentSchemesPage from '../pages/GovernmentSchemes/GovernmentSchemesPage';
 import StartupFundingPage from '../pages/StartupFunding/StartupFundingPage';
-import InternshipsPage from '../pages/Internships/InternshipsPage';
 import FinancialLiteracyPage from '../pages/FinancialLiteracy/FinancialLiteracyPage';
 import MentorshipPage from '../pages/Mentorship/MentorshipPage';
+import MentorProfilePage from '../pages/Mentorship/MentorProfilePage';
+import MentorRequestsPage from '../pages/Mentorship/MentorRequestsPage';
+import ChatPage from '../pages/Chat/ChatPage';
 import SavedPage from '../pages/Saved/SavedPage';
 import ApplicationsPage from '../pages/Applications/ApplicationsPage';
 import NotificationsPage from '../pages/Notifications/NotificationsPage';
@@ -54,9 +56,12 @@ export default function AppRouter() {
             <Route path={ROUTES.EDUCATION_LOANS} element={<EducationLoansPage />} />
             <Route path={ROUTES.GOVERNMENT_SCHEMES} element={<GovernmentSchemesPage />} />
             <Route path={ROUTES.STARTUP_FUNDING} element={<StartupFundingPage />} />
-            <Route path={ROUTES.INTERNSHIPS} element={<InternshipsPage />} />
             <Route path={ROUTES.FINANCIAL_LITERACY} element={<FinancialLiteracyPage />} />
             <Route path={ROUTES.MENTORSHIP} element={<MentorshipPage />} />
+            <Route path="/mentorship/mentor/:mentorId" element={<MentorProfilePage />} />
+            <Route path="/mentorship/requests" element={<MentorRequestsPage />} />
+            <Route path={ROUTES.CHAT} element={<ChatPage />} />
+            <Route path="/chat/:connectionId" element={<ChatPage />} />
             <Route path={ROUTES.SAVED} element={<SavedPage />} />
             <Route path={ROUTES.APPLICATIONS} element={<ApplicationsPage />} />
             <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />

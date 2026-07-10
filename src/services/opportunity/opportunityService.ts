@@ -11,7 +11,6 @@
  * - Education Loan Recommendation
  * - Government Scheme Recommendation
  * - Startup Funding Recommendation
- * - Internship Finder
  * - Financial Literacy Recommendation
  */
 

@@ -6,7 +6,6 @@ export type FeatureType =
   | 'education_loan'
   | 'government_scheme'
   | 'startup_funding'
-  | 'internship'
   | 'financial_literacy';
 
 // ---------- Tavily ----------
@@ -104,14 +103,6 @@ export interface StartupFundingRecommendation extends Recommendation {
   maxAmount?: string;
   stage?: string;
   sector?: string;
-}
-
-export interface InternshipRecommendation extends Recommendation {
-  company?: string;
-  duration?: string;
-  stipend?: string;
-  skills?: string[];
-  applyBy?: string;
 }
 
 export interface FinancialLiteracyRecommendation extends Recommendation {

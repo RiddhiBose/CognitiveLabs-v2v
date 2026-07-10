@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS public.saved_items (
   user_id       UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   item_type     TEXT NOT NULL CHECK (item_type IN (
                   'college','scholarship','loan','government_scheme',
-                  'startup_funding','internship','financial_literacy','mentor'
+                  'startup_funding','financial_literacy','mentor'
                 )),
   item_id       TEXT NOT NULL,
   item_title    TEXT NOT NULL,
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS public.applications (
   user_id           UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   application_type  TEXT NOT NULL CHECK (application_type IN (
                       'college','scholarship','loan',
-                      'internship','startup_funding','government_scheme'
+                      'startup_funding','government_scheme'
                     )),
   opportunity_id    TEXT NOT NULL,
   opportunity_title TEXT NOT NULL,
@@ -409,7 +409,7 @@ CREATE TABLE IF NOT EXISTS public.search_history (
   query         TEXT NOT NULL,
   category      TEXT CHECK (category IN (
                   'college','scholarship','loan','government_scheme',
-                  'startup_funding','internship','financial_literacy',
+                  'startup_funding','financial_literacy',
                   'mentor','general'
                 )),
   filters       JSONB,

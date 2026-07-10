@@ -3,7 +3,6 @@ export type ApplicationType =
   | 'college'
   | 'scholarship'
   | 'loan'
-  | 'internship'
   | 'startup_funding'
   | 'government_scheme';
 

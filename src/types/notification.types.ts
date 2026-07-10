@@ -3,6 +3,7 @@ export type NotificationType =
   | 'mentorship_request'
   | 'mentorship_accepted'
   | 'mentorship_rejected'
+  | 'mentorship_connection'
   | 'application_update'
   | 'system'
   | 'general';

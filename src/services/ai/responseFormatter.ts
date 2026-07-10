@@ -9,7 +9,6 @@ import type {
   LoanRecommendation,
   GovernmentSchemeRecommendation,
   StartupFundingRecommendation,
-  InternshipRecommendation,
   FinancialLiteracyRecommendation,
 } from '../../types/ai.types';
 import { logger } from '../../utils/logger';
@@ -186,21 +185,6 @@ function parseStartupFunding(raw: RawItem): StartupFundingRecommendation {
   };
 }
 
-function parseInternship(raw: RawItem): InternshipRecommendation {
-  const meta = safeMetadata(raw.metadata);
-  const skills = Array.isArray(meta.skills)
-    ? meta.skills.filter((s): s is string => typeof s === 'string')
-    : undefined;
-  return {
-    ...parseBase(raw),
-    company: safeString(meta.company) || undefined,
-    duration: safeString(meta.duration) || undefined,
-    stipend: safeString(meta.stipend) || undefined,
-    skills,
-    applyBy: safeString(meta.applyBy) || undefined,
-  };
-}
-
 function parseFinancialLiteracy(raw: RawItem): FinancialLiteracyRecommendation {
   const meta = safeMetadata(raw.metadata);
   return {
@@ -221,7 +205,6 @@ const PARSERS: Record<FeatureType, (raw: RawItem) => Recommendation> = {
   education_loan: parseLoan,
   government_scheme: parseGovernmentScheme,
   startup_funding: parseStartupFunding,
-  internship: parseInternship,
   financial_literacy: parseFinancialLiteracy,
 };
 

@@ -17,7 +17,6 @@ const NAV_CARDS: NavCard[] = [
   { title: 'Government Schemes', description: 'Browse schemes designed for you.', path: ROUTES.GOVERNMENT_SCHEMES, icon: '🏛' },
   { title: 'Startup Funding', description: 'Find funding for your startup idea.', path: ROUTES.STARTUP_FUNDING, icon: '🚀' },
   { title: 'Financial Literacy', description: 'Learn to manage and grow your money.', path: ROUTES.FINANCIAL_LITERACY, icon: '📚' },
-  { title: 'Internship Finder', description: 'Find internships that boost your career.', path: ROUTES.INTERNSHIPS, icon: '💼' },
   { title: 'Mentorship', description: 'Connect with mentors in your field.', path: ROUTES.MENTORSHIP, icon: '🤝' },
   { title: 'Saved Opportunities', description: 'View your saved items.', path: ROUTES.SAVED, icon: '🔖' },
   { title: 'Applications', description: 'Track your applications.', path: ROUTES.APPLICATIONS, icon: '📄' },

@@ -10,6 +10,13 @@ interface Props {
 
 const QUALIFICATIONS_WITH_NO_SPEC = ['class_10', 'class_12'];
 
+// Qualifications that imply the user attended a college/university
+const COLLEGE_QUALIFICATIONS = [
+  'diploma', 'iti', 'ba', 'bsc', 'bcom', 'bba', 'bca', 'btech', 'be',
+  'mbbs', 'bds', 'bpharm', 'llb', 'mba', 'mca', 'mtech', 'msc', 'ma',
+  'mcom', 'phd', 'other',
+];
+
 export default function Step2Academic({ initialData, onComplete, onBack }: Props) {
   const [qualification, setQualification] = useState<Qualification | ''>(
     initialData?.qualification ?? '',
@@ -21,7 +28,10 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
   const [specializationOther, setSpecializationOther] = useState(
     initialData?.specialization_other ?? '',
   );
-  const [errors, setErrors] = useState<{ qualification?: string; specialization?: string; specializationOther?: string }>({});
+  const [collegeName, setCollegeName] = useState(initialData?.college_name ?? '');
+  const [schoolName, setSchoolName] = useState(initialData?.school_name ?? '');
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const specializationOptions = qualification ? SPECIALIZATIONS[qualification] ?? [] : [];
   const showSpecialization =
@@ -30,9 +40,10 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
     specializationOptions.length > 0;
   const showSpecOther = specialization === 'Other';
   const showQualOther = qualification === 'other';
+  const showCollegeField = qualification ? COLLEGE_QUALIFICATIONS.includes(qualification) : false;
 
   const validate = (): boolean => {
-    const e: typeof errors = {};
+    const e: Record<string, string> = {};
     if (!qualification) e.qualification = 'Please select your highest qualification.';
     if (qualification === 'other' && !qualificationOther.trim()) {
       e.qualification = 'Please specify your qualification.';
@@ -55,6 +66,8 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
       qualification_other: showQualOther ? qualificationOther : undefined,
       specialization: showSpecialization ? specialization : undefined,
       specialization_other: showSpecOther ? specializationOther : undefined,
+      college_name: showCollegeField && collegeName.trim() ? collegeName.trim() : undefined,
+      school_name: schoolName.trim() ? schoolName.trim() : undefined,
     });
   };
 
@@ -92,7 +105,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
         )}
       </div>
 
-      {/* Other qualification text */}
+      {/* Other qualification */}
       {showQualOther && (
         <div>
           <label htmlFor="qualOther" className="mb-1 block text-sm font-medium text-gray-700">
@@ -134,7 +147,7 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
         </div>
       )}
 
-      {/* Other specialization text */}
+      {/* Other specialization */}
       {showSpecOther && (
         <div>
           <label htmlFor="specOther" className="mb-1 block text-sm font-medium text-gray-700">
@@ -155,6 +168,46 @@ export default function Step2Academic({ initialData, onComplete, onBack }: Props
           )}
         </div>
       )}
+
+      {/* College / University name — shown for degree-level qualifications */}
+      {showCollegeField && (
+        <div>
+          <label htmlFor="collegeName" className="mb-1 block text-sm font-medium text-gray-700">
+            College / University Name
+            <span className="ml-1 text-xs text-gray-400 font-normal">(Optional — used for mentor matching)</span>
+          </label>
+          <input
+            id="collegeName"
+            type="text"
+            value={collegeName}
+            onChange={(e) => setCollegeName(e.target.value)}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+            placeholder="e.g. IIT Bombay, Anna University, BITS Pilani"
+          />
+          <p className="mt-1 text-xs text-gray-400">
+            Mentors from the same college are ranked higher in your recommendations.
+          </p>
+        </div>
+      )}
+
+      {/* School name — shown for everyone */}
+      <div>
+        <label htmlFor="schoolName" className="mb-1 block text-sm font-medium text-gray-700">
+          School Name
+          <span className="ml-1 text-xs text-gray-400 font-normal">(Optional — used for mentor matching)</span>
+        </label>
+        <input
+          id="schoolName"
+          type="text"
+          value={schoolName}
+          onChange={(e) => setSchoolName(e.target.value)}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+          placeholder="e.g. Kendriya Vidyalaya, DAV Public School"
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          Mentors who attended the same school are ranked higher in your recommendations.
+        </p>
+      </div>
 
       <div className="flex gap-3">
         <button

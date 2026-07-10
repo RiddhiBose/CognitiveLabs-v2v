@@ -5,7 +5,6 @@ export type SearchCategory =
   | 'loan'
   | 'government_scheme'
   | 'startup_funding'
-  | 'internship'
   | 'financial_literacy'
   | 'mentor'
   | 'general';
@@ -71,12 +70,6 @@ export const PREFERRED_DOMAINS: Record<string, string[]> = {
     'msme.gov.in',
     'dpiit.gov.in',
     'incubator.startupindia.gov.in',
-  ],
-  internship: [
-    'internship.aicte-india.org',
-    'nats.education.gov.in',
-    'internshala.com',
-    'letsintern.com',
   ],
   financial_literacy: [
     'rbi.org.in',

@@ -74,6 +74,10 @@ export interface Profile {
   qualification_other?: string | null;
   specialization?: string | null;
   specialization_other?: string | null;
+  /** College or university attended / currently attending */
+  college_name?: string | null;
+  /** School attended up to Class 10 / Class 12 */
+  school_name?: string | null;
   occupation?: Occupation | null;
   occupation_other?: string | null;
   experience?: number | null;
@@ -123,6 +127,10 @@ export interface ProfileStep2 {
   qualification_other?: string;
   specialization?: string;
   specialization_other?: string;
+  /** College or university name */
+  college_name?: string;
+  /** School name (up to Class 10 / 12) */
+  school_name?: string;
 }
 
 export interface ProfileStep3 {

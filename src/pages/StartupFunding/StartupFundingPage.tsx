@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../contexts/ProfileContext';
+import { useSaved } from '../../contexts/SavedContext';
 import { SearchService } from '../../services/search';
 import StartupFundingService from '../../services/StartupFundingService';
 import {
@@ -38,6 +39,7 @@ function opportunityKey(o: StartupFundingRecommendation): string {
 export default function StartupFundingPage() {
   const { user } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
+  const { adjustCount } = useSaved();
 
   const [formValues, setFormValues] = useState<StartupFundingFormValues>(
     STARTUP_FUNDING_FORM_DEFAULTS,
@@ -131,6 +133,7 @@ export default function StartupFundingPage() {
 
     if (result.success) {
       setSavedKeys((prev) => new Set([...prev, key]));
+      adjustCount(1);
     } else {
       setError(result.error ?? 'Could not save this opportunity right now.');
     }

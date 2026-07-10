@@ -12,6 +12,7 @@
 
 import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
+import SavedItemsService from './SavedItemsService';
 import type { UserProfileForSearch, SearchResponse } from '../types/ai.types';
 import type {
   LoanFormData,
@@ -205,58 +206,34 @@ const LoanService = {
     loan: EducationLoanRecommendation,
   ): Promise<LoanServiceResult> {
     const itemId = LoanService.buildItemId(loan);
-    const metadata: SavedLoanMetadata = {
-      bankName: loan.bankName ?? loan.bank ?? loan.title,
-      interestRate: loan.interestRate,
-      maxAmount: loan.maxAmount,
-      repaymentPeriod: loan.repaymentPeriod,
-      officialWebsite: loan.officialWebsite ?? undefined,
-      savedAt: new Date().toISOString(),
-    };
-
-    const { error } = await supabase.from('saved_items').upsert(
-      {
-        user_id: userId,
-        item_type: 'loan',
-        item_id: itemId,
-        item_title: loan.loanSchemeName ?? loan.title,
-        item_metadata: metadata,
+    const res = await SavedItemsService.save({
+      userId,
+      itemType: 'loan',
+      itemId,
+      itemTitle: loan.loanSchemeName ?? loan.title,
+      itemMetadata: {
+        bankName: loan.bankName ?? loan.bank ?? loan.title,
+        interestRate: loan.interestRate,
+        maxAmount: loan.maxAmount,
+        repaymentPeriod: loan.repaymentPeriod,
+        officialWebsite: loan.officialWebsite ?? undefined,
+        savedAt: new Date().toISOString(),
       },
-      { onConflict: 'user_id,item_type,item_id' },
-    );
-
-    if (error) {
-      logger.error('LoanService', 'Failed to save loan', error);
-      return { data: null, error: parseError(error) };
-    }
+      snapshot: loan as unknown as Record<string, unknown>,
+    });
+    if (res.error) return { data: null, error: res.error };
     return { data: null, error: null };
   },
 
   async unsaveLoan(userId: string, loan: EducationLoanRecommendation): Promise<LoanServiceResult> {
     const itemId = LoanService.buildItemId(loan);
-    const { error } = await supabase
-      .from('saved_items')
-      .delete()
-      .eq('user_id', userId)
-      .eq('item_type', 'loan')
-      .eq('item_id', itemId);
-
-    if (error) {
-      logger.error('LoanService', 'Failed to unsave loan', error);
-      return { data: null, error: parseError(error) };
-    }
+    const res = await SavedItemsService.unsave(userId, 'loan', itemId);
+    if (res.error) return { data: null, error: res.error };
     return { data: null, error: null };
   },
 
   async getSavedLoanIds(userId: string): Promise<Set<string>> {
-    const { data, error } = await supabase
-      .from('saved_items')
-      .select('item_id')
-      .eq('user_id', userId)
-      .eq('item_type', 'loan');
-
-    if (error || !data) return new Set();
-    return new Set(data.map((r: { item_id: string }) => r.item_id));
+    return SavedItemsService.getSavedIds(userId, 'loan');
   },
 
   // ── Utilities ───────────────────────────────────────────────────────────────

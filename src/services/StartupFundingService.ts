@@ -9,6 +9,7 @@
 
 import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
+import SavedItemsService from './SavedItemsService';
 import type { StartupFundingRecommendation } from '../types/ai.types';
 import { parseError } from '../utils/errorHandler';
 import type {
@@ -255,13 +256,12 @@ const StartupFundingService = {
     opportunity: StartupFundingRecommendation,
   ): Promise<{ success: boolean; error?: string }> {
     const itemId = `${opportunity.title}-${opportunity.organization ?? opportunity.source ?? 'unknown'}`;
-
-    const { error } = await supabase.from('saved_items').insert({
-      user_id: userId,
-      item_type: 'startup_funding',
-      item_id: itemId,
-      item_title: opportunity.title,
-      item_metadata: {
+    const res = await SavedItemsService.save({
+      userId,
+      itemType: 'startup_funding',
+      itemId,
+      itemTitle: opportunity.title,
+      itemMetadata: {
         organization: opportunity.organization ?? null,
         fundingType: opportunity.fundingType ?? null,
         officialWebsite: opportunity.officialWebsite ?? null,
@@ -273,18 +273,12 @@ const StartupFundingService = {
         deadline: opportunity.deadline ?? null,
         sourceType: opportunity.sourceType ?? null,
         source: opportunity.source ?? null,
-        savedTime: new Date().toISOString(),
       },
+      snapshot: opportunity as unknown as Record<string, unknown>,
     });
-
-    if (error) {
-      // Unique constraint violation means already saved — treat as success
-      if (error.code === '23505') {
-        return { success: true };
-      }
-      return { success: false, error: parseError(error) };
+    if (res.error && !res.error.includes('duplicate')) {
+      return { success: false, error: res.error };
     }
-
     return { success: true };
   },
 
@@ -294,17 +288,8 @@ const StartupFundingService = {
     organization: string | undefined,
   ): Promise<{ success: boolean; error?: string }> {
     const itemId = `${opportunityTitle}-${organization ?? 'unknown'}`;
-
-    const { error } = await supabase
-      .from('saved_items')
-      .delete()
-      .eq('user_id', userId)
-      .eq('item_type', 'startup_funding')
-      .eq('item_id', itemId);
-
-    if (error) {
-      return { success: false, error: parseError(error) };
-    }
+    const res = await SavedItemsService.unsave(userId, 'startup_funding', itemId);
+    if (res.error) return { success: false, error: res.error };
     return { success: true };
   },
 
@@ -314,17 +299,7 @@ const StartupFundingService = {
     organization: string | undefined,
   ): Promise<boolean> {
     const itemId = `${opportunityTitle}-${organization ?? 'unknown'}`;
-
-    const { data, error } = await supabase
-      .from('saved_items')
-      .select('id')
-      .eq('user_id', userId)
-      .eq('item_type', 'startup_funding')
-      .eq('item_id', itemId)
-      .maybeSingle();
-
-    if (error || !data) return false;
-    return true;
+    return SavedItemsService.isSaved(userId, 'startup_funding', itemId);
   },
 };
 

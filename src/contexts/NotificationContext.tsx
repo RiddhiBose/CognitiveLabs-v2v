@@ -11,6 +11,7 @@ interface NotificationContextValue {
   refreshNotifications: () => Promise<void>;
   markAsRead: (id: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
+  deleteNotification: (id: string) => Promise<void>;
 }
 
 const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
@@ -39,6 +40,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
 
     fetchNotifications(user.id);
+    
+    // Start background checks and unread message reminder checker
+    NotificationService.startBackgroundScheduler(user.id);
 
     // Subscribe to real-time notifications
     const channel = NotificationService.subscribeToNotifications(user.id, (newNotification) => {
@@ -70,11 +74,28 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   }, [user?.id]);
 
+  const deleteNotification = useCallback(
+    async (id: string) => {
+      await NotificationService.deleteNotification(id);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    },
+    [],
+  );
+
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, unreadCount, loading, error, refreshNotifications, markAsRead, markAllAsRead }}
+      value={{
+        notifications,
+        unreadCount,
+        loading,
+        error,
+        refreshNotifications,
+        markAsRead,
+        markAllAsRead,
+        deleteNotification,
+      }}
     >
       {children}
     </NotificationContext.Provider>

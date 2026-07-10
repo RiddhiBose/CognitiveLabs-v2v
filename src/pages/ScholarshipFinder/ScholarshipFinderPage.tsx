@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../contexts/ProfileContext';
+import { useSaved } from '../../contexts/SavedContext';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import LoadingCard from '../../components/common/LoadingCard';
 import DetailsModal from '../../components/common/DetailsModal';
@@ -21,6 +22,7 @@ const loadingMessages = [
 export default function ScholarshipFinderPage() {
   const { user } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
+  const { adjustCount } = useSaved();
   const [formValues, setFormValues] = useState<ScholarshipFormValues>(SCHOLARSHIP_FORM_DEFAULTS);
   const [results, setResults] = useState<ScholarshipRecommendation[]>([]);
   const [resultCount, setResultCount] = useState(0);
@@ -104,6 +106,7 @@ export default function ScholarshipFinderPage() {
 
     if (result.success) {
       setSavedIds((prev) => [...prev, key]);
+      adjustCount(1);
     } else {
       setError(result.error ?? 'Could not save this scholarship right now.');
     }

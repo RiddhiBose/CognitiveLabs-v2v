@@ -1,5 +1,6 @@
 import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
+import SavedItemsService from './SavedItemsService';
 import type {
   UserProfileForSearch,
   CollegeRecommendation,
@@ -97,27 +98,21 @@ export const CollegeService = {
 
   async saveCollege(
     userId: string,
-    collegeName: string,
-    officialWebsite: string | null,
-    courseName: string | null,
+    college: CollegeRecommendation,
   ): Promise<CollegeServiceResult> {
-    const payload = {
-      user_id: userId,
-      item_type: 'college',
-      item_id: collegeName, // Using name as item_id to avoid duplicate saves of same college
-      item_title: collegeName,
-      item_metadata: {
-        officialWebsite: officialWebsite || null,
-        courseName: courseName || null,
-        savedTime: new Date().toISOString(),
+    const res = await SavedItemsService.save({
+      userId,
+      itemType: 'college',
+      itemId: college.title,
+      itemTitle: college.title,
+      itemMetadata: {
+        officialWebsite: college.officialWebsite ?? null,
+        courseName: college.courseName ?? (college.metadata?.courseName as string) ?? null,
+        savedAt: new Date().toISOString(),
       },
-    };
-
-    const { error } = await supabase.from('saved_items').insert(payload);
-
-    if (error) {
-      return { data: null, error: error.message };
-    }
+      snapshot: college as unknown as Record<string, unknown>,
+    });
+    if (res.error) return { data: null, error: res.error };
     return { data: null, error: null };
   },
 

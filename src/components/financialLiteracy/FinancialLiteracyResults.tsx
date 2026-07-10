@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSaved } from '../../contexts/SavedContext';
 import FinancialLiteracyService from '../../services/FinancialLiteracyService';
 import type { FinancialLiteracyRecommendation } from '../../types/ai.types';
 import SuccessMessage from '../../components/common/SuccessMessage';
@@ -18,6 +19,7 @@ export default function FinancialLiteracyResults({
   cached,
 }: FinancialLiteracyResultsProps) {
   const { user } = useAuth();
+  const { adjustCount } = useSaved();
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
   const [savingId, setSavingId] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -35,6 +37,7 @@ export default function FinancialLiteracyResults({
       if (result.success) {
         setSavedItems((prev) => new Set(prev).add(course.title));
         setSaveSuccess(true);
+        adjustCount(1);
         setTimeout(() => setSaveSuccess(false), 3000);
       }
     } catch (err) {

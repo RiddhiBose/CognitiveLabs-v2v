@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { useProfile } from '../../contexts/ProfileContext';
+import { useSaved } from '../../contexts/SavedContext';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 interface NavItem {
   label: string;
@@ -20,11 +22,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Mentorship', path: ROUTES.MENTORSHIP, icon: '&#129309;' },
   { label: 'Mentor Requests', path: '/mentorship/requests', icon: '&#128236;', mentorOnly: true },
   { label: 'Messages', path: ROUTES.CHAT, icon: '&#128172;' },
+  { label: 'Notifications', path: ROUTES.NOTIFICATIONS, icon: '&#128276;' },
   { label: 'Saved', path: ROUTES.SAVED, icon: '&#128278;' },
 ];
 
 export default function Sidebar() {
   const { profile } = useProfile();
+  const { savedCount } = useSaved();
+  const { unreadCount } = useNotifications();
   const isMentor = profile?.role === 'mentor';
 
   const visibleItems = NAV_ITEMS.filter((item) => {
@@ -42,15 +47,27 @@ export default function Sidebar() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
+                  `flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
                     isActive
                       ? 'bg-indigo-50 font-medium text-indigo-700'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
                   }`
                 }
               >
-                <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: item.icon }} />
-                {item.label}
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: item.icon }} />
+                  {item.label}
+                </span>
+                {item.path === ROUTES.SAVED && savedCount > 0 && (
+                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1.5 text-[10px] font-bold text-white">
+                    {savedCount > 99 ? '99+' : savedCount}
+                  </span>
+                )}
+                {item.path === ROUTES.NOTIFICATIONS && unreadCount > 0 && (
+                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
               </NavLink>
             </li>
           ))}

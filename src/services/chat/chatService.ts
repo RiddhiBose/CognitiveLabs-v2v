@@ -10,6 +10,7 @@ import { supabase } from '../supabase/client';
 import { parseError } from '../../utils/errorHandler';
 import { logger } from '../../utils/logger';
 import type { Message, ChatConnection } from '../../types';
+import NotificationService from '../notification/notificationService';
 
 export interface ChatServiceResult<T = null> {
   data: T | null;
@@ -136,6 +137,33 @@ const ChatService = {
       logger.error('ChatService', 'sendMessage failed', error);
       return { data: null, error: parseError(error) };
     }
+
+    // Send real-time notification to the receiver (fire-and-forget)
+    (async () => {
+      try {
+        const { data: senderProfile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('user_id', senderId)
+          .single();
+        const senderName = (senderProfile as { full_name?: string } | null)?.full_name ?? 'Someone';
+        const truncatedContent = trimmed.length > 60 ? trimmed.slice(0, 57) + '...' : trimmed;
+
+        await NotificationService.createNotification(
+          receiverId,
+          'New Message Received',
+          `New message from ${senderName}: "${truncatedContent}"`,
+          'message_received',
+          connectionId,
+          'chat',
+          'messaging',
+          senderName
+        );
+      } catch (err) {
+        logger.warn('ChatService', 'Failed to generate message notification', err);
+      }
+    })();
+
     return { data: data as Message, error: null };
   },
 

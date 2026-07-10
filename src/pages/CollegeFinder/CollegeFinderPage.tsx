@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useProfile } from '../../contexts/ProfileContext';
+import { useSaved } from '../../contexts/SavedContext';
 import { LoadingScreen } from '../../components/common';
 import DetailsModal from '../../components/common/DetailsModal';
 import SearchService from '../../services/search/searchService';
@@ -17,6 +18,7 @@ const LOADING_STEPS = [
 
 export default function CollegeFinderPage() {
   const { profile, loading: profileLoading } = useProfile();
+  const { adjustCount } = useSaved();
   const [isSearching, setIsSearching] = useState(false);
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [colleges, setColleges] = useState<CollegeRecommendation[]>([]);
@@ -148,20 +150,13 @@ export default function CollegeFinderPage() {
       const res = await CollegeService.unsaveCollege(profile.user_id, college.title);
       if (!res.error) {
         setSavedColleges((prev) => prev.filter((name) => name !== college.title));
-      } else {
-        console.error('Failed to unsave', res.error);
+        adjustCount(-1);
       }
     } else {
-      const res = await CollegeService.saveCollege(
-        profile.user_id,
-        college.title,
-        college.officialWebsite || null,
-        college.courseName || (college.metadata?.courseName as string) || null,
-      );
+      const res = await CollegeService.saveCollege(profile.user_id, college);
       if (!res.error) {
         setSavedColleges((prev) => [...prev, college.title]);
-      } else {
-        console.error('Failed to save', res.error);
+        adjustCount(1);
       }
     }
     setSavingName(null);

@@ -1,5 +1,6 @@
 import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
+import SavedItemsService from './SavedItemsService';
 import type { ScholarshipRecommendation } from '../types/ai.types';
 import { parseError } from '../utils/errorHandler';
 import type { ScholarshipFormValues, ScholarshipSearchRequest, ScholarshipSearchResponse } from '../types/scholarship';
@@ -297,12 +298,12 @@ const ScholarshipService = {
 
   async saveScholarship(userId: string, scholarship: ScholarshipRecommendation): Promise<{ success: boolean; error: string | null }> {
     const itemId = `${scholarship.title}-${scholarship.provider ?? scholarship.source}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const { error } = await supabase.from('saved_items').insert({
-      user_id: userId,
-      item_type: 'scholarship',
-      item_id: itemId,
-      item_title: scholarship.title,
-      item_metadata: {
+    const res = await SavedItemsService.save({
+      userId,
+      itemType: 'scholarship',
+      itemId,
+      itemTitle: scholarship.title,
+      itemMetadata: {
         provider: scholarship.provider ?? null,
         officialWebsite: scholarship.officialWebsite ?? null,
         applicationPortal: scholarship.applicationLink ?? null,
@@ -310,12 +311,9 @@ const ScholarshipService = {
         amount: scholarship.amount ?? null,
         deadline: scholarship.deadline ?? null,
       },
+      snapshot: scholarship as unknown as Record<string, unknown>,
     });
-
-    if (error) {
-      return { success: false, error: parseError(error) };
-    }
-
+    if (res.error) return { success: false, error: res.error };
     return { success: true, error: null };
   },
 };

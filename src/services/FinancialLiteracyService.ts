@@ -1,6 +1,7 @@
 import { supabase } from './supabase/client';
 import SearchService from './search/searchService';
 import CacheService from './ai/cacheService';
+import SavedItemsService from './SavedItemsService';
 import type { FinancialLiteracyRecommendation } from '../types/ai.types';
 import { parseError } from '../utils/errorHandler';
 import type {
@@ -291,12 +292,12 @@ const FinancialLiteracyService = {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-');
 
-    const { error } = await supabase.from('saved_items').insert({
-      user_id: userId,
-      item_type: 'financial-literacy-course',
-      item_id: itemId,
-      item_title: course.title,
-      item_metadata: {
+    const res = await SavedItemsService.save({
+      userId,
+      itemType: 'financial-literacy-course',
+      itemId,
+      itemTitle: course.title,
+      itemMetadata: {
         provider: course.provider ?? null,
         topic: course.topic ?? null,
         level: course.level ?? null,
@@ -306,12 +307,10 @@ const FinancialLiteracyService = {
         enrollmentLink: course.applicationLink ?? null,
         sourceUrl: course.source ?? null,
       },
+      snapshot: course as unknown as Record<string, unknown>,
     });
 
-    if (error) {
-      return { success: false, error: parseError(error) };
-    }
-
+    if (res.error) return { success: false, error: res.error };
     return { success: true, error: null };
   },
 };

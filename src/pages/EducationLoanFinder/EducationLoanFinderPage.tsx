@@ -11,6 +11,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useProfile } from '../../contexts/ProfileContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSaved } from '../../contexts/SavedContext';
 import LoanService from '../../services/LoanService';
 import SearchService from '../../services/search/searchService';
 import DetailsModal from '../../components/common/DetailsModal';
@@ -149,6 +150,7 @@ type PageState = 'form' | 'loading' | 'results';
 export default function EducationLoanFinderPage() {
   const { profile, loading: profileLoading } = useProfile();
   const { user } = useAuth();
+  const { adjustCount } = useSaved();
 
   // Form state
   const [form, setForm] = useState<LoanFormData>(EMPTY_LOAN_FORM);
@@ -304,10 +306,11 @@ export default function EducationLoanFinderPage() {
       const result = await LoanService.saveLoan(user.id, loan);
       if (!result.error) {
         setSavedIds((prev) => new Set([...prev, itemId]));
+        adjustCount(1);
       }
       setSavingId(null);
     },
-    [user?.id],
+    [user?.id, adjustCount],
   );
 
   const handleUnsave = useCallback(
@@ -322,10 +325,11 @@ export default function EducationLoanFinderPage() {
           next.delete(itemId);
           return next;
         });
+        adjustCount(-1);
       }
       setSavingId(null);
     },
-    [user?.id],
+    [user?.id, adjustCount],
   );
 
   const handleViewDetails = useCallback((loan: EducationLoanRecommendation) => {

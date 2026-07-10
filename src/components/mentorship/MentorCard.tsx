@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useSaved } from '../../contexts/SavedContext';
+import SavedItemsService from '../../services/SavedItemsService';
 import type { RankedMentor } from '../../types';
 
 interface Props {
   mentor: RankedMentor;
   onSendRequest: (mentor: RankedMentor) => void;
   requesting: boolean;
-  /** 'none' | 'pending' | 'accepted' | 'rejected' | 'cancelled' */
   requestStatus?: string | null;
-  /** If connected, the mentorship_connection id to deep-link into chat */
   chatConnectionId?: string | null;
 }
 
@@ -49,9 +51,48 @@ function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }
 
 export default function MentorCard({ mentor, onSendRequest, requesting, requestStatus, chatConnectionId }: Props) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { adjustCount } = useSaved();
+
+  const [isSaved, setIsSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const degree = mentor.qualification_other ?? mentor.qualification ?? null;
   const occupation = mentor.occupation_other ?? mentor.occupation ?? null;
+
+  const handleSaveToggle = async () => {
+    if (!user?.id) return;
+    setSaving(true);
+    if (isSaved) {
+      await SavedItemsService.unsave(user.id, 'mentor', mentor.user_id);
+      setIsSaved(false);
+      adjustCount(-1);
+    } else {
+      await SavedItemsService.save({
+        userId: user.id,
+        itemType: 'mentor',
+        itemId: mentor.user_id,
+        itemTitle: mentor.full_name,
+        itemMetadata: {
+          qualification: mentor.qualification_other ?? mentor.qualification ?? null,
+          specialization: mentor.specialization ?? null,
+          occupation: mentor.occupation_other ?? mentor.occupation ?? null,
+          job_title: mentor.job_title ?? null,
+          company: mentor.company ?? null,
+          experience: mentor.experience ?? null,
+          state: mentor.state ?? null,
+          city: mentor.city ?? null,
+          bio: mentor.bio ?? null,
+          compatibilityScore: mentor.compatibilityScore,
+          reasons: mentor.reasons,
+        },
+        snapshot: mentor as unknown as Record<string, unknown>,
+      });
+      setIsSaved(true);
+      adjustCount(1);
+    }
+    setSaving(false);
+  };
 
   const requestButtonLabel = () => {
     if (requesting) return 'Sending…';
@@ -128,12 +169,24 @@ export default function MentorCard({ mentor, onSendRequest, requesting, requestS
       )}
 
       {/* Actions */}
-      <div className="mt-auto flex gap-2 pt-1">
+      <div className="mt-auto flex flex-wrap gap-2 pt-1">
         <button
           onClick={() => navigate(`/mentorship/mentor/${mentor.user_id}`)}
           className="flex-1 rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs font-semibold text-indigo-700 hover:bg-indigo-50 transition-colors cursor-pointer"
         >
           View Profile
+        </button>
+        <button
+          onClick={handleSaveToggle}
+          disabled={saving}
+          aria-label={isSaved ? 'Remove from saved' : 'Save mentor'}
+          className={`rounded-lg border px-3 py-2 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50 ${
+            isSaved
+              ? 'border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+              : 'border-gray-200 bg-white text-gray-500 hover:border-indigo-200 hover:text-indigo-600'
+          }`}
+        >
+          {isSaved ? '❤️' : '♡'}
         </button>
         {requestStatus === 'accepted' && chatConnectionId ? (
           <button

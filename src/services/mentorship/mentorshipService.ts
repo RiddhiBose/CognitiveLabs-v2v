@@ -13,7 +13,6 @@ import { supabase } from '../supabase/client';
 import GeminiService from '../ai/geminiService';
 import GroqService from '../ai/groqService';
 import OpenRouterService from '../ai/openRouterService';
-import NotificationService from '../notification/notificationService';
 import { parseError } from '../../utils/errorHandler';
 import { logger } from '../../utils/logger';
 import { COMPATIBILITY_WEIGHTS, MENTORSHIP_AI_SHORTLIST_SIZE, MENTORSHIP_MIN_CANDIDATES_FOR_AI } from '../../constants';
@@ -538,22 +537,8 @@ const MentorshipService = {
 
     if (error) return { data: null, error: parseError(error) };
 
-    // Notify the mentor (fire-and-forget — don't block on notification errors)
-    const { data: learnerProfile } = await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('user_id', learnerId)
-      .single();
-
-    const learnerName = (learnerProfile as { full_name?: string } | null)?.full_name ?? 'A learner';
-    await NotificationService.createNotification(
-      mentorId,
-      'New Mentorship Request',
-      `${learnerName} has sent you a mentorship request.`,
-      'mentorship_request',
-      (data as MentorshipRequest).id,
-      'mentorship_request',
-    );
+    // Notification is handled by the DB trigger trg_notify_mentor_on_new_request
+    // (SECURITY DEFINER — bypasses RLS so mentor receives it reliably)
 
     return { data: data as MentorshipRequest, error: null };
   },
@@ -573,7 +558,6 @@ const MentorshipService = {
     if (error) return { data: null, error: parseError(error) };
     const req = data as MentorshipRequest;
 
-    // On acceptance: create the connection record + notify learner
     if (status === 'accepted') {
       const { error: connErr } = await supabase
         .from('mentorship_connections')
@@ -587,48 +571,12 @@ const MentorshipService = {
 
       if (connErr) logger.warn('MentorshipService', 'Failed to create connection record', connErr);
 
-      const { data: mentorProfile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('user_id', actorUserId)
-        .single();
-      const mentorName = (mentorProfile as { full_name?: string } | null)?.full_name ?? 'Your mentor';
-
-      await NotificationService.createNotification(
-        req.learner_id,
-        'Mentorship Request Accepted',
-        `${mentorName} has accepted your mentorship request. You are now connected!`,
-        'mentorship_accepted',
-        requestId,
-        'mentorship_request',
-      );
-
-      await NotificationService.createNotification(
-        req.learner_id,
-        'Mentorship Connection Established',
-        `You are now connected with ${mentorName}. Reach out to begin your mentorship journey!`,
-        'mentorship_connection',
-        requestId,
-        'mentorship_connection',
-      );
+      // Notifications handled by DB trigger trg_notify_learner_on_request_update
+      // (SECURITY DEFINER — bypasses RLS so learner receives them reliably)
     }
 
     if (status === 'rejected') {
-      const { data: mentorProfile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('user_id', actorUserId)
-        .single();
-      const mentorName = (mentorProfile as { full_name?: string } | null)?.full_name ?? 'The mentor';
-
-      await NotificationService.createNotification(
-        req.learner_id,
-        'Mentorship Request Update',
-        `${mentorName} was unable to accept your mentorship request at this time.`,
-        'mentorship_rejected',
-        requestId,
-        'mentorship_request',
-      );
+      // Notification handled by DB trigger trg_notify_learner_on_request_update
     }
 
     return { data: req, error: null };

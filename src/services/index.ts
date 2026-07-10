@@ -9,4 +9,5 @@ export { NotificationService } from './notification';
 export { CollegeService } from './CollegeService';
 export { default as ScholarshipService } from './ScholarshipService';
 export { default as FinancialLiteracyService } from './FinancialLiteracyService';
+export { default as SavedItemsService } from './SavedItemsService';
 export { default as StartupFundingService } from './StartupFundingService';

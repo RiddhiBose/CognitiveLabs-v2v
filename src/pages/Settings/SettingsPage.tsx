@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { AuthService } from '../../services/auth';
-import { ErrorMessage } from '../../components/common';
+import { ErrorMessage, Spinner } from '../../components/common';
 import { ROUTES } from '../../constants';
+import NotificationService from '../../services/notification/notificationService';
 
 export default function SettingsPage() {
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
@@ -32,6 +33,41 @@ export default function SettingsPage() {
     }
   };
 
+  // Notification Preferences State
+  const [prefs, setPrefs] = useState<any>(null);
+  const [prefsLoading, setPrefsLoading] = useState(true);
+  const [prefsError, setPrefsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    async function loadPrefs() {
+      const res = await NotificationService.getPreferences(user!.id);
+      if (res.error) {
+        setPrefsError(res.error);
+      } else {
+        setPrefs(res.data);
+      }
+      setPrefsLoading(false);
+    }
+    loadPrefs();
+  }, [user?.id]);
+
+  const handleTogglePref = async (field: string) => {
+    if (!user?.id || !prefs) return;
+    const updatedValue = !prefs[field];
+    
+    // Optimistic Update
+    setPrefs((prev: any) => ({ ...prev, [field]: updatedValue }));
+    setPrefsError(null);
+
+    const res = await NotificationService.updatePreferences(user.id, { [field]: updatedValue });
+    if (res.error) {
+      // Revert if error
+      setPrefs((prev: any) => ({ ...prev, [field]: !updatedValue }));
+      setPrefsError(res.error);
+    }
+  };
+
   return (
     <div className="max-w-lg">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">Settings</h1>
@@ -50,6 +86,126 @@ export default function SettingsPage() {
         <p className="mt-2 text-xs text-gray-400">
           Full theme redesign will be available in a future update.
         </p>
+      </section>
+
+      {/* Notification Preferences */}
+      <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
+        <h2 className="mb-1 font-semibold text-gray-800">Notification Preferences</h2>
+        <p className="mb-4 text-sm text-gray-500">Choose which updates you would like to receive.</p>
+
+        <ErrorMessage message={prefsError} className="mb-4" />
+
+        {prefsLoading ? (
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
+        ) : !prefs ? (
+          <p className="text-sm text-gray-500">Failed to load preferences.</p>
+        ) : (
+          <div className="space-y-4">
+            {/* Scholarship */}
+            <div className="flex items-start justify-between">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-scholarships" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Scholarship Updates
+                </label>
+                <span className="text-xs text-gray-500">Deadlines, eligibility changes, and application openings.</span>
+              </div>
+              <input
+                id="pref-scholarships"
+                type="checkbox"
+                checked={prefs.scholarship_updates}
+                onChange={() => handleTogglePref('scholarship_updates')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Loan */}
+            <div className="flex items-start justify-between border-t border-gray-100 pt-3">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-loans" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Education Loan Updates
+                </label>
+                <span className="text-xs text-gray-500">Interest rate changes and new loan products.</span>
+              </div>
+              <input
+                id="pref-loans"
+                type="checkbox"
+                checked={prefs.loan_updates}
+                onChange={() => handleTogglePref('loan_updates')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Schemes */}
+            <div className="flex items-start justify-between border-t border-gray-100 pt-3">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-schemes" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Government Schemes & Startup Updates
+                </label>
+                <span className="text-xs text-gray-500">New startup funding schemes and benefits updates.</span>
+              </div>
+              <input
+                id="pref-schemes"
+                type="checkbox"
+                checked={prefs.government_scheme_updates}
+                onChange={() => handleTogglePref('government_scheme_updates')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Literacy */}
+            <div className="flex items-start justify-between border-t border-gray-100 pt-3">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-literacy" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Financial Literacy Updates
+                </label>
+                <span className="text-xs text-gray-500">Course additions, updates, and certification alerts.</span>
+              </div>
+              <input
+                id="pref-literacy"
+                type="checkbox"
+                checked={prefs.financial_literacy_updates}
+                onChange={() => handleTogglePref('financial_literacy_updates')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Mentorship */}
+            <div className="flex items-start justify-between border-t border-gray-100 pt-3">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-mentorship" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Mentorship Notifications
+                </label>
+                <span className="text-xs text-gray-500">Request received, acceptances, and mentor match alerts.</span>
+              </div>
+              <input
+                id="pref-mentorship"
+                type="checkbox"
+                checked={prefs.mentorship_notifications}
+                onChange={() => handleTogglePref('mentorship_notifications')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Messaging */}
+            <div className="flex items-start justify-between border-t border-gray-100 pt-3">
+              <div className="flex-1 pr-4">
+                <label htmlFor="pref-messages" className="text-sm font-medium text-gray-800 block cursor-pointer">
+                  Message Notifications
+                </label>
+                <span className="text-xs text-gray-500">Real-time alerts for new direct messages and reminders.</span>
+              </div>
+              <input
+                id="pref-messages"
+                type="checkbox"
+                checked={prefs.message_notifications}
+                onChange={() => handleTogglePref('message_notifications')}
+                className="mt-1 h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+              />
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Sign Out */}

@@ -48,7 +48,6 @@ Our platform helps women:
 - 🚀 Access startup funding, incubators, grants, and government schemes for women entrepreneurs.
 - 🤝 Connect with mentors who can guide their academic and professional journey.
 - 📚 Improve financial literacy and make informed financial decisions.
-- 🌐 Access opportunities in both English and Hindi, making the platform more inclusive.
 
 By bringing verified opportunities into one AI-powered platform, ElevateHer AI enables women to make informed decisions, overcome information barriers, and become more independent in pursuing education, careers, and entrepreneurship.
 
@@ -58,7 +57,7 @@ By bringing verified opportunities into one AI-powered platform, ElevateHer AI e
 
 | Resource | Link |
 |---|---|
-| 🌐 **Live Deployment** | [Coming Soon — add your Netlify URL here](#) |
+| 🌐 **Live Deployment** | https://cognitive-labs-v2v.vercel.app/  |
 | 🎥 **Demo Video** | [Coming Soon — add your demo video link here](#) |
 | 💻 **GitHub Repository** | [Coming Soon — add your GitHub repo link here](#) |
 
@@ -78,7 +77,6 @@ By bringing verified opportunities into one AI-powered platform, ElevateHer AI e
 | 🔖 **Saved Opportunities** | Bookmark colleges, scholarships, loans, and funding opportunities for later |
 | 📱 **Responsive Dashboard** | A clean, mobile-friendly dashboard giving a complete overview of your journey |
 | 🔔 **Notification System** | Stay updated with alerts and reminders for important deadlines and opportunities |
-| 🌐 **Language Toggle** | Easily switch between **English** and **Hindi** to make the platform accessible for users across India |
 
 > 💡 All recommendations are based on **live information** fetched from official websites and trusted public sources — not hardcoded datasets.
 

@@ -6,7 +6,6 @@ import LoadingCard from '../../components/common/LoadingCard';
 import DetailsModal from '../../components/common/DetailsModal';
 import { ScholarshipFinderForm, ScholarshipResultCard } from '../../components/scholarship';
 import ScholarshipService from '../../services/ScholarshipService';
-import ApplicationService from '../../services/ApplicationService';
 import type { ScholarshipRecommendation } from '../../types/ai.types';
 import { SCHOLARSHIP_FORM_DEFAULTS, type ScholarshipFormValues } from '../../types/scholarship';
 import { SearchService } from '../../services/search';
@@ -110,16 +109,6 @@ export default function ScholarshipFinderPage() {
     }
   };
 
-  const handleApply = async (scholarship: ScholarshipRecommendation) => {
-    if (!user?.id) return;
-    const res = await ApplicationService.saveScholarshipApplication(user.id, scholarship);
-    if (!res.error) {
-      console.log('Application saved successfully');
-    } else {
-      console.error('Failed to save application', res.error);
-    }
-  };
-
   const handleViewDetails = (scholarship: ScholarshipRecommendation) => {
     setSelectedScholarship(scholarship);
     setDetailsModalOpen(true);
@@ -213,7 +202,6 @@ export default function ScholarshipFinderPage() {
                         onSave={() => handleSave(scholarship)}
                         saving={savingId === `${scholarship.title}-${scholarship.provider ?? scholarship.source}`}
                         saved={savedIds.includes(`${scholarship.title}-${scholarship.provider ?? scholarship.source}`)}
-                        onApply={handleApply}
                         onViewDetails={handleViewDetails}
                       />
                     ))}
@@ -235,7 +223,6 @@ export default function ScholarshipFinderPage() {
                         onSave={() => handleSave(scholarship)}
                         saving={savingId === `${scholarship.title}-${scholarship.provider ?? scholarship.source}`}
                         saved={savedIds.includes(`${scholarship.title}-${scholarship.provider ?? scholarship.source}`)}
-                        onApply={handleApply}
                         onViewDetails={handleViewDetails}
                       />
                     ))}

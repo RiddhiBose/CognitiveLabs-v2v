@@ -59,7 +59,6 @@ interface LoanCardProps {
   onSave: (loan: EducationLoanRecommendation) => void;
   onUnsave: (loan: EducationLoanRecommendation) => void;
   saveLoading?: boolean;
-  onApply?: (loan: EducationLoanRecommendation) => void;
   onViewDetails?: (loan: EducationLoanRecommendation) => void;
 }
 
@@ -69,7 +68,6 @@ export default function LoanCard({
   onSave,
   onUnsave,
   saveLoading = false,
-  onApply,
   onViewDetails,
 }: LoanCardProps) {
   const bankName = loan.bankName ?? loan.bank ?? '';
@@ -242,7 +240,6 @@ export default function LoanCard({
             href={applyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => onApply && onApply(loan)}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
             aria-label={`Apply now for ${schemeName}`}
           >

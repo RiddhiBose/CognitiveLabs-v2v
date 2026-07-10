@@ -6,7 +6,6 @@ interface CollegeResultCardProps {
   isSaved: boolean;
   onSaveToggle: () => void;
   saving: boolean;
-  onApply?: (college: CollegeRecommendation) => void;
   onViewDetails?: (college: CollegeRecommendation) => void;
 }
 
@@ -15,7 +14,6 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
   isSaved,
   onSaveToggle,
   saving,
-  onApply,
   onViewDetails,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -139,7 +137,6 @@ export const CollegeResultCard: React.FC<CollegeResultCardProps> = ({
                   href={officialWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => onApply && onApply(college)}
                   className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors cursor-pointer"
                 >
                   🎓 Apply

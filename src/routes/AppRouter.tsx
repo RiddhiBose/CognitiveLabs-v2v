@@ -27,7 +27,6 @@ import MentorProfilePage from '../pages/Mentorship/MentorProfilePage';
 import MentorRequestsPage from '../pages/Mentorship/MentorRequestsPage';
 import ChatPage from '../pages/Chat/ChatPage';
 import SavedPage from '../pages/Saved/SavedPage';
-import ApplicationsPage from '../pages/Applications/ApplicationsPage';
 import NotificationsPage from '../pages/Notifications/NotificationsPage';
 
 export default function AppRouter() {
@@ -63,7 +62,6 @@ export default function AppRouter() {
             <Route path={ROUTES.CHAT} element={<ChatPage />} />
             <Route path="/chat/:connectionId" element={<ChatPage />} />
             <Route path={ROUTES.SAVED} element={<SavedPage />} />
-            <Route path={ROUTES.APPLICATIONS} element={<ApplicationsPage />} />
             <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
           </Route>
         </Route>

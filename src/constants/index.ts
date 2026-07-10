@@ -24,7 +24,6 @@ export const ROUTES = {
   MENTOR_REQUESTS: '/mentorship/requests',
   CHAT: '/chat',
   SAVED: '/saved',
-  APPLICATIONS: '/applications',
   NOTIFICATIONS: '/notifications',
 } as const;
 

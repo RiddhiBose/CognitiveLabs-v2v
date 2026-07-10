@@ -101,6 +101,51 @@ export default function FinancialLiteracyResults({
   );
 }
 
+// ─── NISM link resolution ─────────────────────────────────────────────────────
+// Priority 1: a direct course URL already provided by the AI (on online.nism.ac.in)
+// Priority 2: search the NISM course catalogue with the course title pre-filled
+// Priority 3: the NISM explore-all-courses landing page
+const NISM_EXPLORE_URL = 'https://online.nism.ac.in/exploreAllCourses.html';
+
+function isNismProvider(course: FinancialLiteracyRecommendation): boolean {
+  const providerLower = (course.provider ?? '').toLowerCase();
+  const sourceLower   = (course.source ?? '').toLowerCase();
+  const websiteLower  = (course.officialWebsite ?? '').toLowerCase();
+  const appLinkLower  = (course.applicationLink ?? '').toLowerCase();
+
+  return (
+    providerLower.includes('nism') ||
+    sourceLower.includes('nism.ac.in') ||
+    websiteLower.includes('nism.ac.in') ||
+    appLinkLower.includes('nism.ac.in')
+  );
+}
+
+function getNismEnrollLink(course: FinancialLiteracyRecommendation): string {
+  // Priority 1 — direct link already on online.nism.ac.in (AI-provided)
+  const directLinks = [
+    course.applicationLink,
+    course.officialWebsite,
+    course.source,
+  ].filter(Boolean) as string[];
+
+  const directNismLink = directLinks.find((url) =>
+    url.toLowerCase().includes('online.nism.ac.in'),
+  );
+  if (directNismLink) return directNismLink;
+
+  // Priority 2 — search the catalogue with the course title pre-filled
+  if (course.title) {
+    const encoded = encodeURIComponent(course.title.trim());
+    return `${NISM_EXPLORE_URL}?search=${encoded}`;
+  }
+
+  // Priority 3 — fallback to the explore-all-courses page
+  return NISM_EXPLORE_URL;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 interface CourseCardProps {
   course: FinancialLiteracyRecommendation;
   isSaved: boolean;
@@ -111,6 +156,15 @@ interface CourseCardProps {
 function CourseCard({ course, isSaved, isSaving, onSave }: CourseCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
+  const nism = isNismProvider(course);
+
+  // Enroll/Apply href:
+  //   NISM courses  → resolved NISM link (direct → search → explore)
+  //   Other courses → applicationLink or officialWebsite as before
+  const enrollHref = nism
+    ? getNismEnrollLink(course)
+    : (course.applicationLink || course.officialWebsite || null);
+
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
       {/* Header */}
@@ -118,7 +172,21 @@ function CourseCard({ course, isSaved, isSaving, onSave }: CourseCardProps) {
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-slate-900 mb-1">{course.title}</h3>
           {course.provider && (
-            <p className="text-sm text-slate-600">Provider: {course.provider}</p>
+            <p className="text-sm text-slate-600">
+              Provider:{' '}
+              {nism ? (
+                <a
+                  href="https://www.nism.ac.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline font-medium"
+                >
+                  {course.provider}
+                </a>
+              ) : (
+                course.provider
+              )}
+            </p>
           )}
         </div>
         <div className="text-right">
@@ -127,6 +195,13 @@ function CourseCard({ course, isSaved, isSaving, onSave }: CourseCardProps) {
           </div>
         </div>
       </div>
+
+      {/* NISM badge */}
+      {nism && (
+        <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-xs font-semibold text-indigo-700">
+          🏛 Official NISM Course
+        </div>
+      )}
 
       {/* Badges */}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -218,14 +293,18 @@ function CourseCard({ course, isSaved, isSaving, onSave }: CourseCardProps) {
           {showDetails ? 'Hide Details' : 'View Details'}
         </button>
 
-        {(course.applicationLink || course.officialWebsite) && (
+        {enrollHref && (
           <a
-            href={course.applicationLink || course.officialWebsite}
+            href={enrollHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md text-sm font-medium transition-colors"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              nism
+                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
-            Enroll / Apply
+            {nism ? '🏛 Enroll on NISM' : 'Enroll / Apply'}
           </a>
         )}
 
@@ -244,8 +323,14 @@ function CourseCard({ course, isSaved, isSaving, onSave }: CourseCardProps) {
 
       {course.source && (
         <p className="text-xs text-slate-500 mt-3">
-          Source: <a href={course.source} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-            {new URL(course.source).hostname}
+          Source:{' '}
+          <a
+            href={course.source}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            {(() => { try { return new URL(course.source).hostname; } catch { return course.source; } })()}
           </a>
         </p>
       )}

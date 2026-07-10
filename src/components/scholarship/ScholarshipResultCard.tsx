@@ -5,7 +5,6 @@ interface ScholarshipResultCardProps {
   onSave: () => void;
   saving: boolean;
   saved: boolean;
-  onApply?: (scholarship: ScholarshipRecommendation) => void;
   onViewDetails?: (scholarship: ScholarshipRecommendation) => void;
 }
 
@@ -24,7 +23,7 @@ function getStatusBadge(deadline?: string): { label: string; tone: string } {
   return { label: 'Open', tone: 'bg-emerald-100 text-emerald-700' };
 }
 
-export default function ScholarshipResultCard({ scholarship, onSave, saving, saved, onApply, onViewDetails }: ScholarshipResultCardProps) {
+export default function ScholarshipResultCard({ scholarship, onSave, saving, saved, onViewDetails }: ScholarshipResultCardProps) {
   const badge = getStatusBadge(scholarship.deadline);
 
   return (
@@ -70,7 +69,6 @@ export default function ScholarshipResultCard({ scholarship, onSave, saving, sav
             href={scholarship.applicationLink}
             target="_blank"
             rel="noreferrer"
-            onClick={() => onApply && onApply(scholarship)}
             className="rounded-full bg-violet-600 px-3 py-2 text-sm font-semibold text-white hover:bg-violet-700"
           >
             Apply Now

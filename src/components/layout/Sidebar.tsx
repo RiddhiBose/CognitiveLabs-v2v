@@ -22,7 +22,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Mentor Requests', path: '/mentorship/requests', icon: '&#128236;', mentorOnly: true },
   { label: 'Messages', path: ROUTES.CHAT, icon: '&#128172;' },
   { label: 'Saved', path: ROUTES.SAVED, icon: '&#128278;' },
-  { label: 'Applications', path: ROUTES.APPLICATIONS, icon: '&#128196;' },
 ];
 
 export default function Sidebar() {

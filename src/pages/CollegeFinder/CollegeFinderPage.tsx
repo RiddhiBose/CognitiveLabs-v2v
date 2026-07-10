@@ -4,7 +4,6 @@ import { LoadingScreen } from '../../components/common';
 import DetailsModal from '../../components/common/DetailsModal';
 import SearchService from '../../services/search/searchService';
 import CollegeService from '../../services/CollegeService';
-import ApplicationService from '../../services/ApplicationService';
 import { CollegeForm, CollegeResultCard } from '../../components/college';
 import type { CollegeRecommendation, CollegeFinderFormData } from '../../types/college';
 import type { UserProfileForSearch } from '../../types';
@@ -168,16 +167,6 @@ export default function CollegeFinderPage() {
     setSavingName(null);
   };
 
-  const handleApply = async (college: CollegeRecommendation) => {
-    if (!profile?.user_id) return;
-    const res = await ApplicationService.saveCollegeApplication(profile.user_id, college);
-    if (!res.error) {
-      console.log('Application saved successfully');
-    } else {
-      console.error('Failed to save application', res.error);
-    }
-  };
-
   const handleViewDetails = (college: CollegeRecommendation) => {
     setSelectedCollege(college);
     setDetailsModalOpen(true);
@@ -313,7 +302,6 @@ export default function CollegeFinderPage() {
                     isSaved={savedColleges.includes(college.title)}
                     onSaveToggle={() => handleSaveToggle(college)}
                     saving={savingName === college.title}
-                    onApply={handleApply}
                     onViewDetails={handleViewDetails}
                   />
                 ))}

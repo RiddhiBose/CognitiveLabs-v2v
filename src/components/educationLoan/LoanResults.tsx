@@ -85,7 +85,6 @@ interface LoanResultsProps {
   onSave: (loan: EducationLoanRecommendation) => void;
   onUnsave: (loan: EducationLoanRecommendation) => void;
   onRetry?: () => void;
-  onApply?: (loan: EducationLoanRecommendation) => void;
   onViewDetails?: (loan: EducationLoanRecommendation) => void;
 }
 
@@ -100,7 +99,6 @@ export default function LoanResults({
   onSave,
   onUnsave,
   onRetry,
-  onApply,
   onViewDetails,
 }: LoanResultsProps) {
   if (error) {
@@ -131,7 +129,6 @@ export default function LoanResults({
               onSave={onSave}
               onUnsave={onUnsave}
               saveLoading={savingId === itemId}
-              onApply={onApply}
               onViewDetails={onViewDetails}
             />
           );

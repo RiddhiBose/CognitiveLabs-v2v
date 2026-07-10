@@ -1,4 +1,5 @@
-import PlaceholderPage from '../../components/common/PlaceholderPage';
+import ScholarshipFinderPage from '../ScholarshipFinder/ScholarshipFinderPage';
+
 export default function ScholarshipsPage() {
-  return <PlaceholderPage title="Scholarships" />;
+  return <ScholarshipFinderPage />;
 }

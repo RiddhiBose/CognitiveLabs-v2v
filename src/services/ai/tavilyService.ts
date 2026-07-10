@@ -83,7 +83,8 @@ const TavilyService = {
             throw new Error(`Tavily API error ${response.status}: ${errorBody}`);
           }
 
-          return response.json() as Promise<TavilyRawResponse>;
+          const body = await response.text();
+          return JSON.parse(body) as TavilyRawResponse;
         },
         'TavilyService',
         {

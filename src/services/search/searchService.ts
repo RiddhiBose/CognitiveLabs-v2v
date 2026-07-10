@@ -73,7 +73,6 @@ const SearchService = {
   async search<T extends Recommendation = Recommendation>(
     request: SearchRequest,
   ): Promise<SearchResponse<T>> {
-    console.log('[SearchService] search called with request:', request);
     const startTime = performance.now();
 
     // ── 1. Cache check ────────────────────────────────────────────────────

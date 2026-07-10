@@ -12,6 +12,9 @@ CRITICAL RULES:
 - Never invent eligibility criteria, fees, deadlines, interest rates, amounts or URLs.
 - If a piece of information is not found in the search results, state "Not available in current sources" for that field.
 - Prefer official government, institutional and regulatory sources over blogs or news sites.
+- Respect user preferences as hard constraints whenever possible.
+- If the user selects International scholarships, prioritize international scholarships first.
+- Only recommend Indian scholarships if the user selected India, Both, or no verified international scholarship exists.
 - Your entire response MUST be a valid JSON array only — no markdown, no explanation text, no code fences.
 - Each item must have all required fields. Use null for unavailable fields.
 - matchScore must be an integer from 0 to 100 based on how well this matches the user profile.
@@ -105,20 +108,41 @@ Focus on:
 
     case 'scholarship':
       return `
-Task: Identify scholarships this user is eligible for based on their academic background, income, category and location.
-Academic Level: ${featureInput.level ?? profile.qualification ?? 'Not specified'}
-Specialization: ${featureInput.specialization ?? profile.specialization ?? 'Not specified'}
+Task: Identify verified scholarships this user is eligible for based on their current profile and the target scholarship goal.
+Current Qualification: ${profile.qualification ?? 'Not specified'}
+Current Degree / Specialization: ${profile.specialization ?? 'Not specified'}
+Target Education Level: ${featureInput.targetEducationLevel ?? featureInput.level ?? 'Any'}
+Target Degree: ${featureInput.targetDegree ?? 'Not specified'}
+Target Specialization: ${featureInput.targetSpecialization ?? 'Not specified'}
+Study Location: ${featureInput.studyLocation ?? featureInput.scopePreference ?? 'Both'}
+Preferred Country: ${featureInput.preferredCountry ?? 'Any'}
+Course: ${featureInput.course ?? profile.specialization ?? 'Not specified'}
+Scope Preference: ${featureInput.scopePreference ?? 'both'}
+Country Preference: ${featureInput.countryPreference ?? 'india_and_international'}
+User Nationality: ${featureInput.userNationality ?? 'Indian'}
+Funding Type Preference: ${Array.isArray(featureInput.fundingType) ? featureInput.fundingType.join(', ') : featureInput.fundingCoverage ?? 'Any'}
+Scholarship Types: ${Array.isArray(featureInput.scholarshipTypes) ? featureInput.scholarshipTypes.join(', ') : 'Any'}
+Application Status: ${featureInput.applicationStatus ?? 'Open Applications Only'}
 State: ${state}
 Income: ${profile.annual_income ?? 'Not specified'}
 Category: ${profile.category ?? 'Not specified'}
 PWD: ${profile.pwd_status === 'yes' ? 'Yes' : 'No'}
 
+Ranking priority:
+1. Study location and country preference
+2. Eligibility from the current profile
+3. Target education level and degree
+4. Target specialization
+5. Funding coverage
+6. Scholarship type
+7. Academic profile
+
 Focus on:
-- National Scholarship Portal schemes
-- State government scholarships
-- AICTE/UGC scholarships
-- Merit-based and need-based scholarships
-- Application deadlines and amounts
+- Official scholarship portals, government portals, university pages and verified scholarship websites only
+- International scholarships first when the user selected International or Both
+- India-only scholarships when the user selected India
+- Broad search behavior when scholarship type, funding coverage or location are set to Any
+- Application deadlines, funding amounts, eligibility, and official links
 `.trim();
 
     case 'education_loan':
@@ -252,8 +276,7 @@ Additional ${featureType} specific metadata:
 ${metadataHint}
 
 For college recommendations, add a metadata.cutoff field whenever the source explicitly mentions a cutoff or closing rank. If the cutoff is unavailable in the source, set metadata.cutoff to "Not available in current sources". When estimating matchScore, weigh the student's entrance exam rank/score/percentile against the stated cutoff and prefer colleges that match the preferred state and college type. Return ONLY the JSON array. No explanation. No markdown. No code fences.
-Return at most 6 results, sorted by matchScore descending.
-If no relevant results are found in the search data, return an empty array: []
+For scholarship recommendations, return every verified scholarship matching the user's current profile and their target scholarship goal. Do not summarize into only a few recommendations. Preserve the complete result set and rank it by relevance descending. If the user selected Any for scholarship type, funding coverage, status, or location, treat that as a broad search and do not narrow the results unnecessarily. Do not fabricate scholarships, deadlines, eligibility criteria, or links. Use only verified official sources. If no relevant results are found in the search data, return an empty array: []
 `.trim();
   },
 
@@ -284,16 +307,57 @@ If no relevant results are found in the search data, return an empty array: []
           featureInput.budget && featureInput.budget !== 'No Preference' ? featureInput.budget : '',
         ].filter(Boolean).join(' ');
 
-      case 'scholarship':
+      case 'scholarship': {
+        const scopePreference = String(featureInput.scopePreference ?? 'both');
+        const level = String(featureInput.targetEducationLevel ?? featureInput.level ?? 'any');
+        const targetDegree = String(featureInput.targetDegree ?? '').trim();
+        const targetSpecialization = String(featureInput.targetSpecialization ?? '').trim();
+        const preferredCountry = String(featureInput.preferredCountry ?? '').trim();
+        const course = String(featureInput.course ?? spec ?? 'engineering');
+        const fundingTypes = Array.isArray(featureInput.fundingType)
+          ? featureInput.fundingType.filter((item): item is string => typeof item === 'string')
+          : [];
+        const scholarshipTypes = Array.isArray(featureInput.scholarshipTypes)
+          ? featureInput.scholarshipTypes.filter((item): item is string => typeof item === 'string')
+          : [];
+        const applicationStatus = String(featureInput.applicationStatus ?? 'Open Applications Only');
+        const statusPhrase = applicationStatus === 'Open Applications Only'
+          ? 'currently open'
+          : applicationStatus === 'Upcoming'
+            ? 'upcoming'
+            : 'currently open and upcoming';
+        const scopePhrase = scopePreference === 'international'
+          ? `international ${level === 'Any' ? 'scholarships' : `${level.toLowerCase()} scholarships`}`
+          : scopePreference === 'both'
+            ? `${level === 'Any' ? 'scholarships' : `${level.toLowerCase()} scholarships`}`
+            : `indian ${level === 'Any' ? 'scholarships' : `${level.toLowerCase()} scholarships`}`;
+
+        const fundingPhrase = fundingTypes.includes('Full Scholarship')
+          ? 'fully funded'
+          : fundingTypes.includes('Partial Scholarship')
+            ? 'partially funded'
+            : '';
+        const typesPhrase = scholarshipTypes.length > 0 ? scholarshipTypes.join(' ') : 'all scholarship types';
+        const goalPhrase = targetDegree || targetSpecialization
+          ? `for ${targetDegree || targetSpecialization}`
+          : `for ${course} students`;
+        const countryPhrase = preferredCountry && preferredCountry.toLowerCase() !== 'any' ? `in ${preferredCountry}` : '';
+
         return [
-          'scholarship',
-          qual,
-          category,
+          scopePhrase,
+          statusPhrase,
+          fundingPhrase,
+          typesPhrase,
+          goalPhrase,
+          countryPhrase,
+          category ? category.toLowerCase() : '',
           state,
           profile.annual_income?.includes('below') || profile.annual_income?.includes('2l') ? 'low income' : '',
           profile.pwd_status === 'yes' ? 'PWD disability' : '',
-          'India 2024 2025',
+          'official websites university portals government portals',
+          '2024 2025',
         ].filter(Boolean).join(' ');
+      }
 
       case 'education_loan':
         return [

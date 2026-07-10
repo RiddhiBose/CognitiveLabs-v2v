@@ -20,20 +20,37 @@
 
 ### Problem Statement
 
-Women often struggle to discover relevant opportunities — colleges, scholarships, education loans, startup funding, mentorship, and financial literacy resources — because this information is **scattered across hundreds of platforms**. Existing solutions are frequently:
+Women often struggle to discover relevant opportunities such as colleges, scholarships, education loans, startup funding, mentorship, and financial literacy resources because this information is scattered across hundreds of platforms. Existing solutions are often:
 
-- **Outdated** — static lists that are rarely refreshed
-- **Generic** — one-size-fits-all recommendations that ignore personal context
-- **Fragmented** — no single place to discover education, finance, and career opportunities together
-- **Inaccessible** — platforms that assume English fluency and internet familiarity
+- **Outdated** — static information that is rarely updated
+- **Generic** — recommendations that ignore individual goals and backgrounds
+- **Fragmented** — education, finance, entrepreneurship, and mentorship exist on separate platforms
+- **Difficult to access** — many opportunities are hidden behind complex websites and eligibility rules
 
-Women from tier-2 and tier-3 cities, first-generation college students, and aspiring women entrepreneurs are especially underserved. The gap between opportunity and awareness is wide, and it holds back millions of capable women every year.
+As a result, students, aspiring professionals, first-generation learners, and women entrepreneurs—especially from tier-2 and tier-3 cities—often miss life-changing opportunities simply because they are unaware of them or cannot easily access the right guidance.
 
 ### Proposed Solution
 
-**ElevateHer AI** is a comprehensive, AI-driven platform that brings all these opportunities together in one place. Instead of relying on hardcoded datasets, every recommendation is generated in real time using a shared AI infrastructure powered by **SearchService**, **Tavily Search**, and **Google Gemini** — delivering accurate, up-to-date, and deeply personalized results sourced directly from official and trusted public websites.
+**ElevateHer AI** is an AI-powered opportunity discovery platform designed to bridge the gap between women and the resources that can help them succeed.
 
-A user simply describes their background and goals, and the platform intelligently surfaces the most relevant colleges, scholarships, loans, funding opportunities, mentors, and financial guidance — all in one dashboard, available in both English and Hindi.
+Using live web search and AI, the platform provides personalized recommendations for colleges, scholarships, education loans, startup funding opportunities, mentors, and financial literacy resources—all from trusted and official sources in one unified dashboard.
+
+Instead of searching across dozens of websites, users simply describe their background and goals. ElevateHer AI intelligently analyses their profile and delivers relevant, up-to-date opportunities in both English and Hindi, making opportunity discovery faster, easier, and more accessible.
+
+### 🌸 Women Empowerment Impact
+
+ElevateHer AI empowers women by reducing the information gap that prevents many from accessing education, careers, entrepreneurship, and financial opportunities.
+
+Our platform helps women:
+
+- 🎓 Discover colleges and scholarships suited to their academic profile.
+- 💳 Explore education loans and financial aid with confidence.
+- 🚀 Access startup funding, incubators, grants, and government schemes for women entrepreneurs.
+- 🤝 Connect with mentors who can guide their academic and professional journey.
+- 📚 Improve financial literacy and make informed financial decisions.
+- 🌐 Access opportunities in both English and Hindi, making the platform more inclusive.
+
+By bringing verified opportunities into one AI-powered platform, ElevateHer AI enables women to make informed decisions, overcome information barriers, and become more independent in pursuing education, careers, and entrepreneurship.
 
 ---
 
